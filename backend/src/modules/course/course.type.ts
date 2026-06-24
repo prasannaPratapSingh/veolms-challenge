@@ -5,8 +5,16 @@ export interface ICourse extends Document {
     description: string;
     thumbnail: string;
     price: number;
-    createdBy: Types.ObjectId;
+    createdBy: string;
     isPublished: boolean;
     createdAt?: Date;
     updatedAt?: Date;
+}
+
+export interface IUploadCourseBody {
+    title: string;
+    description: string;
+    price: number;
+    isPublished?: boolean;
+    createdBy:string
 }
