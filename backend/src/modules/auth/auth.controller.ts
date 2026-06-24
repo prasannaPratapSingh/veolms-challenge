@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import asyncHandler from "../../utils/asyncHandler.js";
 import { IRegisterBody, ILoginBody } from "./auth.types.js";
 import ApiError from "../../utils/ApiError.js";
-import User from "../user/user.model.js";
+import { User } from "../user/user.model.js";
 import hashPass from "../../utils/hashPass.js";
 import ApiResponse from "../../utils/ApiResponse.js";
 import envConfig from "../../config/envConfig.js";

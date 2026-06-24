@@ -4,9 +4,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import asyncHandler from './utils/asyncHandler.js';
 import ApiResponse from './utils/ApiResponse.js';
+import errorHandler from './middlewares/errorHandler.js';
 import authRouter from "../src/modules/auth/auth.routes.js"
 import courseRouter from "../src/modules/course/course.routes.js";
-import errorHandler from './middlewares/errorHandler.js';
+import userRouter from "../src/modules/user/user.routes.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRouter);
 app.use("/api/course", courseRouter);
+app.use("/api/user",userRouter);
 
 
 app.get("/", asyncHandler(async (_: Request, res: Response) => {
