@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
-import User from "../modules/user/user.model.js";
+import { User } from "../modules/user/user.model.js";
 import { UserRole } from "../modules/user/user.interface.js";
 
 export const isAdmin = asyncHandler(async (

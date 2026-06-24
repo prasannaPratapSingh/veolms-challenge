@@ -12,5 +12,4 @@ const userSchema: Schema<IUser> = new Schema({
     coursesEnrolled: { type: [String], default: [] }
 })
 
-const UserModel: Model<IUser> = mongoose.model("User", userSchema);
-export default UserModel;
+export const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);

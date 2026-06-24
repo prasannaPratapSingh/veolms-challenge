@@ -16,6 +16,6 @@ router.post("/logout",strictAuthLimiter,logout);
 
 router.post("/refresh",refreshToken);
 
-router.get("/get-me",authenticateToken,isAdmin,getMe);
+router.get("/get-me",authenticateToken,getMe);
 
 export default router;
