@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import asyncHandler from './utils/asyncHandler.js';
 import ApiResponse from './utils/ApiResponse.js';
 import authRouter from "../src/modules/auth/auth.routes.js"
+import courseRouter from "../src/modules/course/course.routes.js";
 import errorHandler from './middlewares/errorHandler.js';
 
 dotenv.config();
@@ -13,8 +14,12 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 app.use("/api/auth", authRouter);
+app.use("/api/course", courseRouter);
+
 
 app.get("/", asyncHandler(async (_: Request, res: Response) => {
     return res.status(200).json(new ApiResponse(200, "VEO Learning Management System"))

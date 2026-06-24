@@ -101,7 +101,7 @@ export const refreshToken =
         ) => {
             const refreshToken =
                 req.cookies?.refreshToken;
-            
+
 
             if (!refreshToken) {
                 throw new ApiError(
