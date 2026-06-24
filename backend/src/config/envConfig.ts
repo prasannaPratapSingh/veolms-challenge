@@ -10,9 +10,11 @@ interface EnvConfig {
     ACCESS_TOKEN_SECRET: string;
     REFRESH_TOKEN_SECRET: string;
     SALT_VALUE: string
+    IMAGEKIT_PUBLIC_KEY: string;
+    IMAGEKIT_PRIVATE_KEY: string;
 }
 
-const requiredEnvs = ["PORT", "NODE_ENV", "DB_URL", "REDIS_URL", "ACCESS_TOKEN_SECRET", "REFRESH_TOKEN_SECRET", "SALT_VALUE"];
+const requiredEnvs = ["PORT", "NODE_ENV", "DB_URL", "REDIS_URL", "ACCESS_TOKEN_SECRET", "REFRESH_TOKEN_SECRET", "SALT_VALUE", "IMAGEKIT_PUBLIC_KEY", "IMAGEKIT_PRIVATE_KEY"];
 const missingEnvs: string[] = [];
 
 requiredEnvs.forEach((env) => {
@@ -34,7 +36,9 @@ const envConfig: EnvConfig = {
     REDIS_URL: process.env.REDIS_URL as string,
     ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET as string,
     REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET as string,
-    SALT_VALUE: process.env.SALT_VALUE as string
+    SALT_VALUE: process.env.SALT_VALUE as string,
+    IMAGEKIT_PUBLIC_KEY: process.env.IMAGEKIT_PUBLIC_KEY as string,
+    IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY as string
 };
 
 export default envConfig;

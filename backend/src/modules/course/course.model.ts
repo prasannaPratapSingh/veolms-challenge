@@ -22,8 +22,7 @@ const courseSchema: Schema<ICourse> = new Schema({
         min: 0
     },
     createdBy: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
+        type: String,
         required: true
     },
     isPublished: {
