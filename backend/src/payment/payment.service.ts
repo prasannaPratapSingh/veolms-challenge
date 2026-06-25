@@ -22,75 +22,73 @@ class PaymentService {
 
     createOrder = asyncHandler(async (
         req: Request<{}, {}, ICreateOrderBody>,
-        res: Response,
-        next: NextFunction
+        res: Response
     ) => {
-        try {
-            const { courseId } = req.body;
-            const userId = req.user?.id;
+        const { courseId } = req.body;
+        const userId = req.user?.id;
 
-            if (!courseId) throw new ApiError(400, "courseId is required");
+        if (!courseId) throw new ApiError(400, "courseId is required");
 
-            const course = await Course.findById(courseId,{isPublished:true});
-            if (!course) throw new ApiError(404, "Course not found or not published!");
+        const course = await Course.findOne({ _id: courseId, isPublished: true });
+        if (!course) throw new ApiError(404, "Course not found");
 
-            const alreadyEnrolled = await Enrollment.findOne({ userId, courseId });
-            if (alreadyEnrolled) throw new ApiError(400, "Already enrolled in this course");
+        const alreadyEnrolled = await Enrollment.findOne({ userId, courseId });
+        if (alreadyEnrolled) throw new ApiError(400, "Already enrolled in this course");
 
-            const order = await this.razorpay.orders.create({
-                amount: course.price * 100,
-                currency: "INR",
-                receipt: `receipt_${Date.now()}`,
-            });
+        const existingPayment = await Payment.findOne({ userId, courseId, status: "SUCCESS" });
+        if (existingPayment) throw new ApiError(400, "Payment already initiated for this course");
 
-            await Payment.create({
-                userId,
-                courseId,
-                razorpayOrderId: order.id,
-                amount: course.price,
-                currency: "INR",
-            });
+        const order = await this.razorpay.orders.create({
+            amount: course.price * 100,
+            currency: "INR",
+            receipt: `${courseId}_${userId}_${Date.now()}`
+        });
 
-            return res.status(201).json(new ApiResponse(201, "Order created", { orderId: order.id, amount: order.amount, currency: order.currency }));
-        } catch (error) {
-            next(error);
-        }
+        await Payment.create({
+            userId,
+            courseId,
+            razorpayOrderId: order.id,
+            amount: course.price,
+            currency: "INR",
+        });
+
+        return res.status(201).json(new ApiResponse(201, "Order created", {
+            orderId: order.id,
+            amount: order.amount,
+            currency: order.currency,
+        }));
     });
 
     verifyPayment = asyncHandler(async (
         req: Request<{}, {}, IVerifyPaymentBody>,
-        res: Response,
-        next: NextFunction
+        res: Response
     ) => {
-        try {
-            const { razorpayOrderId, razorpayPaymentId, razorpaySignature, courseId } = req.body;
-            const userId = req.user?.id;
+        const { razorpayOrderId, razorpayPaymentId, razorpaySignature, courseId } = req.body;
+        const userId = req.user?.id;
 
-            const body = razorpayOrderId + "|" + razorpayPaymentId;
-            const expectedSignature = crypto
-                .createHmac("sha256", envConfig.RAZORPAY_KEY_SECRET)
-                .update(body)
-                .digest("hex");
+        const paymentRecord = await Payment.findOne({ razorpayOrderId, userId, courseId });
+        if (!paymentRecord) throw new ApiError(404, "Payment record not found");
+        if (paymentRecord.status === "SUCCESS") throw new ApiError(400, "Payment already verified");
 
-            if (expectedSignature !== razorpaySignature) {
-                await Payment.findOneAndUpdate(
-                    { razorpayOrderId },
-                    { status: "FAILED" }
-                );
-                throw new ApiError(400, "Payment verification failed");
-            }
+        const expectedSignature = crypto
+            .createHmac("sha256", envConfig.RAZORPAY_KEY_SECRET)
+            .update(razorpayOrderId + "|" + razorpayPaymentId)
+            .digest("hex");
 
-            await Payment.findOneAndUpdate(
-                { razorpayOrderId },
-                { razorpayPaymentId, status: "SUCCESS", paidAt: new Date() }
-            );
-
-            await Enrollment.create({ userId, courseId });
-
-            return res.status(200).json(new ApiResponse(200, "Payment verified and enrollment successful"));
-        } catch (error) {
-            next(error);
+        if (expectedSignature !== razorpaySignature) {
+            await Payment.findOneAndUpdate({ razorpayOrderId }, { status: "FAILED" });
+            throw new ApiError(400, "Payment verification failed");
         }
+
+        await Payment.findOneAndUpdate(
+            { razorpayOrderId },
+            { razorpayPaymentId, status: "SUCCESS", paidAt: new Date() },
+            { new: true }
+        );
+
+        await Enrollment.create({ userId, courseId });
+
+        return res.status(200).json(new ApiResponse(200, "Payment verified and enrollment successful"));
     });
 }
 
