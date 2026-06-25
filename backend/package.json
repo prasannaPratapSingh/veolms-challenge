@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon --watch src -e ts,js,json --exec tsx src/server.ts",
+    "worker": "tsx src/worker/worker.ts",
+    "worker:dev": "nodemon --watch src/worker -e ts,js,json --exec tsx src/worker/worker.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,12 +19,14 @@
     "@aws-sdk/client-s3": "^3.1075.0",
     "@aws-sdk/s3-request-presigner": "^3.1075.0",
     "bcryptjs": "^3.0.3",
+    "bullmq": "^5.79.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.2",
     "imagekit": "^6.0.0",
+    "ioredis": "^5.11.1",
     "mongoose": "^9.7.2",
     "multer": "^2.2.0",
     "redis": "^6.0.0",
