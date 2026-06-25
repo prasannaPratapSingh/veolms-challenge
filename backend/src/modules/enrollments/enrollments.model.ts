@@ -5,15 +5,22 @@ const enrollSchema: Schema<IEnrollments> = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        required: true,
+        index: true,
     },
     courseId: {
         type: Schema.Types.ObjectId,
         ref: "Course",
-        required: true
+        required: true,
+        index: true,
     },
     enrolledAt: { type: Date, required: true, default: Date.now }
 
 }, { timestamps: true });
 
-export const Enrollment: Model<IEnrollments> = mongoose.model<IEnrollments>("Enrollments", enrollSchema);
+enrollSchema.index(
+    { userId: 1, courseId: 1 },
+    { unique: true }
+)
+
+export const Enrollment: Model<IEnrollments> = mongoose.model<IEnrollments>("Enrollment", enrollSchema);
