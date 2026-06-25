@@ -9,7 +9,11 @@ Welcome to the backend repository of the **VEO Learning Management System**. Thi
 - **Node.js & Express.js**: High-performance backend web framework.
 - **TypeScript**: Strict static typing for maintainability and scalability.
 - **MongoDB & Mongoose**: Flexible NoSQL database and elegant object data modeling.
-- **Redis & BullMQ**: In-memory data structure store used for background job processing and caching.
+- **Redis**: In-memory data structure store used for caching and as a BullMQ message broker.
+- **BullMQ**: Production-grade queue system for managing and processing background jobs reliably.
+- **Cloudflare R2**: S3-compatible object storage for storing raw video uploads and finalized HLS streams.
+- **AWS SDK v3 (`@aws-sdk/client-s3`)**: Used to interact with Cloudflare R2's S3-compatible API — generating presigned upload URLs and uploading processed assets.
+- **FFmpeg**: Industry-standard media processing tool used by the transcoding worker to convert raw video uploads into multi-resolution HLS adaptive bitrate streams.
 - **ImageKit**: Optimized cloud storage and content delivery for course thumbnails and static assets.
 - **Zod**: Type-safe schema validation for all incoming API payloads.
 
