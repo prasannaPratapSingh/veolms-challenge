@@ -7,6 +7,8 @@ import { IUploadCourseBody } from "./course.type.js";
 import { ImageKitService } from "../../infrastructure/imagekit/imagekit.service.js";
 import { User } from "../user/user.model.js";
 import { UserRole } from "../user/user.interface.js";
+import mongoose from "mongoose";
+
 
 export const getAllCourses = asyncHandler(async (
     req: Request,
@@ -215,3 +217,115 @@ export const updateCourse = asyncHandler(async (
         next(error);
     }
 })
+
+
+export const getCourseContent = asyncHandler(async (
+    req: Request,
+    res: Response
+) => {
+    const courseId = req.params.courseId as string;
+
+    if (!mongoose.Types.ObjectId.isValid(courseId)) {
+        throw new ApiError(400, "Invalid course id");
+    }
+
+    const pipeline: mongoose.PipelineStage[] = [
+        {
+            $match: {
+                _id: new mongoose.Types.ObjectId(courseId),
+            },
+        },
+        {
+            $lookup: {
+                from: "sections",
+                let: {
+                    courseId: "$_id",
+                },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $eq: ["$courseId", "$$courseId"],
+                            },
+                        },
+                    },
+                    {
+                        $sort: {
+                            order: 1,
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "lessons",
+                            let: {
+                                sectionId: "$_id",
+                            },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: ["$sectionId", "$$sectionId"],
+                                        },
+                                    },
+                                },
+                                {
+                                    $sort: {
+                                        order: 1,
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        _id: 1,
+                                        title: 1,
+                                        description: 1,
+                                        videoUrl: 1,
+                                        duration: 1,
+                                        isPreview: 1,
+                                        order: 1,
+                                    },
+                                },
+                            ],
+                            as: "lessons",
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 1,
+                            title: 1,
+                            order: 1,
+                            lessons: 1,
+                        },
+                    },
+                ],
+                as: "sections",
+            },
+        },
+        {
+            $project: {
+                _id: 1,
+                title: 1,
+                description: 1,
+                thumbnail: 1,
+                price: 1,
+                category: 1,
+                level: 1,
+                isPublished: 1,
+                sections: 1,
+            },
+        },
+    ];
+
+    const result = await Course.aggregate(pipeline);
+
+    if (!result.length) {
+        throw new ApiError(404, "Course not found");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            "Course content fetched successfully",
+            result[0]
+        )
+    );
+});
