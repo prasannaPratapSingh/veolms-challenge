@@ -18,9 +18,11 @@ interface EnvConfig {
     R2_RAW_BUCKET: string;
     R2_PUBLIC_URL:string;
     R2_HLS_BUCKET:string;
+    RAZORPAY_KEY_ID:string;
+    RAZORPAY_KEY_SECRET:string;
 }
 
-const requiredEnvs = ["PORT", "NODE_ENV", "DB_URL", "REDIS_URL", "ACCESS_TOKEN_SECRET", "REFRESH_TOKEN_SECRET", "SALT_VALUE", "IMAGEKIT_PUBLIC_KEY", "IMAGEKIT_PRIVATE_KEY", "R2_ENDPOINT", "R2_ACCESS_KEY", "R2_SECRET_KEY", "R2_RAW_BUCKET","R2_PUBLIC_URL","R2_HLS_BUCKET"];
+const requiredEnvs = ["PORT", "NODE_ENV", "DB_URL", "REDIS_URL", "ACCESS_TOKEN_SECRET", "REFRESH_TOKEN_SECRET", "SALT_VALUE", "IMAGEKIT_PUBLIC_KEY", "IMAGEKIT_PRIVATE_KEY", "R2_ENDPOINT", "R2_ACCESS_KEY", "R2_SECRET_KEY", "R2_RAW_BUCKET","R2_PUBLIC_URL","R2_HLS_BUCKET","RAZORPAY_KEY_ID","RAZORPAY_KEY_SECRET"];
 const missingEnvs: string[] = [];
 
 requiredEnvs.forEach((env) => {
@@ -51,6 +53,8 @@ const envConfig: EnvConfig = {
     R2_RAW_BUCKET: process.env.R2_RAW_BUCKET as string,
     R2_PUBLIC_URL:process.env.R2_PUBLIC_URL as string,
     R2_HLS_BUCKET:process.env.R2_HLS_BUCKET as string,
+    RAZORPAY_KEY_ID:process.env.RAZORPAY_KEY_ID as string,
+    RAZORPAY_KEY_SECRET:process.env.RAZORPAY_KEY_SECRET as string,
 };
 
 export default envConfig;

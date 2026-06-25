@@ -29,6 +29,7 @@
     "ioredis": "^5.11.1",
     "mongoose": "^9.7.2",
     "multer": "^2.2.0",
+    "razorpay": "^2.9.6",
     "redis": "^6.0.0",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
