@@ -12,9 +12,15 @@ interface EnvConfig {
     SALT_VALUE: string
     IMAGEKIT_PUBLIC_KEY: string;
     IMAGEKIT_PRIVATE_KEY: string;
+    R2_ENDPOINT: string;
+    R2_ACCESS_KEY: string;
+    R2_SECRET_KEY: string;
+    R2_RAW_BUCKET: string;
+    R2_PUBLIC_URL:string;
+    R2_HLS_BUCKET:string;
 }
 
-const requiredEnvs = ["PORT", "NODE_ENV", "DB_URL", "REDIS_URL", "ACCESS_TOKEN_SECRET", "REFRESH_TOKEN_SECRET", "SALT_VALUE", "IMAGEKIT_PUBLIC_KEY", "IMAGEKIT_PRIVATE_KEY"];
+const requiredEnvs = ["PORT", "NODE_ENV", "DB_URL", "REDIS_URL", "ACCESS_TOKEN_SECRET", "REFRESH_TOKEN_SECRET", "SALT_VALUE", "IMAGEKIT_PUBLIC_KEY", "IMAGEKIT_PRIVATE_KEY", "R2_ENDPOINT", "R2_ACCESS_KEY", "R2_SECRET_KEY", "R2_RAW_BUCKET","R2_PUBLIC_URL","R2_HLS_BUCKET"];
 const missingEnvs: string[] = [];
 
 requiredEnvs.forEach((env) => {
@@ -38,7 +44,13 @@ const envConfig: EnvConfig = {
     REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET as string,
     SALT_VALUE: process.env.SALT_VALUE as string,
     IMAGEKIT_PUBLIC_KEY: process.env.IMAGEKIT_PUBLIC_KEY as string,
-    IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY as string
+    IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY as string,
+    R2_ENDPOINT: process.env.R2_ENDPOINT as string,
+    R2_ACCESS_KEY: process.env.R2_ACCESS_KEY as string,
+    R2_SECRET_KEY: process.env.R2_SECRET_KEY as string,
+    R2_RAW_BUCKET: process.env.R2_RAW_BUCKET as string,
+    R2_PUBLIC_URL:process.env.R2_PUBLIC_URL as string,
+    R2_HLS_BUCKET:process.env.R2_HLS_BUCKET as string,
 };
 
 export default envConfig;
