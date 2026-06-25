@@ -9,7 +9,8 @@
     "worker:dev": "nodemon --watch src/worker -e ts,js,json --exec tsx src/worker/worker.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +30,7 @@
     "ioredis": "^5.11.1",
     "mongoose": "^9.7.2",
     "multer": "^2.2.0",
+    "razorpay": "^2.9.6",
     "redis": "^6.0.0",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
@@ -40,9 +42,13 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.1.0",
     "@types/node": "^26.0.0",
+    "@types/supertest": "^7.2.0",
     "jsonwebtoken": "^9.0.3",
+    "mongodb-memory-server": "^11.2.0",
     "nodemon": "^3.1.14",
+    "supertest": "^7.2.2",
     "tsx": "^4.22.4",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   }
 }

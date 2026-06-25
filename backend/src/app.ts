@@ -12,6 +12,7 @@ import sectionRouter from "../src/modules/section/section.routes.js";
 import lessonRouter from "../src/modules/lesson/lesson.routes.js";
 import enrollmentRouter from "../src/modules/enrollments/enrollment.routes.js";
 import progressRouter from "../src/modules/progress/progress.routes.js";
+import paymentRouter from "../src/payment/payment.route.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use("/api/section", sectionRouter);
 app.use("/api/lesson", lessonRouter);
 app.use("/api/enrollment", enrollmentRouter);
 app.use("/api/progress", progressRouter);
+app.use("/api/payment", paymentRouter);
 
 
 app.get("/", asyncHandler(async (_: Request, res: Response) => {
