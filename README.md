@@ -1,3 +1,158 @@
+# VEO Learning Management System (LMS) - Backend API Documentation
+
+Welcome to the backend repository of the **VEO Learning Management System**. This is a robust, production-ready RESTful API built to power an entire e-learning platform. It securely handles user authentication, course management, dynamic video processing pipelines, progress tracking, and student enrollments.
+
+---
+
+## 🚀 Tech Stack
+
+- **Node.js & Express.js**: High-performance backend web framework.
+- **TypeScript**: Strict static typing for maintainability and scalability.
+- **MongoDB & Mongoose**: Flexible NoSQL database and elegant object data modeling.
+- **Redis & BullMQ**: In-memory data structure store used for background job processing and caching.
+- **ImageKit**: Optimized cloud storage and content delivery for course thumbnails and static assets.
+- **Zod**: Type-safe schema validation for all incoming API payloads.
+
+---
+
+## 📁 Project Structure
+
+The project strictly follows a domain-driven, modular architecture to separate concerns, making the codebase highly scalable and readable.
+
+```
+backend/
+├── src/
+│   ├── app.ts                  # Express application setup, middleware, and route mounting
+│   ├── server.ts               # Application entry point and DB connection
+│   ├── middlewares/            # Custom middlewares (auth, admin, error-handling, validation)
+│   ├── utils/                  # Helper utilities (ApiError, ApiResponse, asyncHandler)
+│   ├── infrastructure/         # External service integrations (ImageKit, etc.)
+│   ├── worker/                 # BullMQ workers for background jobs (e.g., processing videos)
+│   └── modules/                # Feature modules containing Models, Routes, and Controllers
+│       ├── auth/               # User registration, login, token refresh, and Google OAuth
+│       ├── user/               # User profiles and role management
+│       ├── course/             # Course creation, modification, and content aggregation
+│       ├── section/            # Course curriculum sections
+│       ├── lesson/             # Individual lessons and video resources
+│       ├── enrollments/        # Student enrollments to courses
+│       └── progress/           # Tracking lesson completions and user progress
+├── .env.example                # Sample environment variables configuration
+├── package.json                # Project dependencies and scripts
+└── tsconfig.json               # TypeScript compiler configuration
+```
+
+---
+
+## 🔑 Key Features
+
+- **Robust Authentication & Authorization**: Secure JWT-based authentication with access and refresh tokens. Role-based access control (RBAC) specifically separating standard users and Admins/Instructors.
+- **Hierarchical Curriculum**: Data models cleanly structured into `Courses -> Sections -> Lessons`.
+- **Advanced Aggregation Pipelines**: Leveraging MongoDB's `$lookup` and aggregation features to fetch fully-populated, deeply nested course structures efficiently.
+- **Background Processing**: Utilizing BullMQ and Redis to offload heavy tasks (see the Transcoding Pipeline docs below).
+- **Secure Video/Asset Delivery**: Integrated with ImageKit and AWS S3 for secure, optimized media distribution.
+- **Strict Validation**: All API inputs are rigorously validated using Zod schemas to ensure absolute data integrity.
+- **Progress Tracking**: Sophisticated user progress monitoring to track lesson completion and course milestones.
+
+---
+
+## 🛠 Setup & Installation
+
+### 1. Prerequisites
+Ensure you have the following installed on your machine:
+- Node.js (v18 or higher)
+- MongoDB (Running locally or a MongoDB Atlas URI)
+- Redis Server (Running locally or via a cloud provider)
+- FFmpeg (Required for the video transcoding worker)
+
+### 2. Clone the Repository
+```bash
+git clone <repository-url>
+cd backend
+```
+
+### 3. Install Dependencies
+```bash
+npm install
+```
+
+### 4. Configure Environment Variables
+Create a `.env` file in the root directory based on the provided `.env.example`:
+
+```env
+PORT=3000
+NODE_ENV=development
+DB_URL=mongodb://localhost:27017/veolms
+ACCESS_TOKEN_SECRET=your_access_token_secret
+REFRESH_TOKEN_SECRET=your_refresh_token_secret
+REDIS_URL=redis://localhost:6379
+SALT_VALUE=10
+MEETING_WINDOW_LIMIT=100
+IMAGEKIT_PRIVATE_KEY=your_imagekit_private_key
+IMAGEKIT_PUBLIC_KEY=your_imagekit_public_key
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_CALLBACK_URL=http://localhost:3000/api/auth/google/callback
+CLIENT_URL=http://localhost:5173
+```
+*Note: Be sure to fill in your actual API keys for ImageKit and Google OAuth if you intend to test these features.*
+
+### 5. Start the Development Server
+```bash
+# Starts the main API server with hot-reloading
+npm run dev
+
+# (Optional in a separate terminal) Starts the background worker
+npm run worker:dev
+```
+The server should now be running on `http://localhost:3000`.
+
+### 6. Building for Production
+```bash
+npm run build
+npm run start
+```
+
+---
+
+## 📡 API Module Overview
+
+All endpoints are prefixed with `/api`.
+
+- **`/api/auth`**: Endpoints for signing up, logging in, logging out, and refreshing tokens.
+- **`/api/user`**: Manage current user profiles and fetch user information.
+- **`/api/course`**: Endpoints to list courses, retrieve full course curriculums (using aggregation), and Admin-only endpoints for creating, updating, publishing, and deleting courses.
+- **`/api/section`**: Admin-only endpoints for adding and managing curriculum sections within a course.
+- **`/api/lesson`**: Admin-only endpoints for adding individual lessons to sections, managing video URLs, durations, and preview access.
+- **`/api/enrollment`**: Endpoints for users to enroll in published courses, retrieve their enrollments, and Admin endpoints to view all enrollments across a specific course.
+- **`/api/progress`**: Endpoints to track and mark specific lessons as completed, and to fetch progress across courses.
+
+---
+
+## 🛡 Error Handling
+
+The application leverages a unified error-handling approach.
+- `ApiError` utility throws structured HTTP exceptions.
+- The global `errorHandler.ts` middleware traps all synchronous and asynchronous exceptions (managed seamlessly via `asyncHandler`), preventing crashes and consistently formatting the response payload:
+```json
+{
+  "success": false,
+  "message": "Error description",
+  "errors": [],
+  "stack": "..." // (Only in development)
+}
+```
+
+---
+
+## 🤝 Contribution Guidelines
+
+1. **Typescript First**: Any new feature or module must have explicit interfaces or types (e.g., `feature.type.ts`).
+2. **Controller/Service Separation**: Keep controllers as thin as possible. Delegate heavy business logic to dedicated services if complexity grows.
+3. **Zod Validation**: Ensure every new request body/params structure is validated by a Zod schema in a `.validation.ts` file before it hits the controller. 
+4. **Follow the Structure**: Create a dedicated directory inside `src/modules/` for any distinct new entity.
+
+---
+
 # Video Transcoding Pipeline Documentation
 
 > [!IMPORTANT]  
