@@ -7,6 +7,7 @@ import Login from "../features/auth/pages/Login";
 import SignUp from "../features/auth/pages/SignUp";
 import AdminLogin from "../features/auth/pages/AdminLogin";
 import VeoDashboard from "../features/auth/pages/VeoDashboard";
+import CourseEditor from "../features/course/pages/CourseEditor";
 
 /* ── guards ── */
 import Protected from "../features/auth/components/Protected";
@@ -43,6 +44,10 @@ export const routes = createBrowserRouter([
     {
         path: "/admin/veodashboard",
         element: <AdminOnly><VeoDashboard /></AdminOnly>,
+    },
+    {
+        path: "/admin/course/:courseId",
+        element: <AdminOnly><CourseEditor /></AdminOnly>,
     },
 
     /* ── learner protected area ── */

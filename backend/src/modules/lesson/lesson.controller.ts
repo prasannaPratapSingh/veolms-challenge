@@ -12,7 +12,6 @@ import { r2Client } from "../../infrastructure/r2/r2.client.js";
 import { videoQueue } from "../../infrastructure/queue/videoQueue.js";
 import envConfig from "../../config/envConfig.js";
 
-
 export const createLesson = asyncHandler(async (
     req: Request,
     res: Response,
@@ -209,11 +208,27 @@ export const triggerProcessing = asyncHandler(async (req: Request, res: Response
     const { lessonId } = req.params;
     const { rawKey, fileName } = req.body;
 
+    // Mark lesson as queued immediately so the frontend can reflect it
+    await Lesson.findByIdAndUpdate(lessonId, { $set: { processingStatus: "queued" } });
+
     const job = await videoQueue.add("transcode", {
         rawKey,
         lessonId: lessonId as string,
         fileName,
     });
 
-    res.json(new ApiResponse(200, "Processing started",{ jobId: job.id }));
+    res.json(new ApiResponse(200, "Processing started", { jobId: job.id }));
+});
+
+// GET /api/lesson/:lessonId/job-status
+export const getJobStatus = asyncHandler(async (req: Request, res: Response) => {
+    const { lessonId } = req.params;
+
+    const lesson = await Lesson.findById(lessonId).select("processingStatus videoUrl");
+    if (!lesson) throw new ApiError(404, "Lesson not found");
+
+    res.json(new ApiResponse(200, "Job status fetched", {
+        processingStatus: lesson.processingStatus,
+        videoUrl: lesson.videoUrl || null,
+    }));
 });

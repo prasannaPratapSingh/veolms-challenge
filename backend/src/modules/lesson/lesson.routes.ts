@@ -10,7 +10,8 @@ import {
     deleteLesson,
     getLessonsBySection,
     getVideoUploadUrl,
-    triggerProcessing
+    triggerProcessing,
+    getJobStatus
 } from "./lesson.controller.js";
 
 const router = Router();
@@ -23,5 +24,6 @@ router.delete("/:lessonId", authenticateToken, isAdmin, deleteLesson);
 
 router.get("/:lessonId/upload-url", authenticateToken, isAdmin, getVideoUploadUrl);
 router.post("/:lessonId/process", authenticateToken, isAdmin, triggerProcessing);
+router.get("/:lessonId/job-status", authenticateToken, isAdmin, getJobStatus);
 
 export default router;

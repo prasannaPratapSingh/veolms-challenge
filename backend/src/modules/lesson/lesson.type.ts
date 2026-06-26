@@ -1,5 +1,7 @@
 import { Document, Types } from "mongoose";
 
+export type ProcessingStatus = "idle" | "queued" | "processing" | "done" | "failed";
+
 export interface ILesson extends Document {
     title: string;
     description: string;
@@ -8,6 +10,7 @@ export interface ILesson extends Document {
     sectionId: Types.ObjectId;
     isPreview: boolean;
     order: number;
+    processingStatus: ProcessingStatus;
     createdAt?: Date;
     updatedAt?: Date;
 }

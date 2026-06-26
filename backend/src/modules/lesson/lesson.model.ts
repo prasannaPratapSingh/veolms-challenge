@@ -14,7 +14,7 @@ const lessonSchema: Schema<ILesson> = new Schema({
     },
     videoUrl: {
         type: String,
-        required: true
+        default: ""
     },
     duration: {
         type: Number,
@@ -35,6 +35,11 @@ const lessonSchema: Schema<ILesson> = new Schema({
         type: Number,
         required: true,
         default: 0
+    },
+    processingStatus: {
+        type: String,
+        enum: ["idle", "queued", "processing", "done", "failed"],
+        default: "idle"
     }
 }, { timestamps: true });
 

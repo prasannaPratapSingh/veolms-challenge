@@ -66,10 +66,8 @@ export const transcodeProcessor = async (
     // ─── Step 5: DB update ──────────────────────────────
     await job.updateProgress(98);
     const videoUrl = `${envConfig.R2_PUBLIC_URL}/hls/${lessonId}/master.m3u8`;
-
     await Lesson.findByIdAndUpdate(lessonId, { $set: { videoUrl } });
     console.log(`[${lessonId}] Done! URL saved to lesson: ${videoUrl}`);
-
     await job.updateProgress(100);
 
   } finally {
