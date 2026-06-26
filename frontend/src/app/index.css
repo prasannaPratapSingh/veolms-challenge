@@ -6,6 +6,10 @@
   box-sizing: border-box;
 }
 
-html{
+html {
   background-color: black;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
