@@ -9,6 +9,7 @@ import { Course } from "../modules/course/course.model.js";
 import { Enrollment } from "../modules/enrollments/enrollments.model.js";
 import { Payment } from "./payment.model.js";
 import { ICreateOrderBody, IVerifyPaymentBody } from "./payment.type.js";
+import { User } from "../modules/user/user.model.js";
 
 class PaymentService {
     private razorpay: Razorpay;
@@ -86,6 +87,11 @@ class PaymentService {
             { new: true }
         );
 
+        await User.findByIdAndUpdate(
+            { userId, courseId },
+            { $addToSet: { coursesEnrolled: courseId } }
+        )
+        
         await Enrollment.create({ userId, courseId });
 
         return res.status(200).json(new ApiResponse(200, "Payment verified and enrollment successful"));
