@@ -116,7 +116,7 @@ export default function Login() {
                 marginBottom: "1.5rem",
               }}
             >
-              veo<span style={{ opacity: 0.35 }}>lms</span>
+              LearnSphere
             </Link>
 
             <h1

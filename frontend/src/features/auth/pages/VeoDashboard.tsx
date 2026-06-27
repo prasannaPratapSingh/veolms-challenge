@@ -39,11 +39,9 @@ export default function VeoDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-neutral-950 text-white font-sans antialiased overflow-hidden relative selection:bg-violet-500/30">
+    <div className="flex h-screen bg-neutral-950 text-white font-sans antialiased overflow-hidden relative selection:bg-white/20">
 
-      {/* Dynamic Background Glows */}
-      <div className="absolute top-0 -left-1/4 w-1/2 h-1/2 bg-violet-600/20 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 -right-1/4 w-1/2 h-1/2 bg-fuchsia-600/10 blur-[120px] rounded-full pointer-events-none" />
+      {/* Dynamic Background Glows removed — black/white theme */}
 
       {/* Subtle Texture Grid */}
       <div
@@ -61,13 +59,13 @@ export default function VeoDashboard() {
         <div className="p-8">
           {/* Brand */}
           <div className="mb-12 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-violet-500/20">
-              <span className="font-bold text-white text-sm">V</span>
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-lg">
+              <span className="font-bold text-black text-sm">L</span>
             </div>
             <span className="font-extrabold text-xl tracking-tighter">
-              veo<span className="text-white/40 font-medium">lms</span>
+              LearnSphere
             </span>
-            <span className="text-[0.6rem] font-bold text-violet-400 tracking-widest uppercase bg-violet-500/10 px-2 py-0.5 rounded-full ml-1">
+            <span className="text-[0.6rem] font-bold text-white/60 tracking-widest uppercase bg-white/10 px-2 py-0.5 rounded-full ml-1">
               Admin
             </span>
           </div>
@@ -153,11 +151,11 @@ function SidebarButton({ active, onClick, label, icon }: { active: boolean; onCl
     <button
       onClick={onClick}
       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all group ${active
-        ? "bg-gradient-to-r from-violet-600/20 to-fuchsia-600/10 border border-violet-500/30 text-white shadow-lg shadow-violet-500/10"
+        ? "bg-white/10 border border-white/20 text-white shadow-lg"
         : "text-white/50 hover:text-white hover:bg-white/[0.03] border border-transparent"
         }`}
     >
-      <span className={`${active ? "text-violet-400" : "text-white/30 group-hover:text-white/60"} transition-colors`}>
+      <span className={`${active ? "text-white" : "text-white/30 group-hover:text-white/60"} transition-colors`}>
         {icon}
       </span>
       {label}
@@ -169,11 +167,11 @@ function SectionHeader({ title, subtitle, badge }: { title: string; subtitle: st
   return (
     <div className="mb-10">
       {badge && (
-        <span className="inline-block px-3 py-1 mb-4 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-bold tracking-wider uppercase">
+        <span className="inline-block px-3 py-1 mb-4 rounded-full bg-white/10 border border-white/20 text-white/60 text-xs font-bold tracking-wider uppercase">
           {badge}
         </span>
       )}
-      <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight mb-3 text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">
+      <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight mb-3 text-white">
         {title}
       </h1>
       <p className="text-neutral-400 text-base max-w-2xl">{subtitle}</p>
@@ -205,9 +203,9 @@ function OverviewTab({ user }: { user: any }) {
 
       <div className="flex justify-around ">
         {[
-          { label: "Total Learners", value: `${analytics?.users}`,color: "text-emerald-400", bg: "bg-emerald-500/10" },
-          { label: "Active Courses", value: `${analytics?.courses}`, color: "text-violet-400", bg: "bg-violet-500/10" },
-          { label: "Total Enrollments", value: `${analytics?.enrollments}`, color: "text-blue-400", bg: "bg-blue-500/10" },
+          { label: "Total Learners", value: `${analytics?.users}` },
+          { label: "Active Courses", value: `${analytics?.courses}` },
+          { label: "Total Enrollments", value: `${analytics?.enrollments}` },
         ].map((card, i) => (
           <motion.div
             key={card.label}
@@ -216,8 +214,6 @@ function OverviewTab({ user }: { user: any }) {
             transition={{ duration: 0.5, delay: i * 0.1, ease: EASE }}
             className="group bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:border-white/10 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50 relative overflow-hidden"
           >
-            <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full blur-2xl ${card.bg} opacity-50 group-hover:opacity-100 transition-opacity`} />
-
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-neutral-400 text-xs font-bold tracking-widest uppercase">
@@ -297,10 +293,10 @@ function CoursesTab({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: i * 0.05, ease: EASE }}
               key={course._id}
-              className="group bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:border-white/20 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-violet-500/10 cursor-pointer"
+              className="group bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:border-white/20 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50 cursor-pointer"
             >
               <div className="aspect-[16/9] bg-neutral-900 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+                <div className="absolute inset-0 bg-black/60 z-10" />
                 {course.thumbnail ? (
                   <img
                     src={course.thumbnail}
@@ -321,8 +317,8 @@ function CoursesTab({
                       handlePublishToggle(course._id, course.isPublished);
                     }}
                     className={`text-[0.65rem] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full backdrop-blur-md shadow-lg transition-colors hover:scale-105 ${course.isPublished
-                      ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 hover:border-emerald-400/50"
-                      : "bg-neutral-500/40 text-neutral-200 border border-neutral-400/30 hover:bg-violet-500/30 hover:text-white hover:border-violet-500/50"
+                      ? "bg-white/20 text-white border border-white/30 hover:bg-white/30"
+                      : "bg-neutral-500/40 text-neutral-200 border border-neutral-400/30 hover:bg-white/20 hover:text-white hover:border-white/30"
                       }`}
                     title={course.isPublished ? "Click to Unpublish" : "Click to Publish"}
                   >
@@ -332,7 +328,7 @@ function CoursesTab({
               </div>
 
               <div className="p-6 flex-1 flex flex-col">
-                <h3 className="font-extrabold text-xl leading-tight mb-2 line-clamp-1 group-hover:text-violet-400 transition-colors">{course.title}</h3>
+                <h3 className="font-extrabold text-xl leading-tight mb-2 line-clamp-1 group-hover:text-white/80 transition-colors">{course.title}</h3>
 
                 <div className="flex items-center gap-2 mb-4">
                   <div className="w-5 h-5 rounded-full bg-neutral-800 border border-white/10 flex items-center justify-center">
@@ -363,7 +359,7 @@ function CoursesTab({
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); navigate(`/admin/course/${course._id}`); }}
-                      className="text-sm font-bold text-violet-400 hover:text-violet-300 transition-colors flex items-center gap-1 bg-violet-500/10 px-3 py-1.5 rounded-lg"
+                      className="text-sm font-bold text-white hover:text-white/70 transition-colors flex items-center gap-1 bg-white/10 px-3 py-1.5 rounded-lg"
                     >
                       Curriculum
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -432,7 +428,7 @@ function UploadTab({ onSuccess, handleUploadCourse }: { onSuccess: (courseId: st
     }
   };
 
-  const inputClass = "w-full bg-neutral-900/50 border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all placeholder:text-neutral-600";
+  const inputClass = "w-full bg-neutral-900/50 border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all placeholder:text-neutral-600";
   const errorClass = "w-full bg-red-500/5 border border-red-500/50 rounded-xl px-5 py-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all placeholder:text-neutral-600";
   const labelClass = "block text-xs font-bold text-neutral-400 uppercase tracking-widest mb-3";
 
@@ -451,9 +447,6 @@ function UploadTab({ onSuccess, handleUploadCourse }: { onSuccess: (courseId: st
       />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-white/[0.02] backdrop-blur-xl p-8 lg:p-10 rounded-3xl border border-white/5 shadow-2xl shadow-black/50 relative overflow-hidden">
-
-        {/* Subtle Form Glow */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-violet-500/5 blur-3xl rounded-full pointer-events-none" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Title */}
@@ -541,7 +534,7 @@ function UploadTab({ onSuccess, handleUploadCourse }: { onSuccess: (courseId: st
             whileTap={!isSubmitting ? { scale: 0.98 } : {}}
             className={`w-full py-4 rounded-xl font-extrabold text-sm flex items-center justify-center gap-3 transition-all shadow-xl ${isSubmitting
               ? "bg-white/10 text-white/40 cursor-not-allowed"
-              : "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-violet-500/20 hover:shadow-violet-500/40 hover:opacity-90"
+              : "bg-white text-black shadow-black/20 hover:bg-neutral-100 hover:opacity-90"
               }`}
           >
             {isSubmitting ? (
@@ -602,7 +595,7 @@ function EditCourseModal({ course, onClose, handleUpdateCourse }: { course: any;
     }
   };
 
-  const inputClass = "w-full bg-neutral-900/50 border border-white/10 rounded-xl px-5 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all placeholder:text-neutral-600";
+  const inputClass = "w-full bg-neutral-900/50 border border-white/10 rounded-xl px-5 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all placeholder:text-neutral-600";
   const errorClass = "w-full bg-red-500/5 border border-red-500/50 rounded-xl px-5 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all placeholder:text-neutral-600";
   const labelClass = "block text-xs font-bold text-neutral-400 uppercase tracking-widest mb-2";
 

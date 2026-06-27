@@ -46,7 +46,7 @@ export default function Navbar() {
           textDecoration: "none",
         }}
       >
-        veo<span style={{ color: "#fff", opacity: 0.35 }}>lms</span>
+        LearnSphere
       </a>
 
       {/* Desktop links */}

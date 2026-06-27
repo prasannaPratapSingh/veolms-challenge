@@ -32,7 +32,7 @@ export default function CTABanner() {
             marginBottom: "2.4rem",
           }}
         >
-          Join 48,000 learners who chose Veolms to upskill faster.
+          Join 48,000 learners who chose LearnSphere to upskill faster.
           No subscription. Pay once, learn forever.
         </p>
         <motion.a

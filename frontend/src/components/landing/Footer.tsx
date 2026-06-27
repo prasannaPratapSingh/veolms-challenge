@@ -46,7 +46,7 @@ export default function Footer() {
                 marginBottom: "1rem",
               }}
             >
-              veo<span style={{ opacity: 0.35 }}>lms</span>
+              LearnSphere
             </a>
             <p
               style={{
@@ -124,7 +124,7 @@ export default function Footer() {
           }}
         >
           <p style={{ color: "rgba(255,255,255,0.22)", fontSize: "0.77rem", margin: 0 }}>
-            © {new Date().getFullYear()} Veolms. All rights reserved.
+            © {new Date().getFullYear()} LearnSphere. All rights reserved.
           </p>
           <div style={{ display: "flex", gap: "1.5rem" }}>
             {["Privacy", "Terms", "Cookies"].map((item) => (

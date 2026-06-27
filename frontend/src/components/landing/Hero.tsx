@@ -45,22 +45,6 @@ export default function Hero() {
         }}
       />
 
-      {/* Glow */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          top: "30%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "700px",
-          height: "700px",
-          background:
-            "radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
-
       <div style={{ position: "relative", maxWidth: "860px" }}>
         {/* Badge */}
         <motion.span
@@ -102,15 +86,7 @@ export default function Hero() {
         >
           Learn skills that
           <br />
-          <span
-            style={{
-              background:
-                "linear-gradient(135deg, #ffffff 30%, rgba(255,255,255,0.4) 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
+          <span style={{ color: "#fff" }}>
             move careers forward.
           </span>
         </motion.h1>
@@ -130,7 +106,7 @@ export default function Hero() {
             fontWeight: 400,
           }}
         >
-          On-demand courses built by practitioners — not slideshow lecturers.
+          On-demand courses built by practitioners not slideshow lecturers.
           Go from zero to job-ready at your own pace.
         </motion.p>
 

@@ -24,7 +24,7 @@ export default function CourseCard({ course }: Props) {
       <div
         style={{
           height: "152px",
-          background: `linear-gradient(135deg, hsl(0,0%,${13 + course.id * 3}%) 0%, hsl(0,0%,10%) 100%)`,
+          background: `hsl(0, 0%, ${13 + course.id * 3}%)`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

@@ -125,7 +125,7 @@ export default function AdminLogin() {
                 marginBottom: "1.5rem",
               }}
             >
-              veo<span style={{ opacity: 0.35 }}>lms</span>
+              LearnSphere
             </Link>
 
             {/* Admin badge */}
@@ -196,7 +196,7 @@ export default function AdminLogin() {
               <input
                 id="admin-email"
                 type="email"
-                placeholder="admin@veolms.com"
+                placeholder="admin@learnsphere.com"
                 autoComplete="email"
                 className="auth-input"
                 style={errors.email ? inputErrorStyle : inputBase}

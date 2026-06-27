@@ -10,7 +10,7 @@ import Footer from "./landing/Footer";
 
 export default function LandingPage() {
   useEffect(() => {
-    document.title = "Veolms — Learn skills that move careers forward";
+    document.title = "LearnSphere — Learn skills that move careers forward";
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
@@ -25,7 +25,7 @@ export default function LandingPage() {
       document.head.appendChild(meta);
     }
     meta.content =
-      "Veolms is an online learning platform with 500+ expert-led courses in tech, design, and business. Buy once, learn forever.";
+      "LearnSphere is an online learning platform with 500+ expert-led courses in tech, design, and business. Buy once, learn forever.";
 
     return () => {
       document.head.removeChild(link);

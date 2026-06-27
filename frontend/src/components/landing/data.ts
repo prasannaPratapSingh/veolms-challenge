@@ -114,7 +114,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: 2,
     name: "Anika Patel",
     role: "Product Designer · Figma",
-    text: "I've tried four different platforms. Veolms is the only one where the instructors actually respond and the curriculum stays current. Night-and-day difference in quality.",
+    text: "I've tried four different platforms. LearnSphere is the only one where the instructors actually respond and the curriculum stays current. Night-and-day difference in quality.",
     initials: "AP",
   },
   {
