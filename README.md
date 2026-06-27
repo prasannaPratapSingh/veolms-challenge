@@ -289,7 +289,79 @@ The background worker operates entirely independently from the main Express API 
 The worker receives the `rawKey` and streams the file from the `R2_RAW_BUCKET` directly to a newly created temporary directory (`/tmp/lesson-{id}-{timestamp}/input.mp4`).
 
 #### 2. Resolution Transcoding (FFmpeg)
-The video is then parsed and transcoded via `child_process.execSync` into four standard resolutions. 
+The video is then parsed and transcoded via `child_process.spawn` into four standard resolutions.
+
+### Why `spawn` over `exec`/`execSync`
+
+When executing FFmpeg in a production environment, `spawn` is the **recommended choice** over `exec` or `execSync` for several critical reasons:
+
+**1. Streaming Output (No Buffering)**
+- `spawn` returns streams (`stdout`, `stderr`) that emit data as it becomes available
+- `exec`/`execSync` buffers the entire output in memory, which can cause issues with long-running video processing
+- FFmpeg can generate substantial log output during transcoding; `spawn` handles this efficiently
+
+**2. Memory Efficiency**
+- `spawn` does not buffer output, making it suitable for large video files
+- `exec`/`execSync` stores entire output in memory, potentially causing `OutOfMemory` errors for large files
+- With `spawn`, you can process videos of any size without memory concerns
+
+**3. Real-time Progress Monitoring**
+- `spawn` allows real-time parsing of FFmpeg progress updates from stderr
+- You can extract percentage complete, current FPS, encoding speed in real-time
+- Enables live progress reporting to clients or monitoring dashboards
+
+**4. Non-blocking Execution**
+- `spawn` is asynchronous and non-blocking by default
+- `execSync` blocks the Node.js event loop, preventing concurrent request handling
+- Even `exec` (async) buffers everything, while `spawn` streams data
+
+**5. Better Error Handling**
+- `spawn` emits `error` events for process-level issues
+- You can capture both `stdout` and `stderr` separately
+- Allows for better cleanup on process termination
+
+**Example of how `spawn` is used in practice:**
+```typescript
+import { spawn } from 'child_process';
+
+const ffmpeg = spawn('ffmpeg', [
+  '-i', inputPath,
+  '-c:v', 'libx264',
+  '-preset', 'fast',
+  '-crf', '22',
+  '-hls_time', '6',
+  '-hls_playlist_type', 'vod',
+  outputSegmentPattern
+]);
+
+ffmpeg.stderr.on('data', (data) => {
+  // Parse FFmpeg progress in real-time
+  const output = data.toString();
+  if (output.includes('time=')) {
+    // Extract current encoding time and calculate percentage
+    console.log('Transcoding in progress:', output.trim());
+  }
+});
+
+ffmpeg.on('close', (code) => {
+  if (code !== 0) {
+    console.error(`FFmpeg process exited with code ${code}`);
+  }
+});
+```
+
+**When to use `exec`/`execSync`:**
+- Short-running commands with predictable, small output
+- When you need the complete output as a single string
+- Simple shell commands where streaming isn't important
+
+**When to use `spawn`:**
+- Long-running processes like video/audio transcoding
+- Commands that may produce large amounts of output
+- When real-time progress monitoring is needed
+- Production environments where memory efficiency matters
+
+For the VEO LMS video transcoding pipeline, `spawn` ensures reliable, memory-efficient processing of videos of any size while providing visibility into the transcoding progress. 
 
 | Name | Width x Height | Video Bitrate | Audio Bitrate |
 | :--- | :--- | :--- | :--- |
