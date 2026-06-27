@@ -12,7 +12,6 @@ export const useAuth = () => {
     const handleRegister = useCallback(async ({ name, email, password }: registerBody) => {
         try {
             dispatch(setLoading(true));
-
             const data = await register({ name, email, password });
             toast.success("Registration successful! Please login.");
             return data;

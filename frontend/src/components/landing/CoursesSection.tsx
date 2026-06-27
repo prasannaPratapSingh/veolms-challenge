@@ -1,6 +1,10 @@
 import { motion, type Variants } from "framer-motion";
-import { COURSES } from "./data";
 import CourseCard from "./CourseCard";
+import { useCourse } from "../../features/course/hook/course.hook";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+
+
 
 const sectionVariants: Variants = {
   hidden: { opacity: 0, y: 32 },
@@ -18,11 +22,39 @@ const cardVariants: Variants = {
 };
 
 export default function CoursesSection() {
+
+  const { fetchCourses } = useCourse();
+
+  const coursesData = useSelector((state: any) => state?.course?.courses)
+
+  console.log(coursesData);
+  useEffect(() => {
+    fetchCourses();
+    console.log(coursesData);
+  }, [])
+
+
+
   return (
     <section
       id="courses"
       style={{ background: "#0a0a0a", padding: "7rem 1.5rem" }}
     >
+      {/* Responsive grid breakpoints */}
+      <style>{`
+        .courses-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-auto-rows: 1fr;
+          gap: 1.25rem;
+        }
+        @media (max-width: 900px) {
+          .courses-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 580px) {
+          .courses-grid { grid-template-columns: 1fr; }
+        }
+      `}</style>
       <div style={{ maxWidth: "1140px", margin: "0 auto" }}>
         {/* Header */}
         <motion.div
@@ -95,14 +127,10 @@ export default function CoursesSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-            gap: "1.2rem",
-          }}
+          className="courses-grid"
         >
-          {COURSES.map((c) => (
-            <motion.div key={c.id} variants={cardVariants}>
+          {coursesData.map((c:any) => (
+            <motion.div key={c._id} variants={cardVariants} style={{ height: "100%" }}>
               <CourseCard course={c} />
             </motion.div>
           ))}

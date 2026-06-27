@@ -50,7 +50,7 @@ export default function Login() {
   const onSubmit = async (data: loginBody) => {
     try {
       await handleLogin(data);
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     } catch {
       // error already dispatched + toasted by the hook — nothing extra needed
     }

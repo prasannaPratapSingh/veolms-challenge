@@ -8,9 +8,9 @@ const App = () => {
     const { handleGetMe } = useAuth();
 
   useEffect(() => {
-    console.log("handleGetMe called");
     handleGetMe();
   }, [])
+
   return (
     <RouterProvider router={routes}/>
   )

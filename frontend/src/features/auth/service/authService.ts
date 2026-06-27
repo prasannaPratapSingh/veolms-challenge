@@ -33,7 +33,6 @@ export const logout = async () => {
 
 export const getMeUuser = async () => {
     try {
-        console.log("getMe api called");
         const response = await axiosInstance.get('/auth/get-me');
         return response.data;
     } catch (error: any) {
