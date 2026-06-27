@@ -4,9 +4,19 @@ export const getAllCourses = async () => {
     try {
         const response = await axiosInstance.get('/course/');
         return response.data;
-        
+
     } catch (error: any) {
         console.error("Error fetching courses from service layer", error.message);
+        throw error;
+    }
+}
+
+export const getAnalytics = async () => {
+    try {
+        const response = await axiosInstance.get("/admin/dashboard");
+        return response.data;
+    } catch (error: any) {
+        console.log("Error fetching analaytics from course service layer", error.message);
         throw error;
     }
 }
@@ -57,3 +67,4 @@ export const updateCourse = async (courseId: string, data: FormData) => {
         throw error;
     }
 }
+

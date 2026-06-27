@@ -3,6 +3,7 @@ import type { CourseState, Course } from "../../../types/course.type";
 
 const initialState: CourseState = {
     courses: [],
+    analytics: null,
     loading: false,
     error: null
 }
@@ -25,9 +26,12 @@ export const courseSlice = createSlice({
         },
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload;
+        },
+        setAnalytics: (state, action: PayloadAction<any>) => {
+            state.analytics = action.payload;
         }
     }
 })
 
-export const { setCourses, updateCourseInState, setError, setLoading } = courseSlice.actions;
+export const { setCourses, updateCourseInState, setError, setLoading, setAnalytics } = courseSlice.actions;
 export default courseSlice.reducer;

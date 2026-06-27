@@ -14,4 +14,5 @@ export interface CourseState {
     courses: Course[];
     loading: boolean;
     error: string | null;
+    analytics: any | null;
 }

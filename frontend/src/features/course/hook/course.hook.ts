@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useCallback } from "react";
-import { setError, setLoading, setCourses, updateCourseInState } from "../state/course.slice";
-import { getAllCourses, uploadCourse, publishCourse, unpublishCourse, updateCourse } from "../service/course.service";
+import { setError, setLoading, setCourses, updateCourseInState, setAnalytics } from "../state/course.slice";
+import { getAllCourses, uploadCourse, publishCourse, unpublishCourse, updateCourse, getAnalytics } from "../service/course.service";
 import { toast } from "react-hot-toast";
 import type { RootState } from "../../../app/store/app.store";
 
@@ -83,6 +83,23 @@ export const useCourse = () => {
         }
     }, [dispatch]);
 
-    return { courses, loading, fetchCourses, handleGetAllCourses, handleUploadCourse, handlePublishToggle, handleUpdateCourse };
+    const handleGetAnalytics = useCallback(async () => {
+        try {
+            dispatch(setLoading(true))
+            const data = await getAnalytics();
+            dispatch(setAnalytics(data?.data));
+        } catch (error: any) {
+            const message = error?.response?.data?.message || error?.message || 'Failed to fetch courses';
+            dispatch(setError(message));
+            toast.error(message);
+            throw error;
+        }
+        finally {
+            dispatch(setLoading(false));
+        }
+
+    }, [dispatch])
+
+    return { courses, loading, fetchCourses, handleGetAllCourses, handleUploadCourse, handlePublishToggle, handleUpdateCourse, handleGetAnalytics };
 
 }
