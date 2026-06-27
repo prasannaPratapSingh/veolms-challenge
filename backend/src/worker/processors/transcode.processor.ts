@@ -31,7 +31,7 @@ export const transcodeProcessor = async (
       console.log(`[${lessonId}] Transcoding ${res.name}...`);
 
       const resOutputDir = path.join(tmpDir, res.name);
-      transcodeToHLS(inputPath, resOutputDir, res);
+      await transcodeToHLS(inputPath, resOutputDir, res);
     }
 
     // ─── Step 3: Upload segments to R2 ─────────────────

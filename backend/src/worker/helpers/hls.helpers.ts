@@ -1,12 +1,10 @@
-
-import { execSync } from "child_process";
+import { spawn } from "child_process";
 import fs from "fs";
 
-
 export const RESOLUTIONS = [
-    { name: "360p", width: 640, height: 360, bitrate: "800k", audioBitrate: "96k" },
-    { name: "480p", width: 854, height: 480, bitrate: "1400k", audioBitrate: "128k" },
-    { name: "720p", width: 1280, height: 720, bitrate: "2800k", audioBitrate: "128k" },
+    { name: "360p",  width: 640,  height: 360,  bitrate: "800k",  audioBitrate: "96k"  },
+    { name: "480p",  width: 854,  height: 480,  bitrate: "1400k", audioBitrate: "128k" },
+    { name: "720p",  width: 1280, height: 720,  bitrate: "2800k", audioBitrate: "128k" },
     { name: "1080p", width: 1920, height: 1080, bitrate: "5000k", audioBitrate: "192k" },
 ];
 
@@ -18,38 +16,60 @@ export interface Resolution {
     audioBitrate: string;
 }
 
-// ab har ek resolution ek liye hume transcode karna hoga HLS me isika ka use karke hum baad me
-// loop chala denge upar RESOLUTIONS ka use karke to humare pass 4 RESOLUTIONS hai to itne hi
-// containers spin up honge 
-// for that we need to create job for each resolution, for this job we use child process
-// ab ek function create karte hai jo ffmpeg chalayega and create-hls-playlist.ts me use karenge 
+/**
+ * Transcode a single video to HLS at the given resolution using spawn.
+ * spawn is non-blocking and streams stderr live — far better than execSync
+ * for large files because it doesn't buffer the entire output in memory.
+ */
+export const transcodeToHLS = (
+    inputPath: string,
+    outputDir: string,
+    resolution: Resolution
+): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        fs.mkdirSync(outputDir, { recursive: true });
 
-export const transcodeToHLS = (inputPath: string, outputDir: string, resolution: Resolution): void => {
+        // Build args as an array — no shell injection risk, no string escaping issues
+        const args = [
+            "-i", inputPath,
+            "-vf", `scale=${resolution.width}:${resolution.height}`,
+            "-c:v", "libx264",
+            "-preset", "fast",
+            "-crf", "22",
+            "-b:v", resolution.bitrate,
+            "-maxrate", resolution.bitrate,
+            "-bufsize", `${parseInt(resolution.bitrate) * 2}k`,
+            "-c:a", "aac",
+            "-b:a", resolution.audioBitrate,
+            "-hls_time", "6",
+            "-hls_playlist_type", "vod",
+            "-hls_segment_filename", `${outputDir}/seg_%03d.ts`,
+            `${outputDir}/index.m3u8`,
+            "-y",
+        ];
 
-    fs.mkdirSync(outputDir, { recursive: true });
+        const ffmpeg = spawn("ffmpeg", args, { stdio: ["ignore", "ignore", "pipe"] });
 
-    const cmd = [
-        `ffmpeg -i "${inputPath}"`,
-        `-vf scale=${resolution.width}:${resolution.height}`,
-        `-c:v libx264 -preset fast -crf 22`,
-        `-b:v ${resolution.bitrate}`,
-        `-maxrate ${resolution.bitrate}`,
-        `-bufsize ${parseInt(resolution.bitrate) * 2}k`,
-        `-c:a aac -b:a ${resolution.audioBitrate}`,
-        `-hls_time 6`,           // har segment 6 seconds ka
-        `-hls_playlist_type vod`, // video on demand
-        `-hls_segment_filename "${outputDir}/seg_%03d.ts"`,
-        `"${outputDir}/index.m3u8"`,
-        `-y`, // overwrite if exists
-    ].join(" ");
-    execSync(cmd, { stdio: "inherit" });
-}
+        // Stream stderr to console in real time without buffering
+        ffmpeg.stderr.on("data", (chunk: Buffer) => {
+            process.stdout.write(`[ffmpeg/${resolution.name}] ${chunk.toString()}`);
+        });
 
-// ab humara transcoding ho hogayi ab hume master playlist banani hogi!!
+        ffmpeg.on("close", (code) => {
+            if (code === 0) {
+                resolve();
+            } else {
+                reject(new Error(`ffmpeg exited with code ${code} for resolution ${resolution.name}`));
+            }
+        });
 
-export const generateMasterPlaylist = (
-    resolutions: Resolution[]
-): string => {
+        ffmpeg.on("error", (err) => {
+            reject(new Error(`ffmpeg spawn error: ${err.message}`));
+        });
+    });
+};
+
+export const generateMasterPlaylist = (resolutions: Resolution[]): string => {
     const header = `#EXTM3U\n#EXT-X-VERSION:3\n`;
 
     const variants = resolutions.map((res) => {
@@ -62,5 +82,3 @@ export const generateMasterPlaylist = (
 
     return header + variants.join("\n");
 };
-
-
