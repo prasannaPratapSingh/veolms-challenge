@@ -27,11 +27,9 @@ const cookieOptions = {
     path: '/',
 };
 
+
 // For clearCookie, set expires in the past — most reliable cross-browser approach
-const clearCookieOptions = {
-    path: '/',
-    expires: new Date(0),
-};
+
 
 export const register = asyncHandler(async (
     req: Request<{}, {}, IRegisterBody>,
@@ -282,36 +280,34 @@ export const refreshToken =
         }
     );
 
+
 export const logout = asyncHandler(
     async (
         req: Request,
         res: Response
     ) => {
-        const refreshToken = req.cookies?.refreshToken;
-        const accessToken  = req.cookies?.accessToken;
+        const refreshToken =
+            req.cookies?.refreshToken;
 
-        // Blacklist the access token immediately so it can't be reused
-        // even if the cookie clear fails on the client side.
-        if (accessToken) {
-            try {
-                const decoded = jwt.decode(accessToken) as CustomJwtPayload | null;
-                if (decoded?.exp) {
-                    const ttl = decoded.exp - Math.floor(Date.now() / 1000);
-                    if (ttl > 0) {
-                        await redisClient.setEx(`blacklist:${accessToken}`, ttl, 'true');
-                    }
-                }
-            } catch {
-                // ignore — still proceed with logout
-            }
-        }
+        // Even if token is missing,
+        // clear cookies anyway
 
-        // Even if refresh token is missing, clear cookies and return
         if (!refreshToken) {
-            res.clearCookie('accessToken', clearCookieOptions);
-            res.clearCookie('refreshToken', clearCookieOptions);
+            res.clearCookie(
+                'accessToken',
+                cookieOptions
+            );
+
+            res.clearCookie(
+                'refreshToken',
+                cookieOptions
+            );
+
             return res.status(200).json(
-                new ApiResponse(200, 'User logged out successfully!')
+                new ApiResponse(
+                    200,
+                    'User logged out successfully!'
+                )
             );
         }
 
@@ -321,26 +317,51 @@ export const logout = asyncHandler(
                 envConfig.REFRESH_TOKEN_SECRET
             ) as CustomJwtPayload;
 
-            const currUser = await User.findById(decoded.id);
+            const currUser =
+                await User.findById(
+                    decoded.id
+                );
 
             if (currUser) {
-                currUser.refreshToken = null;
+                currUser.refreshToken =
+                    null;
+
                 await currUser.save();
             }
 
-            const ttl = decoded.exp! - Math.floor(Date.now() / 1000);
+            const ttl =
+                decoded.exp! -
+                Math.floor(
+                    Date.now() / 1000
+                );
+
             if (ttl > 0) {
-                await redisClient.setEx(`blacklist:${refreshToken}`, ttl, 'true');
+                await redisClient.setEx(
+                    `blacklist:${refreshToken}`,
+                    ttl,
+                    'true'
+                );
             }
         } catch {
-            // ignore token verification errors — logout should still succeed
+            // ignore token verification errors
+            // logout should still succeed
         }
 
-        res.clearCookie('accessToken', clearCookieOptions);
-        res.clearCookie('refreshToken', clearCookieOptions);
+        res.clearCookie(
+            'accessToken',
+            cookieOptions
+        );
+
+        res.clearCookie(
+            'refreshToken',
+            cookieOptions
+        );
 
         return res.status(200).json(
-            new ApiResponse(200, 'User logged out successfully!')
+            new ApiResponse(
+                200,
+                'User logged out successfully!'
+            )
         );
     }
 );

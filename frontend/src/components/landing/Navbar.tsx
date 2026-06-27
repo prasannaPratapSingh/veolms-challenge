@@ -45,7 +45,9 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
   const onLogout = async () => {
     setDropdownOpen(false);
     await handleLogout();
-    navigate("/", { replace: true });
+    // Full page reload + replace — clears Redux, clears history entry,
+    // prevents browser back/forward from restoring stale auth state.
+    window.location.replace("/");
   };
 
   return (

@@ -35,7 +35,7 @@ export default function VeoDashboard() {
 
   const onLogout = async () => {
     await handleLogout();
-    navigate("/admin", { replace: true });
+    window.location.replace("/admin");
   };
 
   return (
