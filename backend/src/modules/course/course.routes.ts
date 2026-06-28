@@ -17,7 +17,7 @@ router.delete("/:courseId", authenticateToken, isAdmin, deleteCourse);
 router.patch("/:courseId", authenticateToken, isAdmin, upload.single("thumbnail"), validateRequest(updateCourseSchema), updateCourse);
 
 // testing aggregation pipeline...
-router.get("/getCourse/:courseId", authenticateToken, getCourseContent);
+router.get("/getCourse/:courseId", getCourseContent);
 
 
 

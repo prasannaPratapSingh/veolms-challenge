@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router";
 
 interface Course {
   _id: string;
@@ -23,8 +24,11 @@ function formatDate(iso: string) {
 }
 
 export default function CourseCard({ course }: Props) {
+  const navigate = useNavigate();
+
   return (
     <motion.article
+      onClick={() => navigate(`/course/${course._id}`)}
       whileHover={{ y: -4, borderColor: "rgba(255,255,255,0.16)" }}
       transition={{ duration: 0.2, ease: "easeOut" }}
       style={{

@@ -113,9 +113,17 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                   <p className="text-white text-sm font-semibold leading-tight truncate">{name}</p>
                   <p className="text-white/35 text-xs mt-0.5">Learner</p>
                 </div>
+
+                <Link to={"/dashboard"}>
+                  <button
+                    className="w-full text-left px-4 py-3 text-sm text-white/60 hover:text-white hover:bg-white/4 transition-colors duration-150 cursor-pointer bg-transparent border-0 font-medium"
+                  >
+                    Dashboard
+                  </button>
+                </Link>
                 <button
                   onClick={onLogout}
-                  className="w-full text-left px-4 py-3 text-sm text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors duration-150 cursor-pointer bg-transparent border-0 font-medium"
+                  className="w-full text-left px-4 py-3 text-sm text-white/60 hover:text-white hover:bg-white/4 transition-colors duration-150 cursor-pointer bg-transparent border-0 font-medium"
                 >
                   Sign out
                 </button>

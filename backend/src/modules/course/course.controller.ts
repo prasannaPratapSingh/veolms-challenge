@@ -8,6 +8,9 @@ import { ImageKitService } from "../../infrastructure/imagekit/imagekit.service.
 import { User } from "../user/user.model.js";
 import { UserRole } from "../user/user.interface.js";
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+import envConfig from "../../config/envConfig.js";
+import { Enrollment } from "../enrollments/enrollments.model.js";
 
 
 export const getAllCourses = asyncHandler(async (
@@ -229,6 +232,23 @@ export const getCourseContent = asyncHandler(async (
         throw new ApiError(400, "Invalid course id");
     }
 
+    // Optional auth: check cookie without middleware
+    let isEnrolled = false;
+    const token = req.cookies?.accessToken;
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, envConfig.ACCESS_TOKEN_SECRET) as jwt.JwtPayload & { id: string };
+            const enrollment = await Enrollment.findOne({
+                userId: decoded.id,
+                courseId: new mongoose.Types.ObjectId(courseId),
+            });
+            isEnrolled = !!enrollment;
+        } catch {
+            // Invalid / expired token — treat as unauthenticated
+            isEnrolled = false;
+        }
+    }
+
     const pipeline: mongoose.PipelineStage[] = [
         {
             $match: {
@@ -321,11 +341,24 @@ export const getCourseContent = asyncHandler(async (
         throw new ApiError(404, "Course not found");
     }
 
+    const courseData = result[0];
+
+    // Post-process: strip videoUrl from lessons if not enrolled
+    if (!isEnrolled) {
+        courseData.sections = courseData.sections.map((section: any) => ({
+            ...section,
+            lessons: section.lessons.map((lesson: any) => ({
+                ...lesson,
+                videoUrl: "",
+            })),
+        }));
+    }
+
     return res.status(200).json(
         new ApiResponse(
             200,
             "Course content fetched successfully",
-            result[0]
+            courseData
         )
     );
 });

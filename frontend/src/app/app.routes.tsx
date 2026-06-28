@@ -7,7 +7,10 @@ import Login from "../features/auth/pages/Login";
 import SignUp from "../features/auth/pages/SignUp";
 import AdminLogin from "../features/auth/pages/AdminLogin";
 import VeoDashboard from "../features/auth/pages/VeoDashboard";
+import UserDashboard from "../features/auth/pages/UserDashboard";
 import CourseEditor from "../features/course/pages/CourseEditor";
+import CourseDetail from "../features/course/pages/CourseDetail";
+import CoursePlayer from "../features/course/pages/CoursePlayer";
 
 /* ── guards ── */
 import Protected from "../features/auth/components/Protected";
@@ -22,6 +25,10 @@ export const routes = createBrowserRouter([
     {
         path: "/",
         element: <LandingPage />,
+    },
+    {
+        path: "/course/:courseId",
+        element: <CourseDetail />,
     },
 
     /* ── learner auth ── */
@@ -57,12 +64,16 @@ export const routes = createBrowserRouter([
             {
                 path: "/dashboard",
                 element: <Protected>
-                    <>Welcome to the protected page!</>
+                    <UserDashboard />
                 </Protected>,
             },
             {
                 path: "/my-courses",
                 element: <>My Courses</>,
+            },
+            {
+                path: "/course/:courseId/learn",
+                element: <Protected><CoursePlayer /></Protected>,
             },
         ],
     },
