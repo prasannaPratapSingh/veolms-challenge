@@ -11,6 +11,8 @@ import UserDashboard from "../features/auth/pages/UserDashboard";
 import CourseEditor from "../features/course/pages/CourseEditor";
 import CourseDetail from "../features/course/pages/CourseDetail";
 import CoursePlayer from "../features/course/pages/CoursePlayer";
+import CoursesPage from "../features/course/pages/CoursesPage";
+import Checkout from "../features/course/pages/Checkout";
 
 /* ── guards ── */
 import Protected from "../features/auth/components/Protected";
@@ -29,6 +31,10 @@ export const routes = createBrowserRouter([
     {
         path: "/course/:courseId",
         element: <CourseDetail />,
+    },
+    {
+        path: "/courses",
+        element: <CoursesPage />,
     },
 
     /* ── learner auth ── */
@@ -74,6 +80,10 @@ export const routes = createBrowserRouter([
             {
                 path: "/course/:courseId/learn",
                 element: <Protected><CoursePlayer /></Protected>,
+            },
+            {
+                path: "/course/:courseId/checkout",
+                element: <Protected><Checkout /></Protected>,
             },
         ],
     },

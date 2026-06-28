@@ -71,12 +71,21 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
         <ul className="flex gap-8 list-none m-0 p-0">
           {NAV_LINKS.map((item) => (
             <li key={item}>
-              <a
-                href={`#${item.toLowerCase().replace(" ", "-")}`}
-                className="text-white/60 text-sm font-medium no-underline transition-colors duration-200 hover:text-white"
-              >
-                {item}
-              </a>
+              {item === "Courses" ? (
+                <Link
+                  to="/courses"
+                  className="text-white/60 text-sm font-medium no-underline transition-colors duration-200 hover:text-white"
+                >
+                  {item}
+                </Link>
+              ) : (
+                <a
+                  href={`#${item.toLowerCase().replace(" ", "-")}`}
+                  className="text-white/60 text-sm font-medium no-underline transition-colors duration-200 hover:text-white"
+                >
+                  {item}
+                </a>
+              )}
             </li>
           ))}
         </ul>

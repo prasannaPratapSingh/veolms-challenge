@@ -39,10 +39,12 @@ class PaymentService {
         const existingPayment = await Payment.findOne({ userId, courseId, status: "SUCCESS" });
         if (existingPayment) throw new ApiError(400, "Payment already initiated for this course");
 
+        const receipt = `${courseId.slice(-8)}_${userId?.toString().slice(-8)}_${Date.now().toString().slice(-8)}`;
+
         const order = await this.razorpay.orders.create({
             amount: course.price * 100,
             currency: "INR",
-            receipt: `${courseId}_${userId}_${Date.now()}`
+            receipt,
         });
 
         await Payment.create({
@@ -88,7 +90,7 @@ class PaymentService {
         );
 
         await User.findByIdAndUpdate(
-            { userId, courseId },
+            userId,
             { $addToSet: { coursesEnrolled: courseId } }
         )
         

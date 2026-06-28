@@ -288,6 +288,7 @@ export default function CourseDetail() {
                 <motion.button
                   whileHover={{ scale: 1.02, opacity: 0.9 }}
                   whileTap={{ scale: 0.97 }}
+                  onClick={() => navigate(`/course/${courseId}/checkout`)}
                   className="bg-white text-black font-bold text-sm px-6 py-3 rounded-lg cursor-pointer border-0"
                 >
                   Enrol Now

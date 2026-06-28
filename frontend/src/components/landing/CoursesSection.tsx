@@ -1,4 +1,5 @@
 import { motion, type Variants } from "framer-motion";
+import { Link } from "react-router";
 import CourseCard from "./CourseCard";
 import { useCourse } from "../../features/course/hook/course.hook";
 import { useEffect } from "react";
@@ -96,7 +97,7 @@ export default function CoursesSection() {
             </h2>
           </div>
           <a
-            href="#courses"
+            href="/courses"
             style={{
               color: "rgba(255,255,255,0.45)",
               fontSize: "0.875rem",
