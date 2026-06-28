@@ -25,15 +25,12 @@ export default function CoursesSection() {
 
   const { fetchCourses } = useCourse();
 
-  const coursesData = useSelector((state: any) => state?.course?.courses)
+  const coursesData = useSelector((state: any) => state?.course?.courses);
+  const loading = useSelector((state: any) => state?.course?.loading);
 
-  console.log(coursesData);
   useEffect(() => {
     fetchCourses();
-    console.log(coursesData);
   }, [])
-
-
 
   return (
     <section
@@ -122,19 +119,49 @@ export default function CoursesSection() {
         </motion.div>
 
         {/* Grid */}
-        <motion.div
-          variants={gridVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          className="courses-grid"
-        >
-          {coursesData.map((c:any) => (
-            <motion.div key={c._id} variants={cardVariants} style={{ height: "100%" }}>
-              <CourseCard course={c} />
-            </motion.div>
-          ))}
-        </motion.div>
+        {loading ? (
+          /* Skeleton cards while loading */
+          <div className="courses-grid">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  background: "#111",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  borderRadius: "14px",
+                  overflow: "hidden",
+                  height: "380px",
+                  animation: "pulse 1.5s ease-in-out infinite",
+                }}
+              >
+                <div style={{ height: "180px", background: "rgba(255,255,255,0.04)" }} />
+                <div style={{ padding: "1.25rem 1.4rem" }}>
+                  <div style={{ height: "16px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", marginBottom: "0.75rem", width: "80%" }} />
+                  <div style={{ height: "12px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", marginBottom: "0.5rem", width: "100%" }} />
+                  <div style={{ height: "12px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", width: "60%" }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : coursesData.length === 0 ? (
+          <p style={{ color: "rgba(255,255,255,0.3)", textAlign: "center", fontSize: "0.9rem" }}>
+            No courses available yet.
+          </p>
+        ) : (
+          <motion.div
+            variants={gridVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            className="courses-grid"
+          >
+            {coursesData.map((c: any) => (
+              <motion.div key={c._id} variants={cardVariants} style={{ height: "100%" }}>
+                <CourseCard course={c} />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   );

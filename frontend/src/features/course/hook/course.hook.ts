@@ -18,10 +18,7 @@ export const useCourse = () => {
             dispatch(setCourses(data?.data || []));
             return data;
         } catch (error: any) {
-            const message = error?.response?.data?.message || error?.message || 'Failed to fetch courses';
-            dispatch(setError(message));
-            toast.error(message);
-            throw error;
+            dispatch(setError(null));
         } finally {
             dispatch(setLoading(false));
         }

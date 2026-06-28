@@ -8,7 +8,7 @@ import { uploadCourseSchema, updateCourseSchema } from "./course.validation.js";
 
 const router = Router();
 
-router.get("/", authenticateToken, getAllCourses);
+router.get("/", getAllCourses); // public — landing page course listing
 router.post("/upload-course", authenticateToken, isAdmin, upload.single("thumbnail"), validateRequest(uploadCourseSchema), uploadCourse);
 router.patch("/:courseId/publish", authenticateToken, isAdmin, publishCourse);
 router.patch("/:courseId/unPublish", authenticateToken, isAdmin, unPublishCourse);

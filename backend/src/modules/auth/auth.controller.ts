@@ -24,6 +24,7 @@ const cookieOptions = {
     httpOnly: true,
     secure: isProd,
     sameSite: isProd ? 'strict' as const : 'lax' as const,
+    path:"/"
 };
 
 
