@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../features/auth/hook/auth.hook";
 
 const NAV_LINKS = ["Courses", "How It Works", "Pricing", "Blog"];
@@ -15,7 +15,6 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
   const { handleLogout } = useAuth();
   const navigate = useNavigate();
 
-  // derive the name and avatar from however the API nests it
   const name: string =
     user?.data?.name ?? user?.user?.name ?? user?.name ?? "";
   const avatarUrl: string =
@@ -28,13 +27,9 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // close dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setDropdownOpen(false);
       }
     };
@@ -45,8 +40,6 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
   const onLogout = async () => {
     setDropdownOpen(false);
     await handleLogout();
-    // Full page reload + replace — clears Redux, clears history entry,
-    // prevents browser back/forward from restoring stale auth state.
     window.location.replace("/");
   };
 
@@ -66,12 +59,12 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
       ].join(" ")}
     >
       {/* Logo */}
-      <a
-        href="/"
+      <Link
+        to="/"
         className="text-[1.35rem] font-extrabold tracking-[-0.03em] text-white no-underline"
       >
         LearnSphere
-      </a>
+      </Link>
 
       {/* Nav links — hidden in minimal mode (dashboard etc.) */}
       {!minimal && (
@@ -91,30 +84,22 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
 
       {/* Auth area */}
       {user ? (
-        /* ── Logged-in state ── */
         <div className="relative flex items-center gap-3" ref={dropdownRef}>
-          {/* Name */}
           <span className="text-white/60 text-sm font-medium hidden sm:block">
             {name}
           </span>
 
-          {/* Avatar button */}
           <button
             onClick={() => setDropdownOpen((v) => !v)}
             className="w-9 h-9 rounded-full overflow-hidden border border-white/10 shrink-0 cursor-pointer transition-opacity duration-200 hover:opacity-80 bg-white flex items-center justify-center"
           >
             {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt={name}
-                className="w-full h-full object-cover"
-              />
+              <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
             ) : (
               <span className="text-black text-sm font-bold">{initial}</span>
             )}
           </button>
 
-          {/* Dropdown */}
           <AnimatePresence>
             {dropdownOpen && (
               <motion.div
@@ -125,9 +110,7 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                 className="absolute top-[calc(100%+0.6rem)] right-0 min-w-[160px] bg-[#111] border border-white/10 rounded-xl overflow-hidden shadow-2xl shadow-black/60"
               >
                 <div className="px-4 py-3 border-b border-white/[0.06]">
-                  <p className="text-white text-sm font-semibold leading-tight truncate">
-                    {name}
-                  </p>
+                  <p className="text-white text-sm font-semibold leading-tight truncate">{name}</p>
                   <p className="text-white/35 text-xs mt-0.5">Learner</p>
                 </div>
                 <button
@@ -141,22 +124,21 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
           </AnimatePresence>
         </div>
       ) : (
-        /* ── Guest state ── */
         <div className="flex items-center gap-3">
-          <a
-            href="/login"
+          <Link
+            to="/login"
             className="text-white/70 text-sm font-medium no-underline px-4 py-[0.45rem] rounded-md transition-colors duration-200 hover:text-white"
           >
             Log in
-          </a>
-          <motion.a
-            href="/signup"
-            whileHover={{ opacity: 0.88, scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
-            className="bg-white text-black text-sm font-bold no-underline px-5 py-2 rounded-md inline-block"
-          >
-            Get Started
-          </motion.a>
+          </Link>
+          <motion.div whileHover={{ opacity: 0.88, scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+            <Link
+              to="/signup"
+              className="bg-white text-black text-sm font-bold no-underline px-5 py-2 rounded-md inline-block"
+            >
+              Get Started
+            </Link>
+          </motion.div>
         </div>
       )}
     </motion.nav>

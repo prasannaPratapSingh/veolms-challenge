@@ -12,7 +12,7 @@ router.post("/register", strictAuthLimiter, validateRequest(registerSchema), reg
 
 router.post("/login", strictAuthLimiter, validateRequest(loginSchema), login)
 
-router.post("/logout",strictAuthLimiter,logout);
+router.post("/logout", logout);
 
 router.post("/refresh",refreshToken);
 

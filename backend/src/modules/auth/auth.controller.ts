@@ -24,7 +24,6 @@ const cookieOptions = {
     httpOnly: true,
     secure: isProd,
     sameSite: isProd ? 'strict' as const : 'lax' as const,
-    path: '/',
 };
 
 
@@ -386,7 +385,10 @@ export const getMe = asyncHandler(async (
         if (!user) {
             throw new ApiError(400, "No such user exists!");
         }
-        return res.status(200).json(new ApiResponse(200, "User data fetched successfully!", { id: user.id, name: user.name, email: user.email, avatarUrl: user.avatarUrl, role: user.role }));
+        return res
+          .status(200)
+          .set("Cache-Control", "no-store")
+          .json(new ApiResponse(200, "User data fetched successfully!", { id: user.id, name: user.name, email: user.email, avatarUrl: user.avatarUrl, role: user.role }));
 
     } catch (error) {
         next(error);

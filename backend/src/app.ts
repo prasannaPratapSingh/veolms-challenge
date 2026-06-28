@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import helmet from 'helmet';
 import dotenv from 'dotenv';
 import asyncHandler from './utils/asyncHandler.js';
 import ApiResponse from './utils/ApiResponse.js';
@@ -18,6 +19,12 @@ import analyticsRouter from "../src/modules/admin/admin.routes.js";
 dotenv.config();
 
 const app = express();
+
+// Security headers — must be before other middleware
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }, // allow ImageKit/R2 media to load
+    contentSecurityPolicy: false, // disable CSP here — configure separately if needed
+}));
 
 app.use(cors({
     origin: 'http://localhost:5173',
