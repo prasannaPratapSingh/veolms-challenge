@@ -11,12 +11,14 @@ import {
     getLessonsBySection,
     getVideoUploadUrl,
     triggerProcessing,
-    getJobStatus
+    getJobStatus,
+    reorderLessons
 } from "./lesson.controller.js";
 
 const router = Router();
 
 router.post("/", authenticateToken, isAdmin, validateRequest(createLessonSchema), createLesson);
+router.put("/reorder", authenticateToken, isAdmin, reorderLessons);
 router.get("/section/:sectionId", authenticateToken, getLessonsBySection);
 router.get("/:lessonId", authenticateToken, getLessonById);
 router.patch("/:lessonId", authenticateToken, isAdmin, validateRequest(updateLessonSchema), updateLesson);

@@ -47,6 +47,11 @@ const lessonSlice = createSlice({
             const list = state.lessonsBySection[sectionId] || [];
             const idx = list.findIndex(l => l._id === lesson._id);
             if (idx !== -1) list[idx] = lesson;
+            // Re-sort so order changes are immediately reflected
+            state.lessonsBySection[sectionId].sort((a, b) => a.order - b.order);
+        },
+        reorderLessons: (state, action: PayloadAction<{ sectionId: string; lessons: Lesson[] }>) => {
+            state.lessonsBySection[action.payload.sectionId] = action.payload.lessons;
         },
         removeLessonFromState: (state, action: PayloadAction<{ sectionId: string; lessonId: string }>) => {
             const { sectionId, lessonId } = action.payload;
@@ -59,5 +64,5 @@ const lessonSlice = createSlice({
     },
 });
 
-export const { setLessons, addLesson, updateLessonInState, removeLessonFromState, setLoading, setError } = lessonSlice.actions;
+export const { setLessons, addLesson, updateLessonInState, reorderLessons, removeLessonFromState, setLoading, setError } = lessonSlice.actions;
 export default lessonSlice.reducer;

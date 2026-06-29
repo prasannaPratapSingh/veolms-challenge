@@ -21,7 +21,7 @@ interface UploadCourseForm {
 export default function VeoDashboard() {
   const user = useSelector((state: any) => state.auth.user);
   const { handleLogout } = useAuth();
-  const { handleGetAllCourses, handleUploadCourse, handlePublishToggle, handleUpdateCourse, handleGetAnalytics } = useCourse();
+  const { fetchCoursesAdmin, handleUploadCourse, handlePublishToggle, handleUpdateCourse, handleGetAnalytics } = useCourse();
 
   useEffect(() => {
     handleGetAnalytics()
@@ -135,7 +135,7 @@ export default function VeoDashboard() {
         <div className="max-w-7xl mx-auto p-10 lg:p-14">
           <AnimatePresence mode="wait">
             {activeTab === "overview" && <OverviewTab key="overview" user={user} />}
-            {activeTab === "courses" && <CoursesTab key="courses" courses={courses} fetchCourses={handleGetAllCourses} handlePublishToggle={handlePublishToggle} handleUpdateCourse={handleUpdateCourse} navigate={navigate} />}
+            {activeTab === "courses" && <CoursesTab key="courses" courses={courses} fetchCourses={fetchCoursesAdmin} handlePublishToggle={handlePublishToggle} handleUpdateCourse={handleUpdateCourse} navigate={navigate} />}
             {activeTab === "upload" && <UploadTab key="upload" onSuccess={(courseId) => navigate(`/admin/course/${courseId}`)} handleUploadCourse={handleUploadCourse} />}
           </AnimatePresence>
         </div>

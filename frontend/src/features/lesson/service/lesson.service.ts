@@ -25,6 +25,11 @@ export const updateLesson = async (lessonId: string, data: Partial<CreateLessonD
     return response.data;
 };
 
+export const reorderLessons = async (items: { _id: string; order: number }[]) => {
+    const response = await axiosInstance.put('/lesson/reorder', { items });
+    return response.data;
+};
+
 export const deleteLesson = async (lessonId: string) => {
     const response = await axiosInstance.delete(`/lesson/${lessonId}`);
     return response.data;

@@ -232,3 +232,42 @@ export const getJobStatus = asyncHandler(async (req: Request, res: Response) => 
         videoUrl: lesson.videoUrl || null,
     }));
 });
+
+// PUT /lesson/reorder  — atomically reassign order for all lessons in a section
+export const reorderLessons = asyncHandler(async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const { items } = req.body as { items: { _id: string; order: number }[] };
+
+        if (!Array.isArray(items) || items.length === 0) {
+            throw new ApiError(400, "items array is required");
+        }
+
+        // Step 1: Move all to temp orders to avoid unique-index collisions
+        await Lesson.bulkWrite(
+            items.map(({ _id }, i) => ({
+                updateOne: {
+                    filter: { _id },
+                    update: { $set: { order: 10000 + i } },
+                }
+            }))
+        );
+
+        // Step 2: Set the actual new orders
+        await Lesson.bulkWrite(
+            items.map(({ _id, order }) => ({
+                updateOne: {
+                    filter: { _id },
+                    update: { $set: { order } },
+                }
+            }))
+        );
+
+        return res.status(200).json(new ApiResponse(200, "Lessons reordered successfully", null));
+    } catch (error) {
+        next(error);
+    }
+});

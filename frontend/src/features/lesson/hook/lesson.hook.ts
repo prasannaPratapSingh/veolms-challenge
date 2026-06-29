@@ -2,8 +2,9 @@ import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import {
-    setLessons, addLesson, updateLessonInState, removeLessonFromState, setLoading, setError
+    setLessons, addLesson, updateLessonInState, reorderLessons, removeLessonFromState, setLoading, setError
 } from "../state/lesson.slice";
+import type { Lesson } from "../state/lesson.slice";
 import {
     createLesson as createLessonSvc,
     getLessonsBySection as getLessonsBySectionSvc,
@@ -13,6 +14,7 @@ import {
     uploadVideoToR2,
     triggerVideoProcessing,
     getJobStatus,
+    reorderLessons as reorderLessonsSvc,
     type CreateLessonData,
 } from "../service/lesson.service";
 
@@ -110,6 +112,8 @@ export const useLesson = () => {
     /**
      * Poll job status every 8 seconds until done or failed.
      * Updates the lesson in Redux so the UI reacts automatically.
+     * On completion, re-fetches the full lesson list for the section
+     * so all fields (title, duration, videoUrl) are up to date.
      */
     const startPolling = useCallback((lessonId: string, sectionId: string) => {
         const intervalId = setInterval(async () => {
@@ -125,7 +129,6 @@ export const useLesson = () => {
                         sectionId,
                         processingStatus,
                         videoUrl: videoUrl || "",
-                        // preserve remaining fields — they are already in the store
                     } as any,
                 }));
 
@@ -133,6 +136,13 @@ export const useLesson = () => {
                     clearInterval(intervalId);
                     if (processingStatus === "done") {
                         toast.success("Video processing complete!");
+                        // Re-fetch full lesson list so title, duration etc. are fresh
+                        try {
+                            const freshData = await getLessonsBySectionSvc(sectionId);
+                            dispatch(setLessons({ sectionId, lessons: freshData?.data || [] }));
+                        } catch {
+                            // non-critical — UI already shows done state
+                        }
                     } else {
                         toast.error("Video processing failed. You can try uploading again.");
                     }
@@ -145,6 +155,26 @@ export const useLesson = () => {
         return () => clearInterval(intervalId); // return cleanup for useEffect
     }, [dispatch]);
 
+    /**
+     * Drag-to-reorder lessons: optimistically update Redux then persist
+     * via a single bulk reorder API call (avoids unique-index conflicts).
+     */
+    const handleReorderLessons = useCallback(async (sectionId: string, reordered: Lesson[]) => {
+        const withNewOrder = reordered.map((l, i) => ({ ...l, order: i + 1 }));
+        dispatch(reorderLessons({ sectionId, lessons: withNewOrder }));
+        try {
+            await reorderLessonsSvc(withNewOrder.map(l => ({ _id: l._id, order: l.order })));
+        } catch (error: any) {
+            const msg = error?.response?.data?.message || "Failed to save lesson order";
+            toast.error(msg);
+            // Re-fetch to restore correct state from DB
+            try {
+                const freshData = await getLessonsBySectionSvc(sectionId);
+                dispatch(setLessons({ sectionId, lessons: freshData?.data || [] }));
+            } catch {}
+        }
+    }, [dispatch]);
+
     return {
         handleGetLessonsBySection,
         handleCreateLesson,
@@ -152,5 +182,6 @@ export const useLesson = () => {
         handleDeleteLesson,
         handleVideoUpload,
         startPolling,
+        handleReorderLessons,
     };
 };

@@ -1,14 +1,15 @@
 import { Router } from "express";
 import authenticateToken from "../../middlewares/auth.middleware.js";
 import { isAdmin } from "../../middlewares/admin.middleware.js";
-import { getAllCourses, publishCourse, unPublishCourse, uploadCourse, getCourseDetails, deleteCourse, updateCourse, getCourseContent } from "./course.controller.js";
+import { getAllCourses, getAllCoursesAdmin, publishCourse, unPublishCourse, uploadCourse, getCourseDetails, deleteCourse, updateCourse, getCourseContent } from "./course.controller.js";
 import { upload } from "../../middlewares/multer.middleware.js";
 import { validateRequest } from "../../middlewares/validateRequest.middleware.js";
 import { uploadCourseSchema, updateCourseSchema } from "./course.validation.js";
 
 const router = Router();
 
-router.get("/", getAllCourses); // public — landing page course listing
+router.get("/", getAllCourses); // public — only published courses
+router.get("/admin/all", authenticateToken, isAdmin, getAllCoursesAdmin); // admin — all courses
 router.post("/upload-course", authenticateToken, isAdmin, upload.single("thumbnail"), validateRequest(uploadCourseSchema), uploadCourse);
 router.patch("/:courseId/publish", authenticateToken, isAdmin, publishCourse);
 router.patch("/:courseId/unPublish", authenticateToken, isAdmin, unPublishCourse);

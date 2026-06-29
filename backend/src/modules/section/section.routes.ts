@@ -8,12 +8,14 @@ import {
     getSectionById,
     updateSection,
     deleteSection,
-    getSectionsByCourse
+    getSectionsByCourse,
+    reorderSections
 } from "./section.controller.js";
 
 const router = Router();
 
 router.post("/", authenticateToken, isAdmin, validateRequest(createSectionSchema), createSection);
+router.put("/reorder", authenticateToken, isAdmin, reorderSections);
 router.get("/:sectionId", authenticateToken, getSectionById);
 router.patch("/:sectionId", authenticateToken, isAdmin, validateRequest(updateSectionSchema), updateSection);
 router.delete("/:sectionId", authenticateToken, isAdmin, deleteSection);

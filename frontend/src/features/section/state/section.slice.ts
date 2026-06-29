@@ -40,6 +40,11 @@ const sectionSlice = createSlice({
             const list = state.sectionsByCourse[courseId] || [];
             const idx = list.findIndex(s => s._id === section._id);
             if (idx !== -1) list[idx] = section;
+            // Re-sort after update so order changes are immediately reflected
+            state.sectionsByCourse[courseId].sort((a, b) => a.order - b.order);
+        },
+        reorderSections: (state, action: PayloadAction<{ courseId: string; sections: Section[] }>) => {
+            state.sectionsByCourse[action.payload.courseId] = action.payload.sections;
         },
         removeSectionFromState: (state, action: PayloadAction<{ courseId: string; sectionId: string }>) => {
             const { courseId, sectionId } = action.payload;
@@ -52,5 +57,5 @@ const sectionSlice = createSlice({
     },
 });
 
-export const { setSections, addSection, updateSectionInState, removeSectionFromState, setLoading, setError } = sectionSlice.actions;
+export const { setSections, addSection, updateSectionInState, reorderSections, removeSectionFromState, setLoading, setError } = sectionSlice.actions;
 export default sectionSlice.reducer;

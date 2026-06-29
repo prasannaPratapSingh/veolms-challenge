@@ -4,9 +4,19 @@ export const getAllCourses = async () => {
     try {
         const response = await axiosInstance.get('/course/');
         return response.data;
-
     } catch (error: any) {
         console.error("Error fetching courses from service layer", error.message);
+        throw error;
+    }
+}
+
+// Admin-only — returns all courses regardless of publish status
+export const getAllCoursesAdmin = async () => {
+    try {
+        const response = await axiosInstance.get('/course/admin/all');
+        return response.data;
+    } catch (error: any) {
+        console.error("Error fetching admin courses from service layer", error.message);
         throw error;
     }
 }

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useCallback } from "react";
 import { setError, setLoading, setCourses, updateCourseInState, setAnalytics } from "../state/course.slice";
-import { getAllCourses, uploadCourse, publishCourse, unpublishCourse, updateCourse, getAnalytics } from "../service/course.service";
+import { getAllCourses, getAllCoursesAdmin, uploadCourse, publishCourse, unpublishCourse, updateCourse, getAnalytics } from "../service/course.service";
 import { toast } from "react-hot-toast";
 import type { RootState } from "../../../app/store/app.store";
 
@@ -26,6 +26,22 @@ export const useCourse = () => {
 
     // Alias for backwards compatibility
     const handleGetAllCourses = fetchCourses;
+
+    // Admin version — fetches all courses including unpublished
+    const fetchCoursesAdmin = useCallback(async () => {
+        try {
+            dispatch(setLoading(true));
+            const data = await getAllCoursesAdmin();
+            dispatch(setCourses(data?.data || []));
+            return data;
+        } catch (error: any) {
+            const message = error?.response?.data?.message || error?.message || 'Failed to fetch courses';
+            dispatch(setError(message));
+            throw error;
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }, [dispatch]);
 
     const handleUploadCourse = useCallback(async (formData: FormData) => {
         try {
@@ -97,6 +113,6 @@ export const useCourse = () => {
 
     }, [dispatch])
 
-    return { courses, loading, fetchCourses, handleGetAllCourses, handleUploadCourse, handlePublishToggle, handleUpdateCourse, handleGetAnalytics };
+    return { courses, loading, fetchCourses, handleGetAllCourses, fetchCoursesAdmin, handleUploadCourse, handlePublishToggle, handleUpdateCourse, handleGetAnalytics };
 
 }

@@ -19,27 +19,26 @@ export const getAllCourses = asyncHandler(async (
     next: NextFunction
 ) => {
     try {
-        const currUser = await User.findById(req.user?.id);
-        const userRole = currUser?.role
-        let courses;
-        if (userRole === UserRole.ADMIN) {
-            courses = await Course.find();
-        } else {
-            courses = await Course.find({
-                isPublished: true
-            })
-        }
-        if (!courses) {
-            throw new ApiError(404, "Error fetching the courses.")
-        }
-        return res.status(200).json(new ApiResponse(200, "Courses fetched successfully", courses))
-
-
+        // Public endpoint — always returns only published courses
+        const courses = await Course.find({ isPublished: true });
+        return res.status(200).json(new ApiResponse(200, "Courses fetched successfully", courses));
     } catch (error) {
         next(error);
     }
+})
 
-
+export const getAllCoursesAdmin = asyncHandler(async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        // Admin-only — returns all courses regardless of publish status
+        const courses = await Course.find();
+        return res.status(200).json(new ApiResponse(200, "Courses fetched successfully", courses));
+    } catch (error) {
+        next(error);
+    }
 })
 
 export const uploadCourse = asyncHandler(async (

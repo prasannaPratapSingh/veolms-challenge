@@ -15,6 +15,11 @@ export const updateSection = async (sectionId: string, data: Partial<{ title: st
     return response.data;
 };
 
+export const reorderSections = async (items: { _id: string; order: number }[]) => {
+    const response = await axiosInstance.put('/section/reorder', { items });
+    return response.data;
+};
+
 export const deleteSection = async (sectionId: string) => {
     const response = await axiosInstance.delete(`/section/${sectionId}`);
     return response.data;

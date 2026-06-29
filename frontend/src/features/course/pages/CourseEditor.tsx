@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { useCourse } from '../hook/course.hook';
@@ -9,6 +9,27 @@ import type { Section } from '../../section/state/section.slice';
 import type { Lesson } from '../../lesson/state/lesson.slice';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+
+// Drag and drop
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import {
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 /* ── Inline SVG Icons (no external icon lib required) ── */
 const IconLoader = () => (
@@ -296,7 +317,7 @@ function GeneralTab({ course, register, handleSubmit, errors, isSubmitting, onSu
 
 /* ── Curriculum Tab ── */
 function CurriculumTab({ courseId }: { courseId: string }) {
-    const { handleGetSectionsByCourse, handleCreateSection, handleUpdateSection, handleDeleteSection } = useSection();
+    const { handleGetSectionsByCourse, handleCreateSection, handleUpdateSection, handleDeleteSection, handleReorderSections } = useSection();
     const sections = useSelector((state: RootState) => state.section.sectionsByCourse[courseId] || []);
     const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
     const [showAddSection, setShowAddSection] = useState(false);
@@ -305,9 +326,33 @@ function CurriculumTab({ courseId }: { courseId: string }) {
     const { register: regSection, handleSubmit: submitSection, reset: resetSection, formState: { errors: errSection, isSubmitting: submittingSection } } = useForm<SectionForm>();
     const { register: regEditSection, handleSubmit: submitEditSection, reset: resetEditSection, formState: { errors: errEditSection, isSubmitting: submittingEditSection } } = useForm<SectionForm>();
 
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    // Sort sections by order for consistent rendering
+    const sortedSections = useMemo(() => {
+        return [...sections].sort((a, b) => a.order - b.order);
+    }, [sections]);
+
     useEffect(() => {
         handleGetSectionsByCourse(courseId);
     }, [courseId]);
+
+    const handleSectionDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
+        
+        if (over && active.id !== over.id) {
+            const oldIndex = sortedSections.findIndex(s => s._id === active.id);
+            const newIndex = sortedSections.findIndex(s => s._id === over.id);
+            
+            const reordered = arrayMove(sortedSections, oldIndex, newIndex);
+            handleReorderSections(courseId, reordered);
+        }
+    };
 
     const toggleSection = (id: string) =>
         setExpandedSections(prev => ({ ...prev, [id]: !prev[id] }));
@@ -414,26 +459,30 @@ function CurriculumTab({ courseId }: { courseId: string }) {
                     <p className="text-white/40 text-sm">No sections yet. Add one to get started.</p>
                 </div>
             ) : (
-                <div className="space-y-3">
-                    {sections.map((section) => (
-                        <SectionCard
-                            key={section._id}
-                            section={section}
-                            courseId={courseId}
-                            isExpanded={!!expandedSections[section._id]}
-                            onToggle={() => toggleSection(section._id)}
-                            onEdit={() => startEditSection(section)}
-                            onDelete={() => handleDeleteSection(courseId, section._id)}
-                        />
-                    ))}
-                </div>
+                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleSectionDragEnd}>
+                    <SortableContext items={sortedSections.map(s => s._id)} strategy={verticalListSortingStrategy}>
+                        <div className="space-y-3">
+                            {sortedSections.map((section) => (
+                                <SortableSectionCard
+                                    key={section._id}
+                                    section={section}
+                                    courseId={courseId}
+                                    isExpanded={!!expandedSections[section._id]}
+                                    onToggle={() => toggleSection(section._id)}
+                                    onEdit={() => startEditSection(section)}
+                                    onDelete={() => handleDeleteSection(courseId, section._id)}
+                                />
+                            ))}
+                        </div>
+                    </SortableContext>
+                </DndContext>
             )}
         </div>
     );
 }
 
-/* ── Section Card ── */
-function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete }: {
+/* ── Sortable Section Card Wrapper ── */
+function SortableSectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete }: {
     section: Section;
     courseId: string;
     isExpanded: boolean;
@@ -441,12 +490,76 @@ function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete
     onEdit: () => void;
     onDelete: () => void;
 }) {
-    const { handleGetLessonsBySection, handleCreateLesson, handleDeleteLesson } = useLesson();
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id: section._id });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+        <div ref={setNodeRef} style={style}>
+            <SectionCard 
+                section={section} 
+                courseId={courseId}
+                isExpanded={isExpanded}
+                onToggle={onToggle}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                dragHandleProps={{ ...attributes, ...listeners }}
+            />
+        </div>
+    );
+}
+
+/* ── Section Card ── */
+function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete, dragHandleProps }: {
+    section: Section;
+    courseId: string;
+    isExpanded: boolean;
+    onToggle: () => void;
+    onEdit: () => void;
+    onDelete: () => void;
+    dragHandleProps?: any;
+}) {
+    const { handleGetLessonsBySection, handleCreateLesson, handleDeleteLesson, handleReorderLessons } = useLesson();
     const lessons = useSelector((state: RootState) => state.lesson.lessonsBySection[section._id] || []);
     const [showAddLesson, setShowAddLesson] = useState(false);
     const [uploadingLesson, setUploadingLesson] = useState<Lesson | null>(null);
 
     const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<LessonForm>();
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    // Sort lessons by order
+    const sortedLessons = useMemo(() => {
+        return [...lessons].sort((a, b) => a.order - b.order);
+    }, [lessons]);
+
+    const handleLessonDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
+        
+        if (over && active.id !== over.id) {
+            const oldIndex = sortedLessons.findIndex(l => l._id === active.id);
+            const newIndex = sortedLessons.findIndex(l => l._id === over.id);
+            
+            const reordered = arrayMove(sortedLessons, oldIndex, newIndex);
+            handleReorderLessons(section._id, reordered);
+        }
+    };
 
     useEffect(() => {
         if (isExpanded) handleGetLessonsBySection(section._id);
@@ -471,6 +584,16 @@ function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete
         <div className="bg-white/[0.02] border border-white/5 hover:border-white/10 rounded-2xl overflow-hidden transition-colors">
             {/* Section header row */}
             <div className="flex items-center gap-4 px-5 py-4">
+                {/* Drag handle for sections */}
+                <button
+                    {...dragHandleProps}
+                    className="text-white/30 hover:text-white/60 cursor-grab active:cursor-grabbing p-1 -ml-1"
+                    title="Drag to reorder sections"
+                >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
                 <button onClick={onToggle} className="text-white/40 hover:text-white transition-colors">
                     {isExpanded ? <IconChevronDown /> : <IconChevronRight />}
                 </button>
@@ -496,15 +619,31 @@ function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete
                     {/* Lesson list */}
                     {lessons.length > 0 && (
                         <div className="space-y-2 mb-4">
-                            {lessons.map(lesson => (
-                                <LessonRow
-                                    key={lesson._id}
-                                    lesson={lesson}
-                                    sectionId={section._id}
-                                    onDelete={() => handleDeleteLesson(section._id, lesson._id)}
-                                    onUpload={() => setUploadingLesson(lesson)}
-                                />
-                            ))}
+                            {sortedLessons.length > 0 ? (
+                                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleLessonDragEnd}>
+                                    <SortableContext items={sortedLessons.map(l => l._id)} strategy={verticalListSortingStrategy}>
+                                        {sortedLessons.map(lesson => (
+                                            <SortableLessonRow
+                                                key={lesson._id}
+                                                lesson={lesson}
+                                                sectionId={section._id}
+                                                onDelete={() => handleDeleteLesson(section._id, lesson._id)}
+                                                onUpload={() => setUploadingLesson(lesson)}
+                                            />
+                                        ))}
+                                    </SortableContext>
+                                </DndContext>
+                            ) : (
+                                lessons.map(lesson => (
+                                    <LessonRow
+                                        key={lesson._id}
+                                        lesson={lesson}
+                                        sectionId={section._id}
+                                        onDelete={() => handleDeleteLesson(section._id, lesson._id)}
+                                        onUpload={() => setUploadingLesson(lesson)}
+                                    />
+                                ))
+                            )}
                         </div>
                     )}
 
@@ -566,12 +705,48 @@ function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete
     );
 }
 
-/* ── Lesson Row ── */
-function LessonRow({ lesson, sectionId, onDelete, onUpload }: {
+/* ── Sortable Lesson Row Wrapper ── */
+function SortableLessonRow({ lesson, sectionId, onDelete, onUpload }: {
     lesson: Lesson;
     sectionId: string;
     onDelete: () => void;
     onUpload: () => void;
+}) {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id: lesson._id });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+        <div ref={setNodeRef} style={style}>
+            <LessonRow 
+                lesson={lesson} 
+                sectionId={sectionId} 
+                onDelete={onDelete} 
+                onUpload={onUpload}
+                dragHandleProps={{ ...attributes, ...listeners }}
+            />
+        </div>
+    );
+}
+
+/* ── Lesson Row ── */
+function LessonRow({ lesson, sectionId, onDelete, onUpload, dragHandleProps }: {
+    lesson: Lesson;
+    sectionId: string;
+    onDelete: () => void;
+    onUpload: () => void;
+    dragHandleProps?: any;
 }) {
     const status = lesson.processingStatus ?? "idle";
     const hasVideo = !!lesson.videoUrl && status === "done";
@@ -594,6 +769,18 @@ function LessonRow({ lesson, sectionId, onDelete, onUpload }: {
 
     return (
         <div className="flex items-center gap-3 px-4 py-3 bg-white/[0.02] border border-white/5 rounded-xl group hover:border-white/10 transition-colors">
+            {/* Drag handle for lessons */}
+            {dragHandleProps && (
+                <button
+                    {...dragHandleProps}
+                    className="text-white/20 hover:text-white/40 cursor-grab active:cursor-grabbing p-1 -ml-2"
+                    title="Drag to reorder lessons"
+                >
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
+            )}
             <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-xs font-bold text-white/30">
                 {lesson.order}
             </div>

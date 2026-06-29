@@ -178,3 +178,43 @@ export const getSectionsByCourse = asyncHandler(async (
         next(error);
     }
 });
+
+// PUT /section/reorder  — atomically reassign order for all sections in a course
+export const reorderSections = asyncHandler(async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const { items } = req.body as { items: { _id: string; order: number }[] };
+
+        if (!Array.isArray(items) || items.length === 0) {
+            throw new ApiError(400, "items array is required");
+        }
+
+        // Step 1: Set all orders to large temp values to avoid unique-index collisions
+        // during the reorder (e.g. swapping order 1 and 2 would conflict mid-write)
+        await Section.bulkWrite(
+            items.map(({ _id }, i) => ({
+                updateOne: {
+                    filter: { _id },
+                    update: { $set: { order: 10000 + i } },
+                }
+            }))
+        );
+
+        // Step 2: Set the actual new orders
+        await Section.bulkWrite(
+            items.map(({ _id, order }) => ({
+                updateOne: {
+                    filter: { _id },
+                    update: { $set: { order } },
+                }
+            }))
+        );
+
+        return res.status(200).json(new ApiResponse(200, "Sections reordered successfully", null));
+    } catch (error) {
+        next(error);
+    }
+});

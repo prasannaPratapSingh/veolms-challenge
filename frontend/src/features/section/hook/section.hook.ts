@@ -2,13 +2,15 @@ import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import {
-    setSections, addSection, updateSectionInState, removeSectionFromState, setLoading, setError
+    setSections, addSection, updateSectionInState, reorderSections, removeSectionFromState, setLoading, setError
 } from "../state/section.slice";
+import type { Section } from "../state/section.slice";
 import {
     createSection as createSectionSvc,
     getSectionsByCourse as getSectionsByCoursesSvc,
     updateSection as updateSectionSvc,
     deleteSection as deleteSectionSvc,
+    reorderSections as reorderSectionsSvc,
 } from "../service/section.service";
 
 export const useSection = () => {
@@ -68,5 +70,26 @@ export const useSection = () => {
         }
     }, [dispatch]);
 
-    return { handleGetSectionsByCourse, handleCreateSection, handleUpdateSection, handleDeleteSection };
+    /**
+     * Drag-to-reorder sections: optimistically update Redux then persist
+     * via a single bulk reorder API call (avoids unique-index conflicts).
+     */
+    const handleReorderSections = useCallback(async (courseId: string, reordered: Section[]) => {
+        const withNewOrder = reordered.map((s, i) => ({ ...s, order: i + 1 }));
+        // Optimistic update immediately
+        dispatch(reorderSections({ courseId, sections: withNewOrder }));
+        try {
+            await reorderSectionsSvc(withNewOrder.map(s => ({ _id: s._id, order: s.order })));
+        } catch (error: any) {
+            const msg = error?.response?.data?.message || "Failed to save section order";
+            toast.error(msg);
+            // Re-fetch to restore correct state from DB
+            try {
+                const data = await getSectionsByCoursesSvc(courseId);
+                dispatch(setSections({ courseId, sections: data?.data || [] }));
+            } catch {}
+        }
+    }, [dispatch]);
+
+    return { handleGetSectionsByCourse, handleCreateSection, handleUpdateSection, handleDeleteSection, handleReorderSections };
 };
