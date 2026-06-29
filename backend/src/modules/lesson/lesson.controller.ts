@@ -220,7 +220,14 @@ export const triggerProcessing = asyncHandler(async (req: Request, res: Response
     res.json(new ApiResponse(200, "Processing started", { jobId: job.id }));
 });
 
-// GET /api/lesson/:lessonId/job-status
+// GET /lesson/in-progress — returns all lessons currently queued or processing (admin only)
+export const getInProgressLessons = asyncHandler(async (req: Request, res: Response) => {
+    const lessons = await Lesson.find({
+        processingStatus: { $in: ["queued", "processing"] }
+    }).select("_id sectionId processingStatus videoUrl");
+
+    res.json(new ApiResponse(200, "In-progress lessons fetched", lessons));
+});
 export const getJobStatus = asyncHandler(async (req: Request, res: Response) => {
     const { lessonId } = req.params;
 

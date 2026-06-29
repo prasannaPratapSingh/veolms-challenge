@@ -116,13 +116,13 @@ interface LessonForm {
 export default function CourseEditor() {
     const { courseId } = useParams<{ courseId: string }>();
     const navigate = useNavigate();
-    const { courses, fetchCourses, handleUpdateCourse, loading } = useCourse();
+    const { courses, fetchCoursesAdmin, handleUpdateCourse, loading } = useCourse();
     const [activeTab, setActiveTab] = useState<'general' | 'curriculum'>('general');
 
     const course = courses.find(c => c._id === courseId);
 
     useEffect(() => {
-        if (courseId) fetchCourses();
+        if (courseId) fetchCoursesAdmin();
     }, [courseId]);
 
     const {
@@ -201,7 +201,7 @@ export default function CourseEditor() {
                             <IconArrowLeft />
                         </button>
                         <div>
-                            <h1 className="text-lg font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400 truncate max-w-xs">
+                            <h1 className="text-lg font-extrabold text-white truncate max-w-xs">
                                 {course.title}
                             </h1>
                             <p className="text-xs text-white/30">Course Editor</p>
@@ -214,7 +214,7 @@ export default function CourseEditor() {
                                 onClick={() => setActiveTab(tab)}
                                 className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all capitalize ${
                                     activeTab === tab
-                                        ? 'bg-gradient-to-r from-violet-600/30 to-fuchsia-600/20 border border-violet-500/30 text-white shadow-sm'
+                                        ? 'bg-white/10 border border-violet-500/30 text-white shadow-sm'
                                         : 'text-white/40 hover:text-white/70'
                                 }`}
                             >
@@ -266,7 +266,7 @@ function GeneralTab({ course, register, handleSubmit, errors, isSubmitting, onSu
                 <button
                     onClick={handleSubmit(onSubmitGeneral)}
                     disabled={isSubmitting}
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-xl font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 shadow-lg shadow-violet-500/20"
+                    className="flex items-center gap-2 px-4 py-2 bg-violet-600 text-white rounded-xl font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 shadow-lg "
                 >
                     {isSubmitting ? <IconLoader /> : <IconSave />}
                     Save Changes
@@ -316,9 +316,11 @@ function GeneralTab({ course, register, handleSubmit, errors, isSubmitting, onSu
 }
 
 /* ── Curriculum Tab ── */
+const EMPTY_SECTIONS: Section[] = [];
+const EMPTY_LESSONS: Lesson[] = [];
 function CurriculumTab({ courseId }: { courseId: string }) {
     const { handleGetSectionsByCourse, handleCreateSection, handleUpdateSection, handleDeleteSection, handleReorderSections } = useSection();
-    const sections = useSelector((state: RootState) => state.section.sectionsByCourse[courseId] || []);
+    const sections = useSelector((state: RootState) => state.section.sectionsByCourse[courseId] ?? EMPTY_SECTIONS);
     const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
     const [showAddSection, setShowAddSection] = useState(false);
     const [editingSection, setEditingSection] = useState<Section | null>(null);
@@ -385,7 +387,7 @@ function CurriculumTab({ courseId }: { courseId: string }) {
                 </div>
                 <button
                     onClick={() => setShowAddSection(v => !v)}
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all shadow-lg shadow-violet-500/20"
+                    className="flex items-center gap-2 px-4 py-2 bg-violet-600 text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all shadow-lg "
                 >
                     <IconPlus />
                     Add Section
@@ -531,7 +533,7 @@ function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete
     dragHandleProps?: any;
 }) {
     const { handleGetLessonsBySection, handleCreateLesson, handleDeleteLesson, handleReorderLessons } = useLesson();
-    const lessons = useSelector((state: RootState) => state.lesson.lessonsBySection[section._id] || []);
+    const lessons = useSelector((state: RootState) => state.lesson.lessonsBySection[section._id] ?? EMPTY_LESSONS);
     const [showAddLesson, setShowAddLesson] = useState(false);
     const [uploadingLesson, setUploadingLesson] = useState<Lesson | null>(null);
 
@@ -824,7 +826,7 @@ function LessonRow({ lesson, sectionId, onDelete, onUpload, dragHandleProps }: {
 type UploadPhase = 'idle' | 'uploading' | 'processing' | 'done' | 'error';
 
 function VideoUploadModal({ lesson, onClose }: { lesson: Lesson; onClose: () => void }) {
-    const { handleVideoUpload, startPolling } = useLesson();
+    const { handleVideoUpload } = useLesson();
     const [file, setFile] = useState<File | null>(null);
     const [phase, setPhase] = useState<UploadPhase>('idle');
     const [progress, setProgress] = useState(0);
@@ -858,8 +860,7 @@ function VideoUploadModal({ lesson, onClose }: { lesson: Lesson; onClose: () => 
             });
             setJobId(result.jobId);
             setPhase('done');
-            // Start polling immediately — Redux already shows "queued", this keeps it live
-            startPolling(lesson._id, lesson.sectionId);
+            // Global poller (useVideoPolling in App.tsx) handles status tracking
         } catch (err: any) {
             setErrorMsg(err?.response?.data?.message || err?.message || 'Upload failed. Please try again.');
             setPhase('error');
@@ -953,7 +954,7 @@ function VideoUploadModal({ lesson, onClose }: { lesson: Lesson; onClose: () => 
                             </div>
                             <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
                                 <div
-                                    className="h-2 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-300"
+                                    className="h-2 rounded-full bg-violet-500 transition-all duration-300"
                                     style={{ width: phase === 'uploading' ? `${progress}%` : '100%' }}
                                 />
                             </div>
@@ -983,7 +984,7 @@ function VideoUploadModal({ lesson, onClose }: { lesson: Lesson; onClose: () => 
                         <button
                             onClick={handleStart}
                             disabled={!file}
-                            className="flex-1 py-3 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-violet-500/20"
+                            className="flex-1 py-3 bg-violet-600 text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg "
                         >
                             Start Upload
                         </button>

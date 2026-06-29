@@ -66,7 +66,7 @@ export default function Login() {
         justifyContent: "center",
         padding: "1.5rem",
         fontFamily:
-          "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          "'Bricolage Grotesque', sans-serif",
         WebkitFontSmoothing: "antialiased",
       }}
     >

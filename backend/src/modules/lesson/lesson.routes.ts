@@ -12,13 +12,15 @@ import {
     getVideoUploadUrl,
     triggerProcessing,
     getJobStatus,
-    reorderLessons
+    reorderLessons,
+    getInProgressLessons,
 } from "./lesson.controller.js";
 
 const router = Router();
 
 router.post("/", authenticateToken, isAdmin, validateRequest(createLessonSchema), createLesson);
 router.put("/reorder", authenticateToken, isAdmin, reorderLessons);
+router.get("/in-progress", authenticateToken, isAdmin, getInProgressLessons);
 router.get("/section/:sectionId", authenticateToken, getLessonsBySection);
 router.get("/:lessonId", authenticateToken, getLessonById);
 router.patch("/:lessonId", authenticateToken, isAdmin, validateRequest(updateLessonSchema), updateLesson);

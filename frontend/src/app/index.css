@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-
+*, *::before, *::after {
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
 
 html {
   background-color: black;

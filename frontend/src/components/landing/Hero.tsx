@@ -80,7 +80,7 @@ export default function Hero() {
             fontWeight: 800,
             color: "#fff",
             lineHeight: 1.08,
-            letterSpacing: "-0.04em",
+            letterSpacing: "",
             marginBottom: "1.5rem",
           }}
         >

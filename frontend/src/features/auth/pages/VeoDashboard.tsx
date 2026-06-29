@@ -665,7 +665,7 @@ function EditCourseModal({ course, onClose, handleUpdateCourse }: { course: any;
             disabled={isSubmitting}
             whileHover={!isSubmitting ? { scale: 1.02 } : {}}
             whileTap={!isSubmitting ? { scale: 0.98 } : {}}
-            className={`px-8 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${isSubmitting ? "bg-white/10 text-white/40 cursor-not-allowed" : "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-500/20 hover:opacity-90"
+            className={`px-8 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${isSubmitting ? "bg-white/10 text-white/40 cursor-not-allowed" : "bg-violet-600 text-white shadow-lg  hover:opacity-90"
               }`}
           >
             {isSubmitting ? <><Spinner /> Saving...</> : "Save Changes"}

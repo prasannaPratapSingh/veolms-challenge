@@ -314,6 +314,17 @@ export default function CoursePlayer() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Auto-collapse sidebar on mobile screens
+  useEffect(() => {
+    const checkWidth = () => {
+      if (window.innerWidth < 768) setSidebarOpen(false);
+      else setSidebarOpen(true);
+    };
+    checkWidth();
+    window.addEventListener("resize", checkWidth);
+    return () => window.removeEventListener("resize", checkWidth);
+  }, []);
+
   useEffect(() => {
     if (!courseId) return;
     axiosInstance.get(`/course/getCourse/${courseId}`)
@@ -399,34 +410,53 @@ export default function CoursePlayer() {
           )}
         </div>
 
-        {/* Sidebar — slide in/out */}
+        {/* Sidebar — overlay on mobile, inline on desktop */}
         <AnimatePresence initial={false}>
           {sidebarOpen && (
-            <motion.aside
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 320, opacity: 1 }}
-              exit={{ width: 0, opacity: 0 }}
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="shrink-0 bg-[#0d0d0d] border-l border-white/5 flex flex-col overflow-hidden"
-              style={{ minWidth: 0 }}
-            >
-              <div className="px-4 py-3 border-b border-white/5 shrink-0 flex items-center justify-between">
-                <div>
-                  <h2 className="text-white text-sm font-bold">Course Content</h2>
-                  <p className="text-white/30 text-xs mt-0.5">{totalCount} lessons</p>
+            <>
+              {/* Mobile backdrop */}
+              <div
+                className="fixed inset-0 bg-black/60 z-20 md:hidden"
+                onClick={() => setSidebarOpen(false)}
+              />
+              <motion.aside
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: 320, opacity: 1 }}
+                exit={{ width: 0, opacity: 0 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                className="shrink-0 bg-[#0d0d0d] border-l border-white/5 flex flex-col overflow-hidden
+                           fixed right-0 top-0 bottom-0 z-30 md:relative md:z-auto"
+                style={{ minWidth: 0 }}
+              >
+                <div className="px-4 py-3 border-b border-white/5 shrink-0 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-white text-sm font-bold">Course Content</h2>
+                    <p className="text-white/30 text-xs mt-0.5">{totalCount} lessons</p>
+                  </div>
+                  {/* Close button visible on mobile */}
+                  <button
+                    onClick={() => setSidebarOpen(false)}
+                    className="md:hidden p-1.5 text-white/40 hover:text-white transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 </div>
-              </div>
-              <div className="flex-1 overflow-y-auto">
-                {course.sections.map(section => (
-                  <SidebarSection key={section._id} section={section}
-                    currentLessonId={currentLesson?._id ?? ""} completedLessons={completedLessons}
-                    onSelectLesson={(lesson) => {
-                      if (advanceTimerRef.current) clearTimeout(advanceTimerRef.current);
-                      setCurrentLesson(lesson);
-                    }}/>
-                ))}
-              </div>
-            </motion.aside>
+                <div className="flex-1 overflow-y-auto">
+                  {course.sections.map(section => (
+                    <SidebarSection key={section._id} section={section}
+                      currentLessonId={currentLesson?._id ?? ""} completedLessons={completedLessons}
+                      onSelectLesson={(lesson) => {
+                        if (advanceTimerRef.current) clearTimeout(advanceTimerRef.current);
+                        setCurrentLesson(lesson);
+                        // Auto-close on mobile after selecting
+                        if (window.innerWidth < 768) setSidebarOpen(false);
+                      }}/>
+                  ))}
+                </div>
+              </motion.aside>
+            </>
           )}
         </AnimatePresence>
       </div>

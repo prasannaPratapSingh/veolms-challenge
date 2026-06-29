@@ -70,3 +70,9 @@ export const getJobStatus = async (lessonId: string) => {
     const response = await axiosInstance.get(`/lesson/${lessonId}/job-status`);
     return response.data;
 };
+
+// Fetch all lessons currently queued or processing (used on app startup to resume polling)
+export const getInProgressLessons = async () => {
+    const response = await axiosInstance.get('/lesson/in-progress');
+    return response.data;
+};
