@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import Hls from "hls.js";
 import { motion, AnimatePresence } from "framer-motion";
 import axiosInstance from "../../../lib/authInstance";
+import { getVideoToken } from "../../lesson/service/lesson.service";
 
 /* ─── Types ─── */
 interface Lesson {
@@ -310,6 +311,7 @@ export default function CoursePlayer() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
+  const [playingVideoUrl, setPlayingVideoUrl] = useState<string | null>(null);
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -337,6 +339,33 @@ export default function CoursePlayer() {
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
   }, [courseId]);
+
+  useEffect(() => {
+    let active = true;
+    if (!currentLesson?.videoUrl) {
+      setPlayingVideoUrl(null);
+      return;
+    }
+    
+    setPlayingVideoUrl(null);
+    getVideoToken(currentLesson._id)
+      .then((res) => {
+        if (!active) return;
+        const token = res.data.token;
+        const rawUrl = currentLesson.videoUrl!.replace('/api/v1/lessons/', '/api/lesson/');
+        const baseUrl = rawUrl.startsWith('http') 
+          ? rawUrl 
+          : `${import.meta.env.VITE_BACKEND_URL || "http://localhost:4002"}${rawUrl}`;
+        
+        const separator = baseUrl.includes('?') ? '&' : '?';
+        setPlayingVideoUrl(`${baseUrl}${separator}token=${token}`);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch video token", err);
+      });
+      
+    return () => { active = false; };
+  }, [currentLesson]);
 
   const markComplete = useCallback(async (lessonId: string) => {
     setCompletedLessons(prev => new Set(prev).add(lessonId));
@@ -400,8 +429,13 @@ export default function CoursePlayer() {
       <div className="flex flex-1 overflow-hidden">
         {/* Video area */}
         <div className="flex-1 bg-black flex items-center justify-center overflow-hidden min-w-0">
-          {currentLesson?.videoUrl ? (
-            <VideoPlayer key={currentLesson._id} videoUrl={currentLesson.videoUrl} onEnded={handleVideoEnded}/>
+          {playingVideoUrl ? (
+            <VideoPlayer key={currentLesson!._id} videoUrl={playingVideoUrl} onEnded={handleVideoEnded}/>
+          ) : currentLesson?.videoUrl ? (
+            <div className="flex flex-col items-center justify-center h-full">
+              <span className="w-10 h-10 border-4 border-white/10 border-t-white rounded-full animate-spin mb-4"/>
+              <p className="text-white/50 text-sm">Loading secure video stream...</p>
+            </div>
           ) : (
             <div className="text-white/20 text-sm text-center p-8">
               <p className="text-4xl mb-4">🔒</p>

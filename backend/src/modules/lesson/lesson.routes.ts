@@ -14,6 +14,8 @@ import {
     getJobStatus,
     reorderLessons,
     getInProgressLessons,
+    getVideoToken,
+    streamVideo,
 } from "./lesson.controller.js";
 
 const router = Router();
@@ -29,5 +31,9 @@ router.delete("/:lessonId", authenticateToken, isAdmin, deleteLesson);
 router.get("/:lessonId/upload-url", authenticateToken, isAdmin, getVideoUploadUrl);
 router.post("/:lessonId/process", authenticateToken, isAdmin, triggerProcessing);
 router.get("/:lessonId/job-status", authenticateToken, isAdmin, getJobStatus);
+
+// Secure Video Streaming Routes
+router.get("/:lessonId/video-token", authenticateToken, getVideoToken);
+router.get("/:lessonId/video/*file", streamVideo);
 
 export default router;

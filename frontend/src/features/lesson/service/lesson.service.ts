@@ -76,3 +76,9 @@ export const getInProgressLessons = async () => {
     const response = await axiosInstance.get('/lesson/in-progress');
     return response.data;
 };
+
+// Fetch token for secure video playback
+export const getVideoToken = async (lessonId: string) => {
+    const response = await axiosInstance.get(`/lesson/${lessonId}/video-token`);
+    return response.data;
+};

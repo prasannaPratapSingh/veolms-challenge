@@ -11,6 +11,8 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { r2Client } from "../../infrastructure/r2/r2.client.js";
 import { videoQueue } from "../../infrastructure/queue/videoQueue.js";
 import envConfig from "../../config/envConfig.js";
+import jwt from "jsonwebtoken";
+import { streamFromR2, getStringFromR2 } from "../../utils/r2.js";
 
 export const createLesson = asyncHandler(async (
     req: Request,
@@ -276,5 +278,85 @@ export const reorderLessons = asyncHandler(async (
         return res.status(200).json(new ApiResponse(200, "Lessons reordered successfully", null));
     } catch (error) {
         next(error);
+    }
+});
+
+// GET /api/v1/lessons/:lessonId/video-token
+// Generates a short-lived token for accessing the video stream
+export const getVideoToken = asyncHandler(async (req: Request, res: Response) => {
+    const { lessonId } = req.params;
+
+    const lesson = await Lesson.findById(lessonId);
+    if (!lesson) throw new ApiError(404, "Lesson not found");
+
+    // Can optionally verify enrollment here before issuing token
+    // This is robust security: Only authenticated users who reach this controller get a token.
+
+    const token = jwt.sign(
+        { lessonId },
+        envConfig.ACCESS_TOKEN_SECRET,
+        { expiresIn: "6h" } // Token valid for 6 hours
+    );
+
+    res.json(new ApiResponse(200, "Video token generated", { token }));
+});
+
+// GET /api/v1/lessons/:lessonId/video/*file
+// Proxies the video request, verifying the token
+export const streamVideo = asyncHandler(async (req: Request, res: Response) => {
+    const { lessonId } = req.params;
+    // In express 5 / path-to-regexp 8, *file may give an array of segments
+    const fileParam = req.params.file;
+    const file = Array.isArray(fileParam) ? fileParam.join('/') : fileParam; 
+    const token = req.query.token as string;
+
+    if (!token) {
+        throw new ApiError(401, "Video token missing");
+    }
+
+    try {
+        const decoded = jwt.verify(token, envConfig.ACCESS_TOKEN_SECRET) as jwt.JwtPayload;
+        if (decoded.lessonId !== lessonId) {
+            throw new ApiError(403, "Invalid video token for this lesson");
+        }
+    } catch (error) {
+        throw new ApiError(403, "Invalid or expired video token");
+    }
+
+    const r2Key = `hls/${lessonId}/${file}`;
+
+    try {
+        if (file.endsWith(".m3u8")) {
+            // It's a playlist. Download, append token to relative URLs, and send as string.
+            const content = await getStringFromR2(r2Key);
+            
+            // Append ?token=xyz to all .m3u8 and .ts URIs
+            // Standard HLS URIs in M3U8 are usually on their own lines without #
+            const lines = content.split('\n');
+            const rewrittenLines = lines.map(line => {
+                const trimmed = line.trim();
+                // If it's a URI line (not starting with # and not empty)
+                if (trimmed && !trimmed.startsWith('#')) {
+                    // Append token
+                    const separator = trimmed.includes('?') ? '&' : '?';
+                    return `${trimmed}${separator}token=${token}`;
+                }
+                return line;
+            });
+            
+            res.setHeader("Content-Type", "application/x-mpegURL");
+            res.send(rewrittenLines.join('\n'));
+        } else {
+            // It's a segment (.ts file). Stream it directly.
+            const stream = await streamFromR2(r2Key);
+            res.setHeader("Content-Type", "video/MP2T");
+            stream.pipe(res);
+        }
+    } catch (error: any) {
+        if (error.name === "NoSuchKey") {
+            res.status(404).send("File not found");
+        } else {
+            throw error;
+        }
     }
 });

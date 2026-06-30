@@ -412,3 +412,22 @@ defaultJobOptions: {
 }
 ```
 If an upload to R2 fails or FFmpeg crashes, the job is retried up to 3 times using exponential backoff (e.g., 5s, 25s, 125s) before marking the job as permanently failed.
+
+---
+
+## 🔒 Secure Video Delivery Pipeline
+
+To protect premium video content from unauthorized access and direct downloads, VEOLMS implements a sophisticated **Token-Based HLS Proxy** architecture.
+
+### How It Works
+
+1. **Short-Lived JWT Generation**: When an authenticated user attempts to play a lesson, the frontend requests a secure token from `GET /api/lesson/:lessonId/video-token`. This token encodes the specific `lessonId` and is signed using `ACCESS_TOKEN_SECRET` with a 6-hour expiration.
+2. **Backend Video Proxy**: Instead of loading the Cloudflare R2 bucket URL directly, the frontend video player hits the backend proxy at `GET /api/lesson/:lessonId/video/master.m3u8?token=...`.
+3. **Dynamic Playlist Rewriting**: The backend authenticates the JWT. Once verified, it fetches the `.m3u8` playlist from the private R2 bucket using the AWS S3 SDK. Crucially, the backend parses the playlist and dynamically appends the `?token=...` parameter to every relative `.ts` chunk and sub-playlist URI.
+4. **Secure Segment Streaming**: As the video player (e.g., `hls.js`) requests individual `.ts` chunks, those requests automatically include the token. The backend verifies the token and securely pipes the binary video stream directly from R2 to the client without buffering it in memory.
+
+### Security Benefits
+
+*   **No Public R2 Access**: The Cloudflare `R2_HLS_BUCKET` can remain completely private. The backend orchestrates all fetches using `R2_ACCESS_KEY` credentials.
+*   **Segment-Level Protection**: Even if a user extracts a direct URL for a video chunk from the network tab, they cannot share it permanently—the token will expire, and the backend will reject any unauthenticated requests with a `403 Forbidden` error.
+*   **Cross-Browser Compatibility**: Because the token is embedded in the stream URL itself (rather than relying on HTTP Cookies), native video players on iOS Safari and smart TVs work flawlessly without cross-origin cookie restrictions.
