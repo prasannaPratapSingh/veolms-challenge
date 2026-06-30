@@ -431,3 +431,255 @@ To protect premium video content from unauthorized access and direct downloads, 
 *   **No Public R2 Access**: The Cloudflare `R2_HLS_BUCKET` can remain completely private. The backend orchestrates all fetches using `R2_ACCESS_KEY` credentials.
 *   **Segment-Level Protection**: Even if a user extracts a direct URL for a video chunk from the network tab, they cannot share it permanently—the token will expire, and the backend will reject any unauthenticated requests with a `403 Forbidden` error.
 *   **Cross-Browser Compatibility**: Because the token is embedded in the stream URL itself (rather than relying on HTTP Cookies), native video players on iOS Safari and smart TVs work flawlessly without cross-origin cookie restrictions.
+
+
+---
+
+# VEO Learning Management System — Frontend Architecture
+
+The frontend of **VEO LMS** is a modern, high-performance single-page application engineered to deliver a seamless learning experience for students and a powerful content management interface for administrators. It is built to the same level of rigor and discipline as the backend, applying industry-proven architectural patterns to ensure maintainability, scalability, and long-term sustainability.
+
+---
+
+## 🚀 Frontend Tech Stack
+
+- **React 19**: Latest stable version of React with concurrent rendering capabilities.
+- **TypeScript ~5.8**: Strict static typing enforced across the entire codebase.
+- **Vite 7**: Next-generation build tooling providing near-instant HMR and optimized production builds.
+- **Redux Toolkit 2 & React-Redux 9**: Predictable, normalized global state management with a modern slice-based pattern.
+- **React Router 8**: Declarative client-side routing with data-mode support.
+- **Tailwind CSS 4**: Utility-first CSS framework for consistent, responsive design.
+- **Framer Motion 12**: Production-grade animation library for fluid UI transitions.
+- **Axios 1**: Promise-based HTTP client with interceptor support for authenticated requests.
+- **React Hook Form 7**: Performant, flexible form state management with minimal re-renders.
+- **hls.js 1**: Client-side HLS adaptive bitrate streaming playback engine, used in the course video player.
+- **@dnd-kit**: Accessible, modern drag-and-drop toolkit used for interactive curriculum reordering.
+- **React Hot Toast**: Lightweight notification system for user feedback.
+- **Razorpay / Razorpay Checkout**: Integrated payment processing for course purchases.
+
+---
+
+## 📐 Architecture Overview
+
+> **The VEO LMS frontend follows a production-grade, scalable, feature-based folder structure combined with a strict 4-Layer Architecture that enforces a clear separation of concerns across every domain of the application.**
+
+---
+
+## ⭐ 4-Layer Architecture — Separation of Concerns
+
+> **This is the foundational design principle of the entire frontend codebase. Every feature module is independently organized into exactly four layers, each with a distinct, non-overlapping responsibility.**
+
+```
+┌─────────────────────────────────────────────────────┐
+│                    UI Layer                         │
+│         (pages/, components/) — Rendering only      │
+├─────────────────────────────────────────────────────┤
+│                   Hook Layer                        │
+│          (hook/) — Bridge between UI & State        │
+├─────────────────────────────────────────────────────┤
+│                   State Layer                       │
+│     (state/) — Redux slices, actions, selectors     │
+├─────────────────────────────────────────────────────┤
+│                  Service Layer                      │
+│     (service/) — API calls, external integrations   │
+└─────────────────────────────────────────────────────┘
+```
+
+### Service Layer — `service/`
+The service layer is the only layer authorized to communicate with the backend API. It contains pure, framework-agnostic functions that make HTTP requests using Axios. No component or Redux action ever calls the API directly — all network traffic is routed exclusively through this layer. This makes it trivially easy to mock services in tests, swap out endpoints, or introduce request/response transformations without touching any UI or state logic.
+
+```typescript
+// Example: course.service.ts
+export const fetchAllCourses = () => axiosInstance.get('/api/course');
+export const fetchCourseById  = (id: string) => axiosInstance.get(`/api/course/${id}`);
+```
+
+### State Layer — `state/`
+The state layer contains Redux Toolkit slices that manage domain-specific application state. Each slice defines the shape of the data, reducers for synchronous state transitions, and `createAsyncThunk` actions that delegate API calls to the service layer. This layer is entirely decoupled from the UI — it has no knowledge of components and no direct access to the DOM.
+
+```typescript
+// Example: course.slice.ts
+export const getCourses = createAsyncThunk('course/getAll', async () => {
+  const res = await fetchAllCourses();
+  return res.data;
+});
+```
+
+### Hook Layer — `hook/`
+The hook layer acts as the bridge between the UI and the Redux state. Custom React hooks in this layer abstract `useSelector`, `useDispatch`, and any derived state logic away from the component layer. A component never imports Redux primitives directly — it only consumes a clean, domain-specific hook. This isolates components from state implementation details and makes refactoring the state layer entirely transparent to the UI.
+
+```typescript
+// Example: course.hook.ts
+export const useCourse = () => {
+  const dispatch = useAppDispatch();
+  const courses  = useAppSelector(selectAllCourses);
+  const load     = () => dispatch(getCourses());
+  return { courses, load };
+};
+```
+
+### UI Layer — `pages/` & `components/`
+The UI layer is responsible solely for rendering. Pages and components consume data and actions exclusively through the hook layer. They contain no business logic, no direct API calls, and no raw Redux imports. This strict boundary ensures that UI components remain dumb, testable, and reusable.
+
+---
+
+## 📁 Feature-Based Folder Structure
+
+The codebase is organized by business domain rather than by technical type. This is the feature-based (also known as domain-driven) approach to frontend architecture. Each self-contained feature module encapsulates all four layers specific to that domain, making it possible to develop, test, and reason about each feature in complete isolation.
+
+```
+frontend/
+├── src/
+│   ├── app/                        # Application bootstrap layer
+│   │   ├── App.tsx                 # Root component and router configuration
+│   │   ├── AppLayout.tsx           # Shared application shell layout
+│   │   ├── app.routes.tsx          # Centralized route definitions
+│   │   ├── index.css               # Global base styles
+│   │   └── store/
+│   │       └── app.store.ts        # Redux store configuration and root reducer
+│   │
+│   ├── features/                   # Feature modules (domain-driven)
+│   │   ├── auth/                   # Authentication & authorization domain
+│   │   │   ├── components/         # [UI Layer] Route guard components
+│   │   │   │   ├── Protected.tsx   # Authenticated-user-only guard
+│   │   │   │   ├── GuestOnly.tsx   # Unauthenticated-user-only guard
+│   │   │   │   ├── AdminOnly.tsx   # Admin RBAC guard
+│   │   │   │   └── AdminGuestOnly.tsx
+│   │   │   ├── hook/               # [Hook Layer] Auth state bridge
+│   │   │   │   └── auth.hook.ts
+│   │   │   ├── pages/              # [UI Layer] Auth screens
+│   │   │   │   ├── Login.tsx
+│   │   │   │   ├── SignUp.tsx
+│   │   │   │   ├── AdminLogin.tsx
+│   │   │   │   ├── UserProfile.tsx
+│   │   │   │   ├── UserDashboard.tsx
+│   │   │   │   └── VeoDashboard.tsx
+│   │   │   ├── service/            # [Service Layer] Auth API calls
+│   │   │   │   └── authService.ts
+│   │   │   └── state/              # [State Layer] Auth Redux slice
+│   │   │       └── auth.slice.ts
+│   │   │
+│   │   ├── course/                 # Course management domain
+│   │   │   ├── hook/               # [Hook Layer]
+│   │   │   │   └── course.hook.ts
+│   │   │   ├── pages/              # [UI Layer] Course screens
+│   │   │   │   ├── CoursesPage.tsx
+│   │   │   │   ├── CourseDetail.tsx
+│   │   │   │   ├── CourseEditor.tsx
+│   │   │   │   ├── CoursePlayer.tsx
+│   │   │   │   └── Checkout.tsx
+│   │   │   ├── service/            # [Service Layer]
+│   │   │   │   └── course.service.ts
+│   │   │   └── state/              # [State Layer]
+│   │   │       └── course.slice.ts
+│   │   │
+│   │   ├── lesson/                 # Lesson & video management domain
+│   │   │   ├── hook/               # [Hook Layer]
+│   │   │   │   ├── lesson.hook.ts
+│   │   │   │   └── useVideoPolling.ts  # Reactive video processing status polling
+│   │   │   ├── service/            # [Service Layer]
+│   │   │   │   └── lesson.service.ts
+│   │   │   └── state/              # [State Layer]
+│   │   │       └── lesson.slice.ts
+│   │   │
+│   │   ├── section/                # Course curriculum section domain
+│   │   │   ├── hook/               # [Hook Layer]
+│   │   │   │   └── section.hook.ts
+│   │   │   ├── service/            # [Service Layer]
+│   │   │   │   └── section.service.ts
+│   │   │   └── state/              # [State Layer]
+│   │   │       └── section.slice.ts
+│   │   │
+│   │   └── userDashboard/          # Student dashboard domain (in progress)
+│   │
+│   ├── shared/                     # Cross-cutting reusable UI elements
+│   │   └── components/
+│   │       └── Navbar.tsx          # Shared navigation bar component
+│   │
+│   ├── components/                 # Page-level composed components
+│   │   ├── LandingPage.tsx         # Marketing landing page composition
+│   │   └── landing/                # Landing page section components
+│   │       ├── Hero.tsx
+│   │       ├── Navbar.tsx
+│   │       ├── CoursesSection.tsx
+│   │       ├── CourseCard.tsx
+│   │       ├── HowItWorks.tsx
+│   │       ├── Testimonials.tsx
+│   │       ├── StatsBar.tsx
+│   │       ├── CTABanner.tsx
+│   │       └── Footer.tsx
+│   │
+│   ├── lib/                        # Core infrastructure and utilities
+│   │   └── authInstance.ts         # Axios instance with auth interceptors
+│   │
+│   └── types/                      # Global TypeScript type definitions
+│       ├── auth.type.ts
+│       └── course.type.ts
+│
+├── public/                         # Static assets
+├── index.html                      # Application HTML entry point
+├── vite.config.ts                  # Vite build configuration
+├── tsconfig.json                   # TypeScript compiler configuration
+└── package.json                    # Project dependencies and scripts
+```
+
+---
+
+## ✨ Key Frontend Features
+
+- **Role-Based Access Control (RBAC)**: Declarative route guard components (`Protected`, `AdminOnly`, `GuestOnly`) enforce authentication and authorization at the routing level, ensuring that students, admins, and unauthenticated users each access only the surfaces appropriate to their role.
+- **HLS Adaptive Video Playback**: The course player integrates `hls.js` directly with the secure Token-Based HLS Proxy from the backend, delivering adaptive bitrate streaming (360p through 1080p) with full segment-level content protection — no direct CDN links are ever exposed to the client.
+- **Reactive Video Processing Status**: A dedicated `useVideoPolling` hook monitors the asynchronous transcoding pipeline in real time, providing live feedback to administrators after a video upload is dispatched for processing.
+- **Interactive Curriculum Editor**: The admin Course Editor leverages `@dnd-kit` to provide an accessible, keyboard-navigable drag-and-drop interface for reordering curriculum sections and lessons — reflecting changes optimistically while persisting them to the backend.
+- **Integrated Payment Flow**: The checkout experience is built on top of the Razorpay SDK, handling the full course purchase lifecycle including order creation, payment modal orchestration, and enrollment confirmation.
+- **Performant Form Management**: All user-facing forms — registration, login, course creation, and profile editing — use `react-hook-form` for zero-overhead validation and minimal re-renders, paired with field-level error messaging for a polished user experience.
+- **Animated Interfaces**: `framer-motion` is used for production-quality page transitions, component mount/unmount animations, and interactive feedback, contributing to a cohesive and professional visual character across the application.
+- **Centralized Axios Configuration**: A dedicated Axios instance in `lib/authInstance.ts` handles JWT injection into request headers and transparent token refresh logic via interceptors, ensuring all authenticated API calls remain consistent and secure without any per-request boilerplate.
+- **Type-Safe Throughout**: TypeScript interfaces for all API payloads, Redux state shapes, and component props are maintained in a dedicated `types/` directory, providing compile-time guarantees across the entire feature surface.
+- **Marketing Landing Page**: A fully composed, animated public-facing marketing experience including hero section, course listings, testimonials, statistics, and a call-to-action banner — all built with modular, independently testable section components.
+
+---
+
+## 🏗️ Frontend Setup & Installation
+
+### 1. Prerequisites
+Ensure you have Node.js v18 or higher installed.
+
+### 2. Navigate to the Frontend Directory
+```bash
+cd frontend
+```
+
+### 3. Install Dependencies
+```bash
+npm install
+```
+
+### 4. Configure Environment Variables
+Create a `.env` file based on the provided `.env.example`. The critical variable is:
+
+```env
+VITE_API_BASE_URL=http://localhost:3000
+```
+
+### 5. Start the Development Server
+```bash
+npm run dev
+```
+The application will be available at `http://localhost:5173`.
+
+### 6. Building for Production
+```bash
+npm run build
+```
+The optimized, tree-shaken output will be written to the `dist/` directory, ready for static hosting or CDN deployment.
+
+---
+
+## 🤝 Frontend Contribution Guidelines
+
+1. **Feature-First, Always**: Every new domain belongs in its own dedicated directory under `src/features/`. Do not add domain logic to `shared/` or `components/`.
+2. **Respect the Layer Boundaries**: Components must only call hooks. Hooks must only interact with Redux. Redux actions must only call services. Services must only call the API. Crossing these boundaries violates the architectural contract.
+3. **TypeScript is Non-Negotiable**: All new files must be fully typed. No `any` types without explicit justification.
+4. **State via Redux Only**: Application-level state must live in Redux slices. Component-local ephemeral state (e.g., open/closed toggles) is the only acceptable use of raw `useState`.
+5. **Service Abstraction**: Never use `axios` or `fetch` directly inside a component or hook. All HTTP communication must be routed through a `*.service.ts` file.
