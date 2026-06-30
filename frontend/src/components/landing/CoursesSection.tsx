@@ -32,7 +32,7 @@ export default function CoursesSection() {
   return (
     <section
       id="courses"
-      style={{ background: "#0e0d0b", padding: "8rem 1.5rem", position: "relative", overflow: "hidden" }}
+      style={{ background: "#0B0F14", padding: "8rem 1.5rem", position: "relative", overflow: "hidden" }}
     >
       {/* Decorative large watermark */}
       <div
@@ -41,10 +41,10 @@ export default function CoursesSection() {
           position: "absolute",
           bottom: "-5rem",
           left: "-3rem",
-          fontFamily: "'Playfair Display', serif",
+          fontFamily: "'Helvetica', Arial, sans-serif",
           fontSize: "clamp(10rem, 22vw, 20rem)",
           fontWeight: 900,
-          color: "rgba(200,169,110,0.025)",
+          color: "rgba(157, 180, 198,0.025)",
           lineHeight: 1,
           userSelect: "none",
           pointerEvents: "none",
@@ -99,12 +99,12 @@ export default function CoursesSection() {
                   display: "block",
                   width: "20px",
                   height: "1px",
-                  background: "#c8a96e",
+                  background: "#9DB4C6",
                 }}
               />
               <span
                 style={{
-                  color: "#c8a96e",
+                  color: "#9DB4C6",
                   fontSize: "0.65rem",
                   fontWeight: 600,
                   letterSpacing: "0.16em",
@@ -116,8 +116,8 @@ export default function CoursesSection() {
             </div>
             <h2
               style={{
-                fontFamily: "'Playfair Display', serif",
-                color: "#ede8df",
+                fontFamily: "'Helvetica', Arial, sans-serif",
+                color: "#F5F8FA",
                 fontSize: "clamp(2rem, 3.5vw, 3rem)",
                 fontWeight: 800,
                 letterSpacing: "-0.03em",
@@ -131,23 +131,23 @@ export default function CoursesSection() {
           <Link
             to="/courses"
             style={{
-              color: "rgba(200,169,110,0.6)",
+              color: "rgba(157, 180, 198,0.6)",
               fontSize: "0.8rem",
               fontWeight: 500,
               textDecoration: "none",
-              borderBottom: "1px solid rgba(200,169,110,0.2)",
+              borderBottom: "1px solid rgba(157, 180, 198,0.2)",
               paddingBottom: "2px",
               whiteSpace: "nowrap",
               letterSpacing: "0.03em",
               transition: "color 0.2s, border-color 0.2s",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.color = "#c8a96e";
-              (e.currentTarget as HTMLElement).style.borderBottomColor = "#c8a96e";
+              (e.currentTarget as HTMLElement).style.color = "#9DB4C6";
+              (e.currentTarget as HTMLElement).style.borderBottomColor = "#9DB4C6";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.color = "rgba(200,169,110,0.6)";
-              (e.currentTarget as HTMLElement).style.borderBottomColor = "rgba(200,169,110,0.2)";
+              (e.currentTarget as HTMLElement).style.color = "rgba(157, 180, 198,0.6)";
+              (e.currentTarget as HTMLElement).style.borderBottomColor = "rgba(157, 180, 198,0.2)";
             }}
           >
             View all courses →
@@ -161,8 +161,8 @@ export default function CoursesSection() {
               <div
                 key={i}
                 style={{
-                  background: "#161510",
-                  border: "1px solid rgba(200,169,110,0.08)",
+                  background: "#1E2A39",
+                  border: "1px solid rgba(157, 180, 198,0.08)",
                   borderRadius: "6px",
                   overflow: "hidden",
                   height: "400px",
@@ -171,7 +171,7 @@ export default function CoursesSection() {
                 <div
                   style={{
                     height: "190px",
-                    background: "rgba(200,169,110,0.04)",
+                    background: "rgba(157, 180, 198,0.04)",
                     animation: "pulse 1.8s ease-in-out infinite",
                   }}
                 />
@@ -179,14 +179,14 @@ export default function CoursesSection() {
                   <div
                     style={{
                       height: "18px",
-                      background: "rgba(200,169,110,0.06)",
+                      background: "rgba(157, 180, 198,0.06)",
                       borderRadius: "3px",
                       marginBottom: "0.8rem",
                       width: "75%",
                     }}
                   />
-                  <div style={{ height: "12px", background: "rgba(200,169,110,0.04)", borderRadius: "3px", marginBottom: "0.5rem", width: "100%" }} />
-                  <div style={{ height: "12px", background: "rgba(200,169,110,0.04)", borderRadius: "3px", width: "55%" }} />
+                  <div style={{ height: "12px", background: "rgba(157, 180, 198,0.04)", borderRadius: "3px", marginBottom: "0.5rem", width: "100%" }} />
+                  <div style={{ height: "12px", background: "rgba(157, 180, 198,0.04)", borderRadius: "3px", width: "55%" }} />
                 </div>
               </div>
             ))}
@@ -194,7 +194,7 @@ export default function CoursesSection() {
         ) : coursesData.length === 0 ? (
           <p
             style={{
-              color: "rgba(237,232,223,0.25)",
+              color: "rgba(245, 248, 250,0.25)",
               textAlign: "center",
               fontSize: "0.9rem",
               fontWeight: 300,

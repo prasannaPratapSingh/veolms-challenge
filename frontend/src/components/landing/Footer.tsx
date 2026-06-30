@@ -17,8 +17,8 @@ export default function Footer() {
   return (
     <footer
       style={{
-        background: "#0e0d0b",
-        borderTop: "1px solid rgba(200,169,110,0.1)",
+        background: "#0B0F14",
+        borderTop: "1px solid rgba(157, 180, 198,0.1)",
         padding: "5rem 1.5rem 2.5rem",
       }}
     >
@@ -47,10 +47,10 @@ export default function Footer() {
             <a
               href="/"
               style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
+                fontFamily: "'Helvetica', Arial, sans-serif",
                 fontSize: "1.4rem",
                 fontWeight: 800,
-                color: "#ede8df",
+                color: "#F5F8FA",
                 textDecoration: "none",
                 letterSpacing: "-0.02em",
                 display: "block",
@@ -61,7 +61,7 @@ export default function Footer() {
             </a>
             <p
               style={{
-                color: "rgba(237,232,223,0.3)",
+                color: "rgba(245, 248, 250,0.3)",
                 fontSize: "0.82rem",
                 lineHeight: 1.75,
                 maxWidth: "240px",
@@ -76,7 +76,7 @@ export default function Footer() {
               style={{
                 width: "32px",
                 height: "2px",
-                background: "rgba(200,169,110,0.4)",
+                background: "rgba(157, 180, 198,0.4)",
                 marginTop: "1.5rem",
               }}
             />
@@ -87,7 +87,7 @@ export default function Footer() {
             <div key={col.head}>
               <p
                 style={{
-                  color: "#c8a96e",
+                  color: "#9DB4C6",
                   fontSize: "0.6rem",
                   fontWeight: 700,
                   letterSpacing: "0.14em",
@@ -113,17 +113,17 @@ export default function Footer() {
                     <a
                       href="#"
                       style={{
-                        color: "rgba(237,232,223,0.3)",
+                        color: "rgba(245, 248, 250,0.3)",
                         fontSize: "0.82rem",
                         textDecoration: "none",
                         transition: "color 0.2s",
                         fontWeight: 300,
                       }}
                       onMouseEnter={(e) =>
-                        ((e.target as HTMLElement).style.color = "rgba(237,232,223,0.7)")
+                        ((e.target as HTMLElement).style.color = "rgba(245, 248, 250,0.7)")
                       }
                       onMouseLeave={(e) =>
-                        ((e.target as HTMLElement).style.color = "rgba(237,232,223,0.3)")
+                        ((e.target as HTMLElement).style.color = "rgba(245, 248, 250,0.3)")
                       }
                     >
                       {link}
@@ -138,7 +138,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div
           style={{
-            borderTop: "1px solid rgba(200,169,110,0.08)",
+            borderTop: "1px solid rgba(157, 180, 198,0.08)",
             paddingTop: "2rem",
             display: "flex",
             justifyContent: "space-between",
@@ -149,7 +149,7 @@ export default function Footer() {
         >
           <p
             style={{
-              color: "rgba(237,232,223,0.18)",
+              color: "rgba(245, 248, 250,0.18)",
               fontSize: "0.73rem",
               margin: 0,
               fontWeight: 300,
@@ -164,17 +164,17 @@ export default function Footer() {
                 key={item}
                 href="#"
                 style={{
-                  color: "rgba(237,232,223,0.18)",
+                  color: "rgba(245, 248, 250,0.18)",
                   fontSize: "0.73rem",
                   textDecoration: "none",
                   transition: "color 0.2s",
                   fontWeight: 300,
                 }}
                 onMouseEnter={(e) =>
-                  ((e.target as HTMLElement).style.color = "rgba(200,169,110,0.6)")
+                  ((e.target as HTMLElement).style.color = "rgba(157, 180, 198,0.6)")
                 }
                 onMouseLeave={(e) =>
-                  ((e.target as HTMLElement).style.color = "rgba(237,232,223,0.18)")
+                  ((e.target as HTMLElement).style.color = "rgba(245, 248, 250,0.18)")
                 }
               >
                 {item}

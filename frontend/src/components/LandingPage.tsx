@@ -35,18 +35,18 @@ export default function LandingPage() {
   return (
     <div
       style={{
-        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif",
+        fontFamily: "'Helvetica', -apple-system, BlinkMacSystemFont, sans-serif",
         WebkitFontSmoothing: "antialiased",
         MozOsxFontSmoothing: "grayscale",
         overflowX: "hidden",
-        background: "#0e0d0b",
-        "--accent": "#c8a96e",
-        "--accent-muted": "rgba(200,169,110,0.15)",
-        "--surface": "#161510",
-        "--surface-2": "#1d1b16",
-        "--border": "rgba(200,169,110,0.12)",
-        "--text": "#ede8df",
-        "--text-muted": "rgba(237,232,223,0.45)",
+        background: "#0B0F14",
+        "--accent": "#9DB4C6",
+        "--accent-muted": "rgba(157, 180, 198,0.15)",
+        "--surface": "#1E2A39",
+        "--surface-2": "#1E2A39",
+        "--border": "rgba(157, 180, 198,0.12)",
+        "--text": "#F5F8FA",
+        "--text-muted": "rgba(245, 248, 250,0.45)",
       } as React.CSSProperties}
     >
       <Navbar />

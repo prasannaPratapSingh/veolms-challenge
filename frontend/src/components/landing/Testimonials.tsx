@@ -21,7 +21,7 @@ export default function Testimonials() {
     <section
       id="testimonials"
       style={{
-        background: "#0e0d0b",
+        background: "#0B0F14",
         padding: "8rem 1.5rem",
         position: "relative",
         overflow: "hidden",
@@ -34,10 +34,10 @@ export default function Testimonials() {
           position: "absolute",
           bottom: "-5rem",
           right: "-3rem",
-          fontFamily: "'Playfair Display', serif",
+          fontFamily: "'Helvetica', Arial, sans-serif",
           fontSize: "clamp(10rem, 22vw, 20rem)",
           fontWeight: 900,
-          color: "rgba(200,169,110,0.025)",
+          color: "rgba(157, 180, 198,0.025)",
           lineHeight: 1,
           userSelect: "none",
           pointerEvents: "none",
@@ -64,10 +64,10 @@ export default function Testimonials() {
               marginBottom: "0.75rem",
             }}
           >
-            <span style={{ display: "block", width: "20px", height: "1px", background: "#c8a96e" }} />
+            <span style={{ display: "block", width: "20px", height: "1px", background: "#9DB4C6" }} />
             <span
               style={{
-                color: "#c8a96e",
+                color: "#9DB4C6",
                 fontSize: "0.65rem",
                 fontWeight: 600,
                 letterSpacing: "0.16em",
@@ -79,8 +79,8 @@ export default function Testimonials() {
           </div>
           <h2
             style={{
-              fontFamily: "'Playfair Display', serif",
-              color: "#ede8df",
+              fontFamily: "'Helvetica', Arial, sans-serif",
+              color: "#F5F8FA",
               fontSize: "clamp(2rem, 3.5vw, 3rem)",
               fontWeight: 800,
               letterSpacing: "-0.03em",
@@ -108,11 +108,11 @@ export default function Testimonials() {
             <motion.blockquote
               key={t.id}
               variants={cardItem}
-              whileHover={{ borderColor: "rgba(200,169,110,0.2)", y: -4 }}
+              whileHover={{ borderColor: "rgba(157, 180, 198,0.2)", y: -4 }}
               transition={{ duration: 0.2 }}
               style={{
-                background: "#161510",
-                border: "1px solid rgba(200,169,110,0.1)",
+                background: "#1E2A39",
+                border: "1px solid rgba(157, 180, 198,0.1)",
                 borderRadius: "6px",
                 padding: "2.25rem",
                 margin: 0,
@@ -126,10 +126,10 @@ export default function Testimonials() {
                   position: "absolute",
                   top: "1.5rem",
                   right: "2rem",
-                  fontFamily: "'Playfair Display', serif",
+                  fontFamily: "'Helvetica', Arial, sans-serif",
                   fontSize: "5rem",
                   lineHeight: 0.8,
-                  color: "rgba(200,169,110,0.08)",
+                  color: "rgba(157, 180, 198,0.08)",
                   userSelect: "none",
                 }}
               >
@@ -144,7 +144,7 @@ export default function Testimonials() {
                     width="12"
                     height="12"
                     viewBox="0 0 24 24"
-                    fill="#c8a96e"
+                    fill="#9DB4C6"
                     style={{ opacity: 0.7 }}
                   >
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -154,7 +154,7 @@ export default function Testimonials() {
 
               <p
                 style={{
-                  color: "rgba(237,232,223,0.55)",
+                  color: "rgba(245, 248, 250,0.55)",
                   fontSize: "0.875rem",
                   lineHeight: 1.8,
                   marginBottom: "2rem",
@@ -171,14 +171,14 @@ export default function Testimonials() {
                     width: "38px",
                     height: "38px",
                     borderRadius: "50%",
-                    background: "rgba(200,169,110,0.1)",
-                    border: "1px solid rgba(200,169,110,0.2)",
+                    background: "rgba(157, 180, 198,0.1)",
+                    border: "1px solid rgba(157, 180, 198,0.2)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     fontSize: "0.72rem",
                     fontWeight: 700,
-                    color: "#c8a96e",
+                    color: "#9DB4C6",
                     flexShrink: 0,
                   }}
                 >
@@ -187,7 +187,7 @@ export default function Testimonials() {
                 <div>
                   <p
                     style={{
-                      color: "#ede8df",
+                      color: "#F5F8FA",
                       fontWeight: 600,
                       fontSize: "0.85rem",
                       margin: 0,
@@ -198,7 +198,7 @@ export default function Testimonials() {
                   </p>
                   <p
                     style={{
-                      color: "rgba(237,232,223,0.3)",
+                      color: "rgba(245, 248, 250,0.3)",
                       fontSize: "0.72rem",
                       margin: "0.2rem 0 0",
                       fontWeight: 300,

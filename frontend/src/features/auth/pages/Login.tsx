@@ -14,11 +14,11 @@ const fadeUp = (delay = 0) => ({
 
 const inputBase: React.CSSProperties = {
   width: "100%",
-  background: "rgba(200,169,110,0.04)",
-  border: "1px solid rgba(200,169,110,0.15)",
+  background: "rgba(157, 180, 198,0.04)",
+  border: "1px solid rgba(157, 180, 198,0.15)",
   borderRadius: "4px",
   padding: "0.75rem 1rem",
-  color: "#ede8df",
+  color: "#F5F8FA",
   fontSize: "0.88rem",
   outline: "none",
   transition: "border-color 0.2s, box-shadow 0.2s",
@@ -48,7 +48,7 @@ export default function Login() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "#0e0d0b",
+      background: "#0B0F14",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -57,7 +57,7 @@ export default function Login() {
       {/* Dot texture */}
       <div aria-hidden style={{
         position: "fixed", inset: 0,
-        backgroundImage: "radial-gradient(rgba(200,169,110,0.05) 1px, transparent 1px)",
+        backgroundImage: "radial-gradient(rgba(157, 180, 198,0.05) 1px, transparent 1px)",
         backgroundSize: "36px 36px",
         maskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 100%)",
         pointerEvents: "none",
@@ -66,15 +66,15 @@ export default function Login() {
       <div aria-hidden style={{
         position: "fixed", top: "-10%", left: "50%", transform: "translateX(-50%)",
         width: "600px", height: "400px",
-        background: "radial-gradient(ellipse at center, rgba(200,169,110,0.06) 0%, transparent 70%)",
+        background: "radial-gradient(ellipse at center, rgba(157, 180, 198,0.06) 0%, transparent 70%)",
         pointerEvents: "none",
       }} />
 
       <motion.div {...fadeUp(0)} style={{ position: "relative", width: "100%", maxWidth: "420px" }}>
         {/* Card */}
         <div style={{
-          background: "#161510",
-          border: "1px solid rgba(200,169,110,0.12)",
+          background: "#1E2A39",
+          border: "1px solid rgba(157, 180, 198,0.12)",
           borderRadius: "6px",
           padding: "2.5rem 2.25rem",
         }}>
@@ -83,22 +83,22 @@ export default function Login() {
             <Link to="/" style={{
               fontFamily: "'Playfair Display', serif",
               fontSize: "1.2rem", fontWeight: 800,
-              color: "#ede8df", textDecoration: "none",
+              color: "#F5F8FA", textDecoration: "none",
               letterSpacing: "-0.02em", display: "inline-block",
               marginBottom: "1.75rem",
             }}>
               LearnSphere
             </Link>
             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.6rem" }}>
-              <span style={{ display: "block", width: "16px", height: "1px", background: "#c8a96e" }} />
-              <span style={{ color: "#c8a96e", fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase" }}>
+              <span style={{ display: "block", width: "16px", height: "1px", background: "#9DB4C6" }} />
+              <span style={{ color: "#9DB4C6", fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase" }}>
                 Learner Access
               </span>
             </div>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df", fontSize: "1.6rem", fontWeight: 800, letterSpacing: "-0.02em", margin: "0 0 0.4rem" }}>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA", fontSize: "1.6rem", fontWeight: 800, letterSpacing: "-0.02em", margin: "0 0 0.4rem" }}>
               Welcome back
             </h1>
-            <p style={{ color: "rgba(237,232,223,0.4)", fontSize: "0.85rem", margin: 0, fontWeight: 300 }}>
+            <p style={{ color: "rgba(245, 248, 250,0.4)", fontSize: "0.85rem", margin: 0, fontWeight: 300 }}>
               Sign in to continue learning.
             </p>
           </motion.div>
@@ -120,9 +120,9 @@ export default function Login() {
             <motion.div {...fadeUp(0.15)} style={{ marginBottom: "1.75rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
                 <label htmlFor="password" style={labelStyle}>Password</label>
-                <a href="#" style={{ color: "rgba(200,169,110,0.45)", fontSize: "0.73rem", textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={e => ((e.target as HTMLElement).style.color = "#c8a96e")}
-                  onMouseLeave={e => ((e.target as HTMLElement).style.color = "rgba(200,169,110,0.45)")}>
+                <a href="#" style={{ color: "rgba(157, 180, 198,0.45)", fontSize: "0.73rem", textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={e => ((e.target as HTMLElement).style.color = "#9DB4C6")}
+                  onMouseLeave={e => ((e.target as HTMLElement).style.color = "rgba(157, 180, 198,0.45)")}>
                   Forgot password?
                 </a>
               </div>
@@ -138,12 +138,12 @@ export default function Login() {
             {/* Submit */}
             <motion.div {...fadeUp(0.2)}>
               <motion.button type="submit" disabled={isSubmitting || loading}
-                whileHover={!(isSubmitting || loading) ? { boxShadow: "0 0 24px rgba(200,169,110,0.2)" } : {}}
+                whileHover={!(isSubmitting || loading) ? { boxShadow: "0 0 24px rgba(157, 180, 198,0.2)" } : {}}
                 whileTap={!(isSubmitting || loading) ? { scale: 0.98 } : {}}
                 style={{
                   width: "100%",
-                  background: (isSubmitting || loading) ? "rgba(200,169,110,0.3)" : "#c8a96e",
-                  color: "#0e0d0b", fontWeight: 700, fontSize: "0.88rem",
+                  background: (isSubmitting || loading) ? "rgba(157, 180, 198,0.3)" : "#9DB4C6",
+                  color: "#0B0F14", fontWeight: 700, fontSize: "0.88rem",
                   padding: "0.85rem", border: "none", borderRadius: "4px",
                   cursor: (isSubmitting || loading) ? "not-allowed" : "pointer",
                   letterSpacing: "0.02em", transition: "background 0.2s",
@@ -158,15 +158,15 @@ export default function Login() {
           <Divider />
 
           {/* Sign up link */}
-          <motion.p {...fadeUp(0.3)} style={{ textAlign: "center", color: "rgba(237,232,223,0.35)", fontSize: "0.83rem", margin: 0 }}>
+          <motion.p {...fadeUp(0.3)} style={{ textAlign: "center", color: "rgba(245, 248, 250,0.35)", fontSize: "0.83rem", margin: 0 }}>
             Don't have an account?{" "}
             <Link to="/signup" style={{
-              color: "#c8a96e", fontWeight: 600, textDecoration: "none",
-              borderBottom: "1px solid rgba(200,169,110,0.3)", paddingBottom: "1px",
+              color: "#9DB4C6", fontWeight: 600, textDecoration: "none",
+              borderBottom: "1px solid rgba(157, 180, 198,0.3)", paddingBottom: "1px",
               transition: "color 0.2s, border-color 0.2s",
             }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderBottomColor = "#c8a96e"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderBottomColor = "rgba(200,169,110,0.3)"; }}>
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderBottomColor = "#9DB4C6"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderBottomColor = "rgba(157, 180, 198,0.3)"; }}>
               Create one →
             </Link>
           </motion.p>
@@ -177,14 +177,14 @@ export default function Login() {
 }
 
 function Spinner() {
-  return <span style={{ width: "14px", height: "14px", border: "2px solid rgba(14,13,11,0.25)", borderTopColor: "#0e0d0b", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />;
+  return <span style={{ width: "14px", height: "14px", border: "2px solid rgba(11, 15, 20,0.25)", borderTopColor: "#0B0F14", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />;
 }
 function Divider() {
   return (
     <div style={{ margin: "1.75rem 0", display: "flex", alignItems: "center", gap: "1rem" }}>
-      <div style={{ flex: 1, height: "1px", background: "rgba(200,169,110,0.08)" }} />
-      <span style={{ color: "rgba(200,169,110,0.3)", fontSize: "0.72rem" }}>or</span>
-      <div style={{ flex: 1, height: "1px", background: "rgba(200,169,110,0.08)" }} />
+      <div style={{ flex: 1, height: "1px", background: "rgba(157, 180, 198,0.08)" }} />
+      <span style={{ color: "rgba(157, 180, 198,0.3)", fontSize: "0.72rem" }}>or</span>
+      <div style={{ flex: 1, height: "1px", background: "rgba(157, 180, 198,0.08)" }} />
     </div>
   );
 }
@@ -198,6 +198,6 @@ function FieldError({ message }: { message?: string }) {
   );
 }
 const labelStyle: React.CSSProperties = {
-  display: "block", color: "rgba(237,232,223,0.5)", fontSize: "0.75rem",
+  display: "block", color: "rgba(245, 248, 250,0.5)", fontSize: "0.75rem",
   fontWeight: 600, marginBottom: "0.4rem", letterSpacing: "0.04em",
 };

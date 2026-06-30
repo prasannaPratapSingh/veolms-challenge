@@ -60,7 +60,7 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
     <>
       <style>{`
         .nav-link {
-          color: rgba(237,232,223,0.5);
+          color: rgba(245, 248, 250,0.5);
           font-size: 0.82rem;
           font-weight: 500;
           text-decoration: none;
@@ -75,10 +75,10 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
           left: 0;
           width: 0;
           height: 1px;
-          background: #c8a96e;
+          background: #9DB4C6;
           transition: width 0.2s ease;
         }
-        .nav-link:hover { color: #ede8df; }
+        .nav-link:hover { color: #F5F8FA; }
         .nav-link:hover::after { width: 100%; }
       `}</style>
 
@@ -89,23 +89,31 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
         transition={{ duration: 0.6, ease: "easeOut" }}
         style={{
           position: "fixed",
-          top: 0,
+          top: scrolled && !mobileOpen ? "1.5rem" : 0,
           left: 0,
           right: 0,
+          margin: "0 auto",
+          width: scrolled && !mobileOpen ? "calc(100% - 3rem)" : "100%",
+          maxWidth: scrolled && !mobileOpen ? "1200px" : "100%",
+          borderRadius: scrolled && !mobileOpen ? "1.5rem" : 0,
           zIndex: 100,
           height: "68px",
           padding: "0 2rem",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          transition: "background 0.3s, border-color 0.3s, backdrop-filter 0.3s",
+          transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
           background: scrolled || mobileOpen
-            ? "rgba(14,13,11,0.96)"
+            ? "rgba(11, 15, 20, 0.35)"
             : "transparent",
-          backdropFilter: scrolled || mobileOpen ? "blur(16px)" : "none",
-          borderBottom: scrolled || mobileOpen
-            ? "1px solid rgba(200,169,110,0.1)"
+          backdropFilter: scrolled || mobileOpen ? "blur(24px) saturate(180%)" : "none",
+          WebkitBackdropFilter: scrolled || mobileOpen ? "blur(24px) saturate(180%)" : "none",
+          border: scrolled || mobileOpen
+            ? "1px solid rgba(255, 255, 255, 0.08)"
             : "1px solid transparent",
+          boxShadow: scrolled || mobileOpen
+            ? "0 10px 40px rgba(0, 0, 0, 0.2)"
+            : "none",
         }}
       >
         {/* Logo */}
@@ -113,10 +121,10 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
           to="/"
           onClick={() => setMobileOpen(false)}
           style={{
-            fontFamily: "'Playfair Display', Georgia, serif",
+            fontFamily: "'Helvetica', Arial, sans-serif",
             fontSize: "1.35rem",
             fontWeight: 800,
-            color: "#ede8df",
+            color: "#F5F8FA",
             textDecoration: "none",
             letterSpacing: "-0.02em",
             flexShrink: 0,
@@ -176,7 +184,7 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
               >
                 <span
                   style={{
-                    color: "rgba(237,232,223,0.5)",
+                    color: "rgba(245, 248, 250,0.5)",
                     fontSize: "0.8rem",
                     fontWeight: 400,
                     display: "none",
@@ -193,10 +201,10 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                     height: "34px",
                     borderRadius: "50%",
                     overflow: "hidden",
-                    border: "1px solid rgba(200,169,110,0.3)",
+                    border: "1px solid rgba(157, 180, 198,0.3)",
                     flexShrink: 0,
                     cursor: "pointer",
-                    background: "#1d1b16",
+                    background: "#1E2A39",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -206,7 +214,7 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                   {avatarUrl ? (
                     <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   ) : (
-                    <span style={{ color: "#c8a96e", fontSize: "0.75rem", fontWeight: 700 }}>{initial}</span>
+                    <span style={{ color: "#9DB4C6", fontSize: "0.75rem", fontWeight: 700 }}>{initial}</span>
                   )}
                 </button>
 
@@ -222,8 +230,8 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                         top: "calc(100% + 0.6rem)",
                         right: 0,
                         minWidth: "160px",
-                        background: "#161510",
-                        border: "1px solid rgba(200,169,110,0.12)",
+                        background: "#1E2A39",
+                        border: "1px solid rgba(157, 180, 198,0.12)",
                         borderRadius: "8px",
                         overflow: "hidden",
                         boxShadow: "0 16px 48px rgba(0,0,0,0.6)",
@@ -232,10 +240,10 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                       <div
                         style={{
                           padding: "0.75rem 1rem",
-                          borderBottom: "1px solid rgba(200,169,110,0.08)",
+                          borderBottom: "1px solid rgba(157, 180, 198,0.08)",
                         }}
                       >
-                        <p style={{ color: "#ede8df", fontSize: "0.82rem", fontWeight: 600, margin: 0 }}>
+                        <p style={{ color: "#F5F8FA", fontSize: "0.82rem", fontWeight: 600, margin: 0 }}>
                           {name}
                         </p>
                       </div>
@@ -255,19 +263,19 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                               textAlign: "left",
                               padding: "0.7rem 1rem",
                               fontSize: "0.8rem",
-                              color: "rgba(237,232,223,0.5)",
+                              color: "rgba(245, 248, 250,0.5)",
                               background: "transparent",
                               border: 0,
                               cursor: "pointer",
-                              fontFamily: "'DM Sans', sans-serif",
+                              fontFamily: "'Helvetica', Arial, sans-serif",
                               transition: "color 0.15s, background 0.15s",
                             }}
                             onMouseEnter={(e) => {
-                              (e.currentTarget as HTMLElement).style.color = "#ede8df";
-                              (e.currentTarget as HTMLElement).style.background = "rgba(200,169,110,0.06)";
+                              (e.currentTarget as HTMLElement).style.color = "#F5F8FA";
+                              (e.currentTarget as HTMLElement).style.background = "rgba(157, 180, 198,0.06)";
                             }}
                             onMouseLeave={(e) => {
-                              (e.currentTarget as HTMLElement).style.color = "rgba(237,232,223,0.5)";
+                              (e.currentTarget as HTMLElement).style.color = "rgba(245, 248, 250,0.5)";
                               (e.currentTarget as HTMLElement).style.background = "transparent";
                             }}
                           >
@@ -282,19 +290,19 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                           textAlign: "left",
                           padding: "0.7rem 1rem",
                           fontSize: "0.8rem",
-                          color: "rgba(237,232,223,0.5)",
+                          color: "rgba(245, 248, 250,0.5)",
                           background: "transparent",
                           border: 0,
                           cursor: "pointer",
-                          fontFamily: "'DM Sans', sans-serif",
+                          fontFamily: "'Helvetica', Arial, sans-serif",
                           transition: "color 0.15s, background 0.15s",
                         }}
                         onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLElement).style.color = "#ede8df";
-                          (e.currentTarget as HTMLElement).style.background = "rgba(200,169,110,0.06)";
+                          (e.currentTarget as HTMLElement).style.color = "#F5F8FA";
+                          (e.currentTarget as HTMLElement).style.background = "rgba(157, 180, 198,0.06)";
                         }}
                         onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLElement).style.color = "rgba(237,232,223,0.5)";
+                          (e.currentTarget as HTMLElement).style.color = "rgba(245, 248, 250,0.5)";
                           (e.currentTarget as HTMLElement).style.background = "transparent";
                         }}
                       >
@@ -309,15 +317,15 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                 <Link
                   to="/login"
                   style={{
-                    color: "rgba(237,232,223,0.55)",
+                    color: "rgba(245, 248, 250,0.55)",
                     fontSize: "0.82rem",
                     fontWeight: 500,
                     textDecoration: "none",
                     padding: "0.45rem 0.8rem",
                     transition: "color 0.2s",
                   }}
-                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#ede8df")}
-                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(237,232,223,0.55)")}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#F5F8FA")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(245, 248, 250,0.55)")}
                 >
                   Log in
                 </Link>
@@ -325,8 +333,8 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                   <Link
                     to="/signup"
                     style={{
-                      background: "#c8a96e",
-                      color: "#0e0d0b",
+                      background: "#9DB4C6",
+                      color: "#0B0F14",
                       fontSize: "0.82rem",
                       fontWeight: 700,
                       textDecoration: "none",
@@ -357,9 +365,9 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                   height: "30px",
                   borderRadius: "50%",
                   overflow: "hidden",
-                  border: "1px solid rgba(200,169,110,0.3)",
+                  border: "1px solid rgba(157, 180, 198,0.3)",
                   flexShrink: 0,
-                  background: "#1d1b16",
+                  background: "#1E2A39",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -369,7 +377,7 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                 {avatarUrl ? (
                   <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 ) : (
-                  <span style={{ color: "#c8a96e", fontSize: "0.65rem", fontWeight: 700 }}>{initial}</span>
+                  <span style={{ color: "#9DB4C6", fontSize: "0.65rem", fontWeight: 700 }}>{initial}</span>
                 )}
               </button>
             )}
@@ -378,7 +386,7 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               style={{
                 padding: "0.35rem",
-                color: "rgba(237,232,223,0.6)",
+                color: "rgba(245, 248, 250,0.6)",
                 background: "transparent",
                 border: 0,
                 cursor: "pointer",
@@ -413,9 +421,11 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
               left: 0,
               right: 0,
               zIndex: 99,
-              background: "rgba(14,13,11,0.97)",
-              backdropFilter: "blur(16px)",
-              borderBottom: "1px solid rgba(200,169,110,0.1)",
+              background: "rgba(11, 15, 20, 0.45)",
+              backdropFilter: "blur(24px) saturate(180%)",
+              WebkitBackdropFilter: "blur(24px) saturate(180%)",
+              borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+              boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)",
             }}
             className="mobile-drawer"
           >
@@ -428,11 +438,11 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                     to="/courses"
                     onClick={() => setMobileOpen(false)}
                     style={{
-                      color: "rgba(237,232,223,0.6)",
+                      color: "rgba(245, 248, 250,0.6)",
                       fontSize: "0.95rem",
                       fontWeight: 400,
                       padding: "0.8rem 0",
-                      borderBottom: "1px solid rgba(200,169,110,0.07)",
+                      borderBottom: "1px solid rgba(157, 180, 198,0.07)",
                       textDecoration: "none",
                       display: "block",
                       letterSpacing: "0.02em",
@@ -446,11 +456,11 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                     href={`#${item.toLowerCase().replace(" ", "-")}`}
                     onClick={() => setMobileOpen(false)}
                     style={{
-                      color: "rgba(237,232,223,0.6)",
+                      color: "rgba(245, 248, 250,0.6)",
                       fontSize: "0.95rem",
                       fontWeight: 400,
                       padding: "0.8rem 0",
-                      borderBottom: "1px solid rgba(200,169,110,0.07)",
+                      borderBottom: "1px solid rgba(157, 180, 198,0.07)",
                       textDecoration: "none",
                       display: "block",
                       letterSpacing: "0.02em",
@@ -472,10 +482,10 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                       to={to}
                       onClick={() => setMobileOpen(false)}
                       style={{
-                        color: "rgba(237,232,223,0.6)",
+                        color: "rgba(245, 248, 250,0.6)",
                         fontSize: "0.95rem",
                         padding: "0.8rem 0",
-                        borderBottom: "1px solid rgba(200,169,110,0.07)",
+                        borderBottom: "1px solid rgba(157, 180, 198,0.07)",
                         textDecoration: "none",
                         display: "block",
                       }}
@@ -487,13 +497,13 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                     onClick={onLogout}
                     style={{
                       textAlign: "left",
-                      color: "rgba(237,232,223,0.6)",
+                      color: "rgba(245, 248, 250,0.6)",
                       fontSize: "0.95rem",
                       padding: "0.8rem 0",
                       background: "transparent",
                       border: 0,
                       cursor: "pointer",
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: "'Helvetica', Arial, sans-serif",
                     }}
                   >
                     Sign out
@@ -506,11 +516,11 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                     onClick={() => setMobileOpen(false)}
                     style={{
                       textAlign: "center",
-                      color: "rgba(237,232,223,0.7)",
+                      color: "rgba(245, 248, 250,0.7)",
                       fontSize: "0.9rem",
                       fontWeight: 500,
                       padding: "0.8rem",
-                      border: "1px solid rgba(200,169,110,0.15)",
+                      border: "1px solid rgba(157, 180, 198,0.15)",
                       borderRadius: "4px",
                       textDecoration: "none",
                       display: "block",
@@ -523,8 +533,8 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                     onClick={() => setMobileOpen(false)}
                     style={{
                       textAlign: "center",
-                      background: "#c8a96e",
-                      color: "#0e0d0b",
+                      background: "#9DB4C6",
+                      color: "#0B0F14",
                       fontSize: "0.9rem",
                       fontWeight: 700,
                       padding: "0.8rem",

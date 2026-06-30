@@ -69,7 +69,7 @@ function loadRazorpayScript(): Promise<void> {
 /* ─── Skeleton ─── */
 function SkeletonBlock({ className }: { className: string }) {
   return (
-    <div style={{ background: "rgba(200,169,110,0.06)" }} className={`rounded-sm animate-pulse ${className}`} />
+    <div style={{ background: "rgba(157, 180, 198,0.06)" }} className={`rounded-sm animate-pulse ${className}`} />
   );
 }
 
@@ -184,7 +184,7 @@ export default function Checkout() {
   /* ─── Loading skeleton ─── */
   if (courseLoading) {
     return (
-      <div className="min-h-screen pt-[68px]" style={{ background: "#0e0d0b" }}>
+      <div className="min-h-screen pt-[68px]" style={{ background: "#0B0F14" }}>
         <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col lg:flex-row gap-8">
           <div className="flex-1 space-y-4">
             <SkeletonBlock className="w-full aspect-video" />
@@ -206,7 +206,7 @@ export default function Checkout() {
   const duration = totalDuration(course.sections);
 
   return (
-    <div className="min-h-screen pt-[68px]" style={{ background: "#0e0d0b", color: "#ede8df" }}>
+    <div className="min-h-screen pt-[68px]" style={{ background: "#0B0F14", color: "#F5F8FA" }}>
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -218,8 +218,8 @@ export default function Checkout() {
           {/* Back link */}
           <Link
             to={`/course/${courseId}`}
-            className="inline-flex items-center gap-1.5 text-xs font-medium hover:text-[#c8a96e] transition-colors no-underline"
-            style={{ color: "rgba(200,169,110,0.45)" }}
+            className="inline-flex items-center gap-1.5 text-xs font-medium hover:text-[#9DB4C6] transition-colors no-underline"
+            style={{ color: "rgba(157, 180, 198,0.45)" }}
           >
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -228,20 +228,20 @@ export default function Checkout() {
           </Link>
 
           {/* Thumbnail */}
-          <div className="w-full aspect-video rounded-sm overflow-hidden" style={{ background: "#1d1b16", border: "1px solid rgba(200,169,110,0.1)" }}>
+          <div className="w-full aspect-video rounded-sm overflow-hidden" style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}>
             {course.thumbnail ? (
               <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-sm" style={{ color: "rgba(200,169,110,0.2)" }}>No Cover</div>
+              <div className="w-full h-full flex items-center justify-center text-sm" style={{ color: "rgba(157, 180, 198,0.2)" }}>No Cover</div>
             )}
           </div>
 
           {/* Title + description */}
           <div>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df" }} className="text-2xl lg:text-3xl font-extrabold tracking-tight mb-3">
+            <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-2xl lg:text-3xl font-extrabold tracking-tight mb-3">
               {course.title}
             </h1>
-            <p style={{ color: "rgba(237,232,223,0.42)" }} className="text-sm leading-relaxed line-clamp-3 font-light">
+            <p style={{ color: "rgba(245, 248, 250,0.42)" }} className="text-sm leading-relaxed line-clamp-3 font-light">
               {course.description}
             </p>
           </div>
@@ -250,7 +250,7 @@ export default function Checkout() {
           <div className="flex flex-wrap gap-3">
             {[`▶ ${lessons} lessons`, `⏱ ${duration}`, `📚 ${course.sections.length} sections`].map(label => (
               <span key={label} className="flex items-center gap-1.5 rounded-sm px-3.5 py-1.5 text-xs font-medium"
-                style={{ background: "rgba(200,169,110,0.06)", border: "1px solid rgba(200,169,110,0.12)", color: "rgba(237,232,223,0.5)" }}>
+                style={{ background: "rgba(157, 180, 198,0.06)", border: "1px solid rgba(157, 180, 198,0.12)", color: "rgba(245, 248, 250,0.5)" }}>
                 {label}
               </span>
             ))}
@@ -259,24 +259,24 @@ export default function Checkout() {
           {/* Sections list */}
           {course.sections.length > 0 && (
             <div className="space-y-2">
-              <h2 style={{ color: "rgba(200,169,110,0.6)", letterSpacing: "0.12em" }} className="text-xs font-semibold uppercase mb-3">
+              <h2 style={{ color: "rgba(157, 180, 198,0.6)", letterSpacing: "0.12em" }} className="text-xs font-semibold uppercase mb-3">
                 What's included
               </h2>
               {course.sections.map((section) => (
                 <div
                   key={section._id}
                   className="flex items-center justify-between px-4 py-3 rounded-sm"
-                  style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.08)" }}
+                  style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.08)" }}
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <span style={{ color: "rgba(200,169,110,0.3)" }} className="text-xs font-bold w-5 shrink-0 text-right">
+                    <span style={{ color: "rgba(157, 180, 198,0.3)" }} className="text-xs font-bold w-5 shrink-0 text-right">
                       {section.order + 1}
                     </span>
-                    <span style={{ color: "rgba(237,232,223,0.7)" }} className="text-sm font-medium truncate">
+                    <span style={{ color: "rgba(245, 248, 250,0.7)" }} className="text-sm font-medium truncate">
                       {section.title}
                     </span>
                   </div>
-                  <span style={{ color: "rgba(200,169,110,0.4)" }} className="text-xs shrink-0 ml-4">
+                  <span style={{ color: "rgba(157, 180, 198,0.4)" }} className="text-xs shrink-0 ml-4">
                     {section.lessons.length} lesson{section.lessons.length !== 1 ? "s" : ""}
                   </span>
                 </div>
@@ -292,37 +292,37 @@ export default function Checkout() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
             className="p-6 space-y-5 sticky top-[88px] rounded-sm"
-            style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.12)" }}
+            style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.12)" }}
           >
-            <h2 style={{ color: "#ede8df", fontFamily: "'Playfair Display', serif" }} className="text-lg font-bold tracking-tight">Order Summary</h2>
+            <h2 style={{ color: "#F5F8FA", fontFamily: "'Playfair Display', serif" }} className="text-lg font-bold tracking-tight">Order Summary</h2>
 
             {/* Course line */}
             <div className="flex items-start justify-between gap-3">
-              <p style={{ color: "rgba(237,232,223,0.55)" }} className="text-sm leading-snug">{course.title}</p>
-              <span style={{ color: "#ede8df" }} className="text-sm font-bold shrink-0">₹{course.price}</span>
+              <p style={{ color: "rgba(245, 248, 250,0.55)" }} className="text-sm leading-snug">{course.title}</p>
+              <span style={{ color: "#F5F8FA" }} className="text-sm font-bold shrink-0">₹{course.price}</span>
             </div>
 
             {/* Divider */}
-            <div className="h-px" style={{ background: "rgba(200,169,110,0.08)" }} />
+            <div className="h-px" style={{ background: "rgba(157, 180, 198,0.08)" }} />
 
             {/* Total */}
             <div className="flex items-center justify-between">
-              <span style={{ color: "rgba(237,232,223,0.55)" }} className="text-sm font-semibold">Total</span>
-              <span style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df" }} className="text-xl font-extrabold tracking-tight">₹{course.price}</span>
+              <span style={{ color: "rgba(245, 248, 250,0.55)" }} className="text-sm font-semibold">Total</span>
+              <span style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-xl font-extrabold tracking-tight">₹{course.price}</span>
             </div>
 
             {/* Pay button */}
             <motion.button
-              whileHover={{ boxShadow: payLoading ? "none" : "0 0 24px rgba(200,169,110,0.25)" }}
+              whileHover={{ boxShadow: payLoading ? "none" : "0 0 24px rgba(157, 180, 198,0.25)" }}
               whileTap={{ scale: payLoading ? 1 : 0.97 }}
               onClick={handlePay}
               disabled={payLoading}
-              style={{ background: payLoading ? "rgba(200,169,110,0.3)" : "#c8a96e", color: "#0e0d0b" }}
+              style={{ background: payLoading ? "rgba(157, 180, 198,0.3)" : "#9DB4C6", color: "#0B0F14" }}
               className="w-full font-bold text-sm py-3.5 rounded-sm cursor-pointer border-0 flex items-center justify-center gap-2 disabled:cursor-not-allowed transition-all"
             >
               {payLoading ? (
                 <>
-                  <span className="w-4 h-4 border-2 rounded-full animate-spin" style={{ borderColor: "rgba(14,13,11,0.2)", borderTopColor: "#0e0d0b" }} />
+                  <span className="w-4 h-4 border-2 rounded-full animate-spin" style={{ borderColor: "rgba(11, 15, 20,0.2)", borderTopColor: "#0B0F14" }} />
                   Processing…
                 </>
               ) : (
@@ -338,7 +338,7 @@ export default function Checkout() {
             )}
 
             {/* Trust note */}
-            <p style={{ color: "rgba(200,169,110,0.35)" }} className="text-xs text-center">
+            <p style={{ color: "rgba(157, 180, 198,0.35)" }} className="text-xs text-center">
               Secured by Razorpay · Pay once, learn forever
             </p>
           </motion.div>

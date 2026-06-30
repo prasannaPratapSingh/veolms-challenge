@@ -32,8 +32,8 @@ export default function CourseCard({ course }: Props) {
       whileHover={{ y: -5 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
       style={{
-        background: "#161510",
-        border: "1px solid rgba(200,169,110,0.1)",
+        background: "#1E2A39",
+        border: "1px solid rgba(157, 180, 198,0.1)",
         borderRadius: "6px",
         overflow: "hidden",
         cursor: "pointer",
@@ -47,7 +47,7 @@ export default function CourseCard({ course }: Props) {
       <div
         style={{
           height: "190px",
-          background: "#1d1b16",
+          background: "#1E2A39",
           overflow: "hidden",
           position: "relative",
           flexShrink: 0,
@@ -79,7 +79,7 @@ export default function CourseCard({ course }: Props) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "rgba(200,169,110,0.15)",
+              color: "rgba(157, 180, 198,0.15)",
               fontSize: "0.72rem",
               fontWeight: 600,
               letterSpacing: "0.1em",
@@ -95,7 +95,7 @@ export default function CourseCard({ course }: Props) {
           style={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(to top, rgba(14,13,11,0.4) 0%, transparent 50%)",
+            background: "linear-gradient(to top, rgba(11, 15, 20,0.4) 0%, transparent 50%)",
             pointerEvents: "none",
           }}
         />
@@ -106,8 +106,8 @@ export default function CourseCard({ course }: Props) {
               position: "absolute",
               top: "12px",
               left: "12px",
-              background: "#c8a96e",
-              color: "#0e0d0b",
+              background: "#9DB4C6",
+              color: "#0B0F14",
               fontSize: "0.58rem",
               fontWeight: 700,
               padding: "0.2rem 0.55rem",
@@ -132,8 +132,8 @@ export default function CourseCard({ course }: Props) {
       >
         <h3
           style={{
-            fontFamily: "'Playfair Display', serif",
-            color: "#ede8df",
+            fontFamily: "'Helvetica', Arial, sans-serif",
+            color: "#F5F8FA",
             fontSize: "1.05rem",
             fontWeight: 700,
             lineHeight: 1.3,
@@ -150,7 +150,7 @@ export default function CourseCard({ course }: Props) {
 
         <p
           style={{
-            color: "rgba(237,232,223,0.35)",
+            color: "rgba(245, 248, 250,0.35)",
             fontSize: "0.78rem",
             lineHeight: 1.65,
             marginBottom: "1.25rem",
@@ -169,7 +169,7 @@ export default function CourseCard({ course }: Props) {
           <span
             style={{
               display: "block",
-              color: "rgba(200,169,110,0.5)",
+              color: "rgba(157, 180, 198,0.5)",
               fontSize: "0.58rem",
               fontWeight: 700,
               letterSpacing: "0.12em",
@@ -181,7 +181,7 @@ export default function CourseCard({ course }: Props) {
           </span>
           <p
             style={{
-              color: "rgba(237,232,223,0.5)",
+              color: "rgba(245, 248, 250,0.5)",
               fontSize: "0.78rem",
               fontWeight: 400,
               overflow: "hidden",
@@ -197,7 +197,7 @@ export default function CourseCard({ course }: Props) {
         <div
           style={{
             height: "1px",
-            background: "rgba(200,169,110,0.08)",
+            background: "rgba(157, 180, 198,0.08)",
             marginBottom: "1.25rem",
           }}
         />
@@ -216,7 +216,7 @@ export default function CourseCard({ course }: Props) {
             <span
               style={{
                 display: "block",
-                color: "rgba(200,169,110,0.5)",
+                color: "rgba(157, 180, 198,0.5)",
                 fontSize: "0.58rem",
                 fontWeight: 700,
                 letterSpacing: "0.1em",
@@ -228,8 +228,8 @@ export default function CourseCard({ course }: Props) {
             </span>
             <span
               style={{
-                fontFamily: "'Playfair Display', serif",
-                color: "#ede8df",
+                fontFamily: "'Helvetica', Arial, sans-serif",
+                color: "#F5F8FA",
                 fontSize: "1.25rem",
                 fontWeight: 700,
                 letterSpacing: "-0.02em",
@@ -241,16 +241,16 @@ export default function CourseCard({ course }: Props) {
 
           <motion.button
             whileHover={{
-              background: "#c8a96e",
-              color: "#0e0d0b",
-              borderColor: "#c8a96e",
+              background: "#9DB4C6",
+              color: "#0B0F14",
+              borderColor: "#9DB4C6",
             }}
             whileTap={{ scale: 0.97 }}
             transition={{ duration: 0.18 }}
             style={{
               background: "transparent",
-              color: "rgba(200,169,110,0.8)",
-              border: "1px solid rgba(200,169,110,0.25)",
+              color: "rgba(157, 180, 198,0.8)",
+              border: "1px solid rgba(157, 180, 198,0.25)",
               borderRadius: "3px",
               padding: "0.5rem 1.1rem",
               fontSize: "0.75rem",
@@ -258,7 +258,7 @@ export default function CourseCard({ course }: Props) {
               cursor: "pointer",
               whiteSpace: "nowrap",
               letterSpacing: "0.04em",
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'Helvetica', Arial, sans-serif",
             }}
           >
             Enrol Now
@@ -267,7 +267,7 @@ export default function CourseCard({ course }: Props) {
 
         <p
           style={{
-            color: "rgba(237,232,223,0.18)",
+            color: "rgba(245, 248, 250,0.18)",
             fontSize: "0.65rem",
             marginTop: "0.9rem",
             letterSpacing: "0.04em",

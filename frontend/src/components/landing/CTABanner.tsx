@@ -1,17 +1,29 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router";
+import Threads from "../Threads";
 
 export default function CTABanner() {
   return (
     <section
       style={{
-        background: "#c8a96e",
+        background: "#9DB4C6",
         padding: "7rem 1.5rem",
         textAlign: "center",
         position: "relative",
         overflow: "hidden",
       }}
     >
+      {/* Threads Background */}
+      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', opacity: 0.3, zIndex: 0 }}>
+        <Threads
+          color={[0, 0, 0]}
+          amplitude={1}
+          distance={0}
+          enableMouseInteraction
+          style={{ width: '100%', height: '100%' }}
+        />
+      </div>
+
       {/* Fine dot texture on accent background */}
       <div
         aria-hidden
@@ -19,7 +31,7 @@ export default function CTABanner() {
           position: "absolute",
           inset: 0,
           backgroundImage:
-            "radial-gradient(rgba(14,13,11,0.08) 1px, transparent 1px)",
+            "radial-gradient(rgba(11, 15, 20,0.08) 1px, transparent 1px)",
           backgroundSize: "32px 32px",
           pointerEvents: "none",
         }}
@@ -45,12 +57,12 @@ export default function CTABanner() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.4 }}
         transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-        style={{ maxWidth: "680px", margin: "0 auto", position: "relative" }}
+        style={{ maxWidth: "680px", margin: "0 auto", position: "relative", zIndex: 1 }}
       >
         <h2
           style={{
-            fontFamily: "'Playfair Display', serif",
-            color: "#0e0d0b",
+            fontFamily: "'Helvetica', Arial, sans-serif",
+            color: "#0B0F14",
             fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)",
             fontWeight: 800,
             letterSpacing: "-0.03em",
@@ -64,7 +76,7 @@ export default function CTABanner() {
         </h2>
         <p
           style={{
-            color: "rgba(14,13,11,0.6)",
+            color: "rgba(11, 15, 20,0.6)",
             fontSize: "1rem",
             lineHeight: 1.75,
             marginBottom: "2.75rem",
@@ -87,8 +99,8 @@ export default function CTABanner() {
             whileHover={{ opacity: 0.9, scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             style={{
-              background: "#0e0d0b",
-              color: "#c8a96e",
+              background: "#0B0F14",
+              color: "#9DB4C6",
               fontWeight: 700,
               fontSize: "0.9rem",
               letterSpacing: "0.03em",
@@ -96,7 +108,7 @@ export default function CTABanner() {
               borderRadius: "4px",
               textDecoration: "none",
               display: "inline-block",
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'Helvetica', Arial, sans-serif",
             }}
           >
             Create Free Account →
@@ -110,7 +122,7 @@ export default function CTABanner() {
               to="/courses"
               style={{
                 background: "transparent",
-                color: "#0e0d0b",
+                color: "#0B0F14",
                 fontWeight: 600,
                 fontSize: "0.9rem",
                 letterSpacing: "0.02em",
@@ -118,7 +130,7 @@ export default function CTABanner() {
                 borderRadius: "4px",
                 textDecoration: "none",
                 display: "inline-block",
-                border: "2px solid rgba(14,13,11,0.2)",
+                border: "2px solid rgba(11, 15, 20,0.2)",
               }}
             >
               Browse Courses

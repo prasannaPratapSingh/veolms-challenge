@@ -21,9 +21,9 @@ export default function StatsBar() {
   return (
     <section
       style={{
-        background: "#161510",
-        borderTop: "1px solid rgba(200,169,110,0.1)",
-        borderBottom: "1px solid rgba(200,169,110,0.1)",
+        background: "#1E2A39",
+        borderTop: "1px solid rgba(157, 180, 198,0.1)",
+        borderBottom: "1px solid rgba(157, 180, 198,0.1)",
         padding: "0 2rem",
       }}
     >
@@ -46,15 +46,15 @@ export default function StatsBar() {
             style={{
               padding: "2.5rem 1rem",
               textAlign: "center",
-              borderRight: i < STATS.length - 1 ? "1px solid rgba(200,169,110,0.08)" : "none",
+              borderRight: i < STATS.length - 1 ? "1px solid rgba(157, 180, 198,0.08)" : "none",
             }}
           >
             <p
               style={{
-                fontFamily: "'Playfair Display', serif",
+                fontFamily: "'Helvetica', Arial, sans-serif",
                 fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
                 fontWeight: 800,
-                color: "#c8a96e",
+                color: "#9DB4C6",
                 letterSpacing: "-0.03em",
                 margin: 0,
                 lineHeight: 1,
@@ -64,7 +64,7 @@ export default function StatsBar() {
             </p>
             <p
               style={{
-                color: "rgba(237,232,223,0.35)",
+                color: "rgba(245, 248, 250,0.35)",
                 fontSize: "0.68rem",
                 fontWeight: 600,
                 marginTop: "0.5rem",

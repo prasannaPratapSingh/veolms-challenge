@@ -33,6 +33,26 @@ export default function VeoDashboard() {
 
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<Tab>("overview");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsSidebarOpen(true);
+      } else {
+        setIsSidebarOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleTabClick = (tab: Tab) => {
+    setActiveTab(tab);
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
+  };
 
   const onLogout = async () => {
     await handleLogout();
@@ -40,36 +60,61 @@ export default function VeoDashboard() {
   };
 
   return (
-    <div className="flex h-screen antialiased overflow-hidden relative" style={{ background: "#0e0d0b", color: "#ede8df" }}>
+    <div className="flex h-screen antialiased overflow-hidden relative" style={{ background: "#0B0F14", color: "#F5F8FA" }}>
 
       {/* Subtle dot texture */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: "radial-gradient(rgba(200,169,110,0.04) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(rgba(157, 180, 198,0.04) 1px, transparent 1px)",
           backgroundSize: "36px 36px",
           maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%)",
         }}
       />
 
+      {/* Sidebar Backdrop Overlay on Mobile */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 z-35 bg-black/60 backdrop-blur-sm md:hidden transition-opacity"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="relative z-20 w-72 flex flex-col justify-between shrink-0" style={{ borderRight: "1px solid rgba(200,169,110,0.1)", background: "#161510" }}>
-        <div className="p-8">
+      <aside 
+        className={`fixed inset-y-0 left-0 z-40 w-72 flex flex-col justify-between shrink-0 transition-transform duration-300 transform 
+          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+        style={{ borderRight: "1px solid rgba(157, 180, 198,0.1)", background: "#1E2A39" }}
+      >
+        <div className="p-8 relative">
           {/* Brand */}
-          <div className="mb-12 flex items-center gap-3">
-            <span style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df", fontSize: "1.2rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
-              LearnSphere
-            </span>
-            <span style={{ color: "#c8a96e", background: "rgba(200,169,110,0.1)", border: "1px solid rgba(200,169,110,0.2)", fontSize: "0.55rem", fontWeight: 700, letterSpacing: "0.1em" }} className="uppercase px-2 py-0.5 rounded-sm ml-1">
-              Admin
-            </span>
+          <div className="mb-12 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <span style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA", fontSize: "1.2rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
+                LearnSphere
+              </span>
+              <span style={{ color: "#9DB4C6", background: "rgba(157, 180, 198,0.1)", border: "1px solid rgba(157, 180, 198,0.2)", fontSize: "0.55rem", fontWeight: 700, letterSpacing: "0.1em" }} className="uppercase px-2 py-0.5 rounded-sm ml-1">
+                Admin
+              </span>
+            </div>
+            
+            {/* Toggle Button inside Sidebar */}
+            <button 
+              onClick={() => setIsSidebarOpen(false)}
+              className="p-1.5 text-[rgba(245, 248, 250,0.5)] hover:text-[#F5F8FA] hover:bg-white/5 rounded-md transition-colors"
+              title="Close sidebar"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
           </div>
 
           {/* Navigation */}
           <nav className="space-y-2">
             <SidebarButton
               active={activeTab === "overview"}
-              onClick={() => setActiveTab("overview")}
+              onClick={() => handleTabClick("overview")}
               label="Overview"
               icon={
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -79,7 +124,7 @@ export default function VeoDashboard() {
             />
             <SidebarButton
               active={activeTab === "courses"}
-              onClick={() => setActiveTab("courses")}
+              onClick={() => handleTabClick("courses")}
               label="Course Library"
               icon={
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -89,7 +134,7 @@ export default function VeoDashboard() {
             />
             <SidebarButton
               active={activeTab === "upload"}
-              onClick={() => setActiveTab("upload")}
+              onClick={() => handleTabClick("upload")}
               label="Publish Course"
               icon={
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -99,7 +144,7 @@ export default function VeoDashboard() {
             />
             <SidebarButton
               active={activeTab === "students"}
-              onClick={() => setActiveTab("students")}
+              onClick={() => handleTabClick("students")}
               label="Students"
               icon={
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -111,23 +156,23 @@ export default function VeoDashboard() {
         </div>
 
         {/* User Info & Logout */}
-        <div className="p-6" style={{ borderTop: "1px solid rgba(200,169,110,0.08)", background: "rgba(200,169,110,0.01)" }}>
+        <div className="p-6" style={{ borderTop: "1px solid rgba(157, 180, 198,0.08)", background: "rgba(157, 180, 198,0.01)" }}>
           <div className="flex items-center gap-3 mb-6">
-            <div style={{ background: "rgba(200,169,110,0.1)", border: "1px solid rgba(200,169,110,0.2)" }} className="w-10 h-10 rounded-full flex items-center justify-center shrink-0">
-              <span style={{ color: "#c8a96e" }} className="text-sm font-bold">{user?.name?.[0]?.toUpperCase() || 'A'}</span>
+            <div style={{ background: "rgba(157, 180, 198,0.1)", border: "1px solid rgba(157, 180, 198,0.2)" }} className="w-10 h-10 rounded-full flex items-center justify-center shrink-0">
+              <img src={user?.data?.avatarUrl} alt="" className="w-full h-full object-cover rounded-full" />
             </div>
             <div className="overflow-hidden">
-              <p style={{ color: "#ede8df" }} className="text-sm font-semibold truncate">{user?.name || 'Administrator'}</p>
-              <p style={{ color: "rgba(200,169,110,0.4)" }} className="text-xs truncate">{user?.email}</p>
+              <p style={{ color: "#F5F8FA" }} className="text-sm font-semibold truncate">{user?.data?.name || 'Administrator'}</p>
+              <p style={{ color: "rgba(157, 180, 198,0.4)" }} className="text-xs truncate">{user?.data?.email}</p>
             </div>
           </div>
           <motion.button
             onClick={onLogout}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            style={{ border: "1px solid rgba(200,169,110,0.1)", color: "rgba(237,232,223,0.4)" }}
-            className="w-full py-2.5 rounded-sm text-sm font-semibold transition-colors flex items-center justify-center gap-2 hover:text-[#ede8df]"
-            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(200,169,110,0.05)")}
+            style={{ border: "1px solid rgba(157, 180, 198,0.1)", color: "rgba(245, 248, 250,0.4)" }}
+            className="w-full py-2.5 rounded-sm text-sm font-semibold transition-colors flex items-center justify-center gap-2 hover:text-[#F5F8FA]"
+            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(157, 180, 198,0.05)")}
             onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = "transparent")}
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -139,7 +184,20 @@ export default function VeoDashboard() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="relative z-10 flex-1 overflow-y-auto">
+      <main className={`relative z-10 flex-1 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "md:pl-72" : "md:pl-0"}`}>
+        {/* Floating toggle button when sidebar is closed */}
+        {!isSidebarOpen && (
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="fixed top-6 left-6 z-30 p-2 bg-[#1E2A39] text-[rgba(245, 248, 250,0.6)] hover:text-[#F5F8FA] hover:bg-white/5 rounded-md border border-[rgba(157, 180, 198,0.15)] transition-colors shadow-lg"
+            title="Open sidebar"
+          >
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        )}
+
         <div className="max-w-7xl mx-auto p-10 lg:p-14">
           <AnimatePresence mode="wait">
             {activeTab === "overview" && <OverviewTab key="overview" user={user} />}
@@ -160,13 +218,13 @@ function SidebarButton({ active, onClick, label, icon }: { active: boolean; onCl
     <button
       onClick={onClick}
       style={active
-        ? { background: "#c8a96e", color: "#0e0d0b", border: "1px solid #c8a96e" }
-        : { color: "rgba(237,232,223,0.45)", border: "1px solid transparent" }}
+        ? { background: "#9DB4C6", color: "#0B0F14", border: "1px solid #9DB4C6" }
+        : { color: "rgba(245, 248, 250,0.45)", border: "1px solid transparent" }}
       className="w-full flex items-center gap-3 px-4 py-3 rounded-sm text-sm font-semibold transition-all group"
-      onMouseEnter={e => { if (!active) { (e.currentTarget as HTMLElement).style.background = "rgba(200,169,110,0.06)"; (e.currentTarget as HTMLElement).style.color = "#ede8df"; } }}
-      onMouseLeave={e => { if (!active) { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "rgba(237,232,223,0.45)"; } }}
+      onMouseEnter={e => { if (!active) { (e.currentTarget as HTMLElement).style.background = "rgba(157, 180, 198,0.06)"; (e.currentTarget as HTMLElement).style.color = "#F5F8FA"; } }}
+      onMouseLeave={e => { if (!active) { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "rgba(245, 248, 250,0.45)"; } }}
     >
-      <span style={{ color: active ? "#0e0d0b" : "rgba(200,169,110,0.45)" }} className="transition-colors">{icon}</span>
+      <span style={{ color: active ? "#0B0F14" : "rgba(157, 180, 198,0.45)" }} className="transition-colors">{icon}</span>
       {label}
     </button>
   );
@@ -177,14 +235,14 @@ function SectionHeader({ title, subtitle, badge }: { title: string; subtitle: st
     <div className="mb-10">
       {badge && (
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.75rem" }}>
-          <span style={{ display: "block", width: "16px", height: "1px", background: "#c8a96e" }} />
-          <span style={{ color: "#c8a96e", fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" }}>{badge}</span>
+          <span style={{ display: "block", width: "16px", height: "1px", background: "#9DB4C6" }} />
+          <span style={{ color: "#9DB4C6", fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" }}>{badge}</span>
         </div>
       )}
-      <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df" }} className="text-4xl lg:text-5xl font-extrabold tracking-tight mb-3">
+      <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-4xl lg:text-5xl font-extrabold tracking-tight mb-3">
         {title}
       </h1>
-      <p style={{ color: "rgba(237,232,223,0.4)" }} className="text-base max-w-2xl font-light">{subtitle}</p>
+      <p style={{ color: "rgba(245, 248, 250,0.4)" }} className="text-base max-w-2xl font-light">{subtitle}</p>
     </div>
   );
 }
@@ -194,8 +252,6 @@ function SectionHeader({ title, subtitle, badge }: { title: string; subtitle: st
 function OverviewTab({ user }: { user: any }) {
   const analytics = useSelector(
     (state: any) => state.course.analytics)
-
-    console.log(user);
     
   
   return (
@@ -211,7 +267,7 @@ function OverviewTab({ user }: { user: any }) {
         subtitle="Here's a high-level overview of your platform's performance and recent activities."
       />
 
-      <div className="flex justify-around ">
+      <div className="flex flex-col sm:flex-row justify-around gap-2">
         {[
           { label: "Total Learners", value: `${analytics?.users}` },
           { label: "Active Courses", value: `${analytics?.courses}` },
@@ -223,16 +279,16 @@ function OverviewTab({ user }: { user: any }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: i * 0.1, ease: EASE }}
-            style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.1)" }}
+            style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}
             className="group rounded-sm p-6 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
-            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(200,169,110,0.22)")}
-            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(200,169,110,0.1)")}
+            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(157, 180, 198,0.22)")}
+            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(157, 180, 198,0.1)")}
           >
             <div className="relative z-10">
-              <p style={{ color: "rgba(200,169,110,0.55)", letterSpacing: "0.12em" }} className="text-xs font-bold uppercase mb-4">
+              <p style={{ color: "rgba(157, 180, 198,0.55)", letterSpacing: "0.12em" }} className="text-xs font-bold uppercase mb-4">
                 {card.label}
               </p>
-              <p style={{ fontFamily: "'Playfair Display', serif", color: "#c8a96e" }} className="text-4xl font-extrabold tracking-tight">
+              <p style={{ fontFamily: "'Playfair Display', serif", color: "#9DB4C6" }} className=" text-2xl sm:text-3xl font-extrabold tracking-tight">
                 {card.value}
               </p>
             </div>
@@ -305,24 +361,24 @@ function CoursesTab({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: i * 0.05, ease: EASE }}
               key={course._id}
-              style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.1)" }}
+              style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}
               className="group rounded-sm overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(200,169,110,0.25)")}
-              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(200,169,110,0.1)")}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(157, 180, 198,0.25)")}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(157, 180, 198,0.1)")}
             >
               <div className="aspect-[16/9] bg-neutral-900 relative overflow-hidden">
                 <div className="absolute inset-0 bg-black/50 z-10" />
                 {course.thumbnail ? (
                   <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-sm font-medium" style={{ color: "rgba(200,169,110,0.2)" }}>No Cover Image</div>
+                  <div className="w-full h-full flex items-center justify-center text-sm font-medium" style={{ color: "rgba(157, 180, 198,0.2)" }}>No Cover Image</div>
                 )}
                 <div className="absolute top-4 right-4 z-20">
                   <button
                     onClick={(e) => { e.stopPropagation(); handlePublishToggle(course._id, course.isPublished); }}
                     style={course.isPublished
-                      ? { background: "#c8a96e", color: "#0e0d0b", border: "1px solid #c8a96e" }
-                      : { background: "rgba(200,169,110,0.08)", color: "rgba(200,169,110,0.6)", border: "1px solid rgba(200,169,110,0.2)" }}
+                      ? { background: "#9DB4C6", color: "#0B0F14", border: "1px solid #9DB4C6" }
+                      : { background: "rgba(157, 180, 198,0.08)", color: "rgba(157, 180, 198,0.6)", border: "1px solid rgba(157, 180, 198,0.2)" }}
                     className="text-[0.6rem] font-bold uppercase tracking-widest px-3 py-1.5 rounded-sm backdrop-blur-md shadow-lg transition-colors"
                   >
                     {course.isPublished ? "Live" : "Draft"}
@@ -331,24 +387,24 @@ function CoursesTab({
               </div>
 
               <div className="p-6 flex-1 flex flex-col">
-                <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df" }} className="font-extrabold text-xl leading-tight mb-2 line-clamp-1">{course.title}</h3>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="font-extrabold text-xl leading-tight mb-2 line-clamp-1">{course.title}</h3>
                 <div className="flex items-center gap-2 mb-4">
-                  <div style={{ background: "rgba(200,169,110,0.1)", border: "1px solid rgba(200,169,110,0.15)" }} className="w-5 h-5 rounded-full flex items-center justify-center">
-                    <span style={{ color: "#c8a96e" }} className="text-[10px] font-bold">{course.createdBy?.charAt(0).toUpperCase()}</span>
+                  <div style={{ background: "rgba(157, 180, 198,0.1)", border: "1px solid rgba(157, 180, 198,0.15)" }} className="w-5 h-5 rounded-full flex items-center justify-center">
+                    <span style={{ color: "#9DB4C6" }} className="text-[10px] font-bold">{course.createdBy?.charAt(0).toUpperCase()}</span>
                   </div>
-                  <p style={{ color: "rgba(237,232,223,0.4)" }} className="text-xs font-medium truncate">{course.createdBy}</p>
+                  <p style={{ color: "rgba(245, 248, 250,0.4)" }} className="text-xs font-medium truncate">{course.createdBy}</p>
                 </div>
-                <p style={{ color: "rgba(237,232,223,0.35)" }} className="text-sm line-clamp-2 mb-6 flex-1 leading-relaxed font-light">{course.description}</p>
-                <div className="flex items-center justify-between pt-5 mt-auto" style={{ borderTop: "1px solid rgba(200,169,110,0.08)" }}>
+                <p style={{ color: "rgba(245, 248, 250,0.35)" }} className="text-sm line-clamp-2 mb-6 flex-1 leading-relaxed font-light">{course.description}</p>
+                <div className="flex items-center justify-between pt-5 mt-auto" style={{ borderTop: "1px solid rgba(157, 180, 198,0.08)" }}>
                   <div className="flex flex-col">
-                    <span style={{ color: "rgba(200,169,110,0.45)", letterSpacing: "0.1em" }} className="text-[10px] font-bold uppercase mb-0.5">Price</span>
-                    <span style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df" }} className="font-extrabold text-lg">₹{course.price}</span>
+                    <span style={{ color: "rgba(157, 180, 198,0.45)", letterSpacing: "0.1em" }} className="text-[10px] font-bold uppercase mb-0.5">Price</span>
+                    <span style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="font-extrabold text-lg">₹{course.price}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <button
                       onClick={(e) => { e.stopPropagation(); setEditingCourse(course); }}
-                      style={{ color: "rgba(200,169,110,0.45)" }}
-                      className="text-sm font-bold transition-colors hover:text-[#c8a96e] flex items-center gap-1"
+                      style={{ color: "rgba(157, 180, 198,0.45)" }}
+                      className="text-sm font-bold transition-colors hover:text-[#9DB4C6] flex items-center gap-1"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -356,8 +412,8 @@ function CoursesTab({
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); navigate(`/admin/course/${course._id}`); }}
-                      style={{ background: "rgba(200,169,110,0.1)", color: "#c8a96e", border: "1px solid rgba(200,169,110,0.2)" }}
-                      className="text-sm font-bold transition-colors flex items-center gap-1 px-3 py-1.5 rounded-sm hover:bg-[rgba(200,169,110,0.18)]"
+                      style={{ background: "rgba(157, 180, 198,0.1)", color: "#9DB4C6", border: "1px solid rgba(157, 180, 198,0.2)" }}
+                      className="text-sm font-bold transition-colors flex items-center gap-1 px-3 py-1.5 rounded-sm hover:bg-[rgba(157, 180, 198,0.18)]"
                     >
                       Curriculum
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -371,15 +427,15 @@ function CoursesTab({
           ))}
         </div>
       ) : (
-        <div className="text-center py-32 rounded-sm" style={{ border: "1px dashed rgba(200,169,110,0.12)", background: "rgba(200,169,110,0.01)" }}>
-          <div style={{ background: "rgba(200,169,110,0.08)", border: "1px solid rgba(200,169,110,0.15)" }} className="w-16 h-16 mx-auto rounded-sm flex items-center justify-center mb-6">
-            <svg className="w-8 h-8" style={{ color: "rgba(200,169,110,0.4)" }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="text-center py-32 rounded-sm" style={{ border: "1px dashed rgba(157, 180, 198,0.12)", background: "rgba(157, 180, 198,0.01)" }}>
+          <div style={{ background: "rgba(157, 180, 198,0.08)", border: "1px solid rgba(157, 180, 198,0.15)" }} className="w-16 h-16 mx-auto rounded-sm flex items-center justify-center mb-6">
+            <svg className="w-8 h-8" style={{ color: "rgba(157, 180, 198,0.4)" }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
           </div>
-          <h3 style={{ color: "#ede8df" }} className="text-xl font-bold mb-2">No Courses Found</h3>
-          <p style={{ color: "rgba(237,232,223,0.35)" }} className="max-w-sm mx-auto mb-8 font-light">You haven't published any courses yet. Get started by creating your first course.</p>
-          <button style={{ background: "#c8a96e", color: "#0e0d0b" }} onClick={() => document.getElementById('upload-tab-btn')?.click()} className="px-6 py-3 font-bold rounded-sm transition-colors hover:opacity-90">
+          <h3 style={{ color: "#F5F8FA" }} className="text-xl font-bold mb-2">No Courses Found</h3>
+          <p style={{ color: "rgba(245, 248, 250,0.35)" }} className="max-w-sm mx-auto mb-8 font-light">You haven't published any courses yet. Get started by creating your first course.</p>
+          <button style={{ background: "#9DB4C6", color: "#0B0F14" }} onClick={() => document.getElementById('upload-tab-btn')?.click()} className="px-6 py-3 font-bold rounded-sm transition-colors hover:opacity-90">
             Create Course
           </button>
         </div>
@@ -426,12 +482,12 @@ function UploadTab({ onSuccess, handleUploadCourse }: { onSuccess: (courseId: st
     }
   };
 
-  const inputClass = "w-full rounded-sm px-5 py-4 text-sm focus:outline-none transition-all placeholder:text-[rgba(237,232,223,0.2)] auth-input" ;
-  const errorClass = "w-full rounded-sm px-5 py-4 text-sm focus:outline-none transition-all placeholder:text-[rgba(237,232,223,0.2)]";
+  const inputClass = "w-full rounded-sm px-5 py-4 text-sm focus:outline-none transition-all placeholder:text-[rgba(245, 248, 250,0.2)] auth-input" ;
+  const errorClass = "w-full rounded-sm px-5 py-4 text-sm focus:outline-none transition-all placeholder:text-[rgba(245, 248, 250,0.2)]";
   const labelClass = "block text-xs font-bold uppercase tracking-widest mb-3";
-  const inputStyle = { background: "rgba(200,169,110,0.04)", border: "1px solid rgba(200,169,110,0.15)", color: "#ede8df" };
-  const errorStyle = { background: "rgba(224,112,112,0.04)", border: "1px solid rgba(224,112,112,0.4)", color: "#ede8df" };
-  const labelStyle = { color: "rgba(200,169,110,0.6)" };
+  const inputStyle = { background: "rgba(157, 180, 198,0.04)", border: "1px solid rgba(157, 180, 198,0.15)", color: "#F5F8FA" };
+  const errorStyle = { background: "rgba(224,112,112,0.04)", border: "1px solid rgba(224,112,112,0.4)", color: "#F5F8FA" };
+  const labelStyle = { color: "rgba(157, 180, 198,0.6)" };
 
   return (
     <motion.div
@@ -447,7 +503,7 @@ function UploadTab({ onSuccess, handleUploadCourse }: { onSuccess: (courseId: st
         subtitle="Provide the details for your new course to make it available to learners."
       />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 p-8 lg:p-10 rounded-sm relative overflow-hidden" style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.12)" }}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 p-8 lg:p-10 rounded-sm relative overflow-hidden" style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.12)" }}>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Title */}
@@ -478,9 +534,9 @@ function UploadTab({ onSuccess, handleUploadCourse }: { onSuccess: (courseId: st
 
           {/* Price */}
           <div className="relative z-10">
-            <label htmlFor="price" className={labelClass}>Price ($)</label>
+            <label htmlFor="price" className={labelClass}>Price (₹)</label>
             <div className="relative">
-              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-neutral-500 font-medium">$</span>
+              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-neutral-500 font-medium">₹</span>
               <input
                 id="price"
                 type="number"
@@ -617,9 +673,9 @@ function EditCourseModal({ course, onClose, handleUpdateCourse }: { course: any;
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ duration: 0.3, ease: EASE }}
         className="relative w-full max-w-2xl rounded-sm shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
-        style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.15)" }}
+        style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.15)" }}
       >
-        <div className="p-6 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(200,169,110,0.08)", background: "rgba(200,169,110,0.02)" }}>
+        <div className="p-6 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(157, 180, 198,0.08)", background: "rgba(157, 180, 198,0.02)" }}>
           <h2 className="text-xl font-bold text-white">Edit Course</h2>
           <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors text-white/50 hover:text-white">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -667,7 +723,7 @@ function EditCourseModal({ course, onClose, handleUpdateCourse }: { course: any;
             disabled={isSubmitting}
             whileHover={!isSubmitting ? { scale: 1.02 } : {}}
             whileTap={!isSubmitting ? { scale: 0.98 } : {}}
-            className={`px-8 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${isSubmitting ? "bg-white/10 text-white/40 cursor-not-allowed" : "bg-violet-600 text-white shadow-lg  hover:opacity-90"
+            className={`px-8 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${isSubmitting ? "bg-white/10 text-white/40 cursor-not-allowed" : "bg-amber-900 text-white shadow-lg  hover:opacity-90"
               }`}
           >
             {isSubmitting ? <><Spinner /> Saving...</> : "Save Changes"}

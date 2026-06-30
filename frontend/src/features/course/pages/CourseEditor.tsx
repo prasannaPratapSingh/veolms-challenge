@@ -165,18 +165,18 @@ export default function CourseEditor() {
 
     if (loading && !course) {
         return (
-            <div className="flex h-screen items-center justify-center" style={{ background: "#0e0d0b" }}>
-                <span className="w-8 h-8 border-4 rounded-full animate-spin" style={{ borderColor: "rgba(200,169,110,0.15)", borderTopColor: "#c8a96e" }} />
+            <div className="flex h-screen items-center justify-center" style={{ background: "#0B0F14" }}>
+                <span className="w-8 h-8 border-4 rounded-full animate-spin" style={{ borderColor: "rgba(157, 180, 198,0.15)", borderTopColor: "#9DB4C6" }} />
             </div>
         );
     }
 
     if (!course) {
         return (
-            <div className="flex h-screen items-center justify-center" style={{ background: "#0e0d0b", color: "#ede8df" }}>
+            <div className="flex h-screen items-center justify-center" style={{ background: "#0B0F14", color: "#F5F8FA" }}>
                 <div className="text-center">
                     <h2 className="text-2xl font-bold mb-2">Course not found</h2>
-                    <button onClick={() => navigate('/admin/veodashboard')} style={{ color: "#c8a96e" }} className="hover:opacity-80 underline underline-offset-2">
+                    <button onClick={() => navigate('/admin/veodashboard')} style={{ color: "#9DB4C6" }} className="hover:opacity-80 underline underline-offset-2">
                         Return to Dashboard
                     </button>
                 </div>
@@ -185,38 +185,38 @@ export default function CourseEditor() {
     }
 
     return (
-        <div className="min-h-screen text-white font-sans relative" style={{ background: "#0e0d0b", color: "#ede8df" }}>
+        <div className="min-h-screen text-white font-sans relative" style={{ background: "#0B0F14", color: "#F5F8FA" }}>
             {/* Ambient glow */}
-            <div className="fixed top-0 left-1/2 -translate-x-1/2 w-1/2 h-64 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, rgba(200,169,110,0.05) 0%, transparent 70%)" }} />
+            <div className="fixed top-0 left-1/2 -translate-x-1/2 w-1/2 h-64 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, rgba(157, 180, 198,0.05) 0%, transparent 70%)" }} />
 
             {/* Header */}
-            <header className="sticky top-0 z-20 backdrop-blur-xl" style={{ background: "rgba(14,13,11,0.95)", borderBottom: "1px solid rgba(200,169,110,0.1)" }}>
+            <header className="sticky top-0 z-20 backdrop-blur-xl" style={{ background: "rgba(11, 15, 20,0.95)", borderBottom: "1px solid rgba(157, 180, 198,0.1)" }}>
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <button
                             onClick={() => navigate('/admin/veodashboard')}
                             className="p-2 rounded-sm transition-colors"
-                            style={{ color: "rgba(200,169,110,0.5)" }}
-                            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#c8a96e")}
-                            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "rgba(200,169,110,0.5)")}
+                            style={{ color: "rgba(157, 180, 198,0.5)" }}
+                            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#9DB4C6")}
+                            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "rgba(157, 180, 198,0.5)")}
                         >
                             <IconArrowLeft />
                         </button>
                         <div>
-                            <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df" }} className="text-lg font-extrabold truncate max-w-xs">
+                            <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-lg font-extrabold truncate max-w-xs">
                                 {course.title}
                             </h1>
-                            <p style={{ color: "rgba(200,169,110,0.45)" }} className="text-xs">Course Editor</p>
+                            <p style={{ color: "rgba(157, 180, 198,0.45)" }} className="text-xs">Course Editor</p>
                         </div>
                     </div>
-                    <div className="flex rounded-sm p-1" style={{ background: "rgba(200,169,110,0.06)", border: "1px solid rgba(200,169,110,0.12)" }}>
+                    <div className="flex rounded-sm p-1" style={{ background: "rgba(157, 180, 198,0.06)", border: "1px solid rgba(157, 180, 198,0.12)" }}>
                         {(['general', 'curriculum'] as const).map(tab => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
                                 style={activeTab === tab
-                                    ? { background: "#c8a96e", color: "#0e0d0b", border: "1px solid #c8a96e" }
-                                    : { color: "rgba(237,232,223,0.45)", border: "1px solid transparent" }}
+                                    ? { background: "#9DB4C6", color: "#0B0F14", border: "1px solid #9DB4C6" }
+                                    : { color: "rgba(245, 248, 250,0.45)", border: "1px solid transparent" }}
                                 className="px-4 py-1.5 rounded-sm text-sm font-semibold transition-all capitalize"
                             >
                                 {tab === 'general' ? 'General Info' : 'Curriculum'}
@@ -254,23 +254,23 @@ function GeneralTab({ course, register, handleSubmit, errors, isSubmitting, onSu
     isSubmitting: boolean;
     onSubmitGeneral: (data: CourseGeneralForm) => Promise<void>;
 }) {
-    const inputClass = "w-full rounded-sm px-4 py-3 text-sm focus:outline-none transition-all auth-input placeholder:text-[rgba(237,232,223,0.2)]";
-    const inputStyle = { background: "rgba(200,169,110,0.04)", border: "1px solid rgba(200,169,110,0.15)", color: "#ede8df" };
-    const errorStyle = { background: "rgba(224,112,112,0.04)", border: "1px solid rgba(224,112,112,0.4)", color: "#ede8df" };
+    const inputClass = "w-full rounded-sm px-4 py-3 text-sm focus:outline-none transition-all auth-input placeholder:text-[rgba(245, 248, 250,0.2)]";
+    const inputStyle = { background: "rgba(157, 180, 198,0.04)", border: "1px solid rgba(157, 180, 198,0.15)", color: "#F5F8FA" };
+    const errorStyle = { background: "rgba(224,112,112,0.04)", border: "1px solid rgba(224,112,112,0.4)", color: "#F5F8FA" };
     const labelClass = "block text-xs font-bold uppercase tracking-widest mb-2";
-    const labelStyle = { color: "rgba(200,169,110,0.6)" };
+    const labelStyle = { color: "rgba(157, 180, 198,0.6)" };
 
     return (
-        <div style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.12)" }} className="rounded-sm overflow-hidden">
-            <div className="p-6 flex justify-between items-center" style={{ borderBottom: "1px solid rgba(200,169,110,0.08)", background: "rgba(200,169,110,0.02)" }}>
+        <div style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.12)" }} className="rounded-sm overflow-hidden">
+            <div className="p-6 flex justify-between items-center" style={{ borderBottom: "1px solid rgba(157, 180, 198,0.08)", background: "rgba(157, 180, 198,0.02)" }}>
                 <div>
-                    <h2 style={{ color: "#ede8df" }} className="text-base font-semibold">General Information</h2>
-                    <p style={{ color: "rgba(237,232,223,0.38)" }} className="text-sm mt-0.5 font-light">Update your course details and cover image.</p>
+                    <h2 style={{ color: "#F5F8FA" }} className="text-base font-semibold">General Information</h2>
+                    <p style={{ color: "rgba(245, 248, 250,0.38)" }} className="text-sm mt-0.5 font-light">Update your course details and cover image.</p>
                 </div>
                 <button
                     onClick={handleSubmit(onSubmitGeneral)}
                     disabled={isSubmitting}
-                    style={{ background: isSubmitting ? "rgba(200,169,110,0.3)" : "#c8a96e", color: "#0e0d0b" }}
+                    style={{ background: isSubmitting ? "rgba(157, 180, 198,0.3)" : "#9DB4C6", color: "#0B0F14" }}
                     className="flex items-center gap-2 px-4 py-2 rounded-sm font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
                 >
                     {isSubmitting ? <IconLoader /> : <IconSave />}
@@ -303,15 +303,15 @@ function GeneralTab({ course, register, handleSubmit, errors, isSubmitting, onSu
                 <div>
                     <label className={labelClass} style={labelStyle}>Cover Image</label>
                     <div className="flex items-start gap-6">
-                        <div style={{ background: "rgba(200,169,110,0.06)", border: "1px solid rgba(200,169,110,0.12)" }} className="w-40 h-24 rounded-sm overflow-hidden shrink-0 flex items-center justify-center">
+                        <div style={{ background: "rgba(157, 180, 198,0.06)", border: "1px solid rgba(157, 180, 198,0.12)" }} className="w-40 h-24 rounded-sm overflow-hidden shrink-0 flex items-center justify-center">
                             {course.thumbnail
                                 ? <img src={course.thumbnail} alt="Cover" className="w-full h-full object-cover" />
                                 : <IconImage />
                             }
                         </div>
                         <div className="flex-1">
-                            <input type="file" accept="image/*" className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-sm file:border-0 file:text-xs file:font-semibold transition-colors" style={{ color: "rgba(237,232,223,0.4)" }} {...register("thumbnail")} />
-                            <p style={{ color: "rgba(200,169,110,0.35)" }} className="mt-2 text-xs">Upload a new image to replace the current one. 16:9 ratio recommended.</p>
+                            <input type="file" accept="image/*" className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-sm file:border-0 file:text-xs file:font-semibold transition-colors" style={{ color: "rgba(245, 248, 250,0.4)" }} {...register("thumbnail")} />
+                            <p style={{ color: "rgba(157, 180, 198,0.35)" }} className="mt-2 text-xs">Upload a new image to replace the current one. 16:9 ratio recommended.</p>
                         </div>
                     </div>
                 </div>
@@ -381,19 +381,19 @@ function CurriculumTab({ courseId }: { courseId: string }) {
         resetEditSection({ title: section.title, order: section.order });
     };
 
-    const inputClass = "w-full rounded-sm px-4 py-3 text-sm focus:outline-none transition-all auth-input placeholder:text-[rgba(237,232,223,0.2)]";
-    const inputStyle = { background: "rgba(200,169,110,0.04)", border: "1px solid rgba(200,169,110,0.15)", color: "#ede8df" };
+    const inputClass = "w-full rounded-sm px-4 py-3 text-sm focus:outline-none transition-all auth-input placeholder:text-[rgba(245, 248, 250,0.2)]";
+    const inputStyle = { background: "rgba(157, 180, 198,0.04)", border: "1px solid rgba(157, 180, 198,0.15)", color: "#F5F8FA" };
 
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h2 style={{ color: "#ede8df" }} className="text-base font-semibold">Curriculum Builder</h2>
-                    <p style={{ color: "rgba(237,232,223,0.38)" }} className="text-sm mt-0.5 font-light">{sections.length} section{sections.length !== 1 ? 's' : ''}</p>
+                    <h2 style={{ color: "#F5F8FA" }} className="text-base font-semibold">Curriculum Builder</h2>
+                    <p style={{ color: "rgba(245, 248, 250,0.38)" }} className="text-sm mt-0.5 font-light">{sections.length} section{sections.length !== 1 ? 's' : ''}</p>
                 </div>
                 <button
                     onClick={() => setShowAddSection(v => !v)}
-                    style={{ background: "#c8a96e", color: "#0e0d0b" }}
+                    style={{ background: "#9DB4C6", color: "#0B0F14" }}
                     className="flex items-center gap-2 px-4 py-2 rounded-sm font-semibold text-sm hover:opacity-90 transition-all"
                 >
                     <IconPlus />
@@ -403,23 +403,23 @@ function CurriculumTab({ courseId }: { courseId: string }) {
 
             {/* Add Section Form */}
             {showAddSection && (
-                <div style={{ background: "rgba(200,169,110,0.04)", border: "1px solid rgba(200,169,110,0.15)" }} className="rounded-sm p-5 mb-4">
-                    <h3 style={{ color: "#c8a96e", letterSpacing: "0.12em" }} className="text-xs font-bold uppercase mb-4">New Section</h3>
+                <div style={{ background: "rgba(157, 180, 198,0.04)", border: "1px solid rgba(157, 180, 198,0.15)" }} className="rounded-sm p-5 mb-4">
+                    <h3 style={{ color: "#9DB4C6", letterSpacing: "0.12em" }} className="text-xs font-bold uppercase mb-4">New Section</h3>
                     <form onSubmit={submitSection(onAddSection)} className="flex items-end gap-4">
                         <div className="flex-1">
-                            <label style={{ color: "rgba(200,169,110,0.6)", letterSpacing: "0.12em" }} className="block text-xs font-bold uppercase mb-2">Title</label>
+                            <label style={{ color: "rgba(157, 180, 198,0.6)", letterSpacing: "0.12em" }} className="block text-xs font-bold uppercase mb-2">Title</label>
                             <input type="text" placeholder="e.g. Introduction" className={inputClass} style={inputStyle} {...regSection("title", { required: "Title is required" })} />
                             {errSection.title && <p style={{ color: "#e07070" }} className="text-xs mt-1">{errSection.title.message}</p>}
                         </div>
                         <div className="w-24">
-                            <label style={{ color: "rgba(200,169,110,0.6)", letterSpacing: "0.12em" }} className="block text-xs font-bold uppercase mb-2">Order</label>
+                            <label style={{ color: "rgba(157, 180, 198,0.6)", letterSpacing: "0.12em" }} className="block text-xs font-bold uppercase mb-2">Order</label>
                             <input type="number" min={1} placeholder="1" className={inputClass} style={inputStyle} {...regSection("order", { required: true, min: 1 })} />
                         </div>
                         <div className="flex gap-2 pb-0.5">
-                            <button type="submit" disabled={submittingSection} style={{ background: "#c8a96e", color: "#0e0d0b" }} className="px-4 py-3 rounded-sm text-sm font-semibold transition-colors disabled:opacity-50 hover:opacity-90">
+                            <button type="submit" disabled={submittingSection} style={{ background: "#9DB4C6", color: "#0B0F14" }} className="px-4 py-3 rounded-sm text-sm font-semibold transition-colors disabled:opacity-50 hover:opacity-90">
                                 {submittingSection ? <IconLoader /> : "Create"}
                             </button>
-                            <button type="button" onClick={() => setShowAddSection(false)} style={{ border: "1px solid rgba(200,169,110,0.15)", color: "rgba(237,232,223,0.5)" }} className="px-4 py-3 rounded-sm text-sm font-semibold transition-colors hover:text-[#ede8df]">
+                            <button type="button" onClick={() => setShowAddSection(false)} style={{ border: "1px solid rgba(157, 180, 198,0.15)", color: "rgba(245, 248, 250,0.5)" }} className="px-4 py-3 rounded-sm text-sm font-semibold transition-colors hover:text-[#F5F8FA]">
                                 Cancel
                             </button>
                         </div>
@@ -431,26 +431,26 @@ function CurriculumTab({ courseId }: { courseId: string }) {
             {editingSection && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setEditingSection(null)} />
-                    <div style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.15)" }} className="relative w-full max-w-md rounded-sm shadow-2xl p-6">
+                    <div style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.15)" }} className="relative w-full max-w-md rounded-sm shadow-2xl p-6">
                         <div className="flex items-center justify-between mb-5">
-                            <h3 style={{ color: "#ede8df" }} className="font-bold">Edit Section</h3>
-                            <button onClick={() => setEditingSection(null)} style={{ color: "rgba(200,169,110,0.4)" }} className="hover:text-[#c8a96e] transition-colors"><IconX /></button>
+                            <h3 style={{ color: "#F5F8FA" }} className="font-bold">Edit Section</h3>
+                            <button onClick={() => setEditingSection(null)} style={{ color: "rgba(157, 180, 198,0.4)" }} className="hover:text-[#9DB4C6] transition-colors"><IconX /></button>
                         </div>
                         <form onSubmit={submitEditSection(onEditSection)} className="space-y-4">
                             <div>
-                                <label style={{ color: "rgba(200,169,110,0.6)", letterSpacing: "0.12em" }} className="block text-xs font-bold uppercase mb-2">Title</label>
+                                <label style={{ color: "rgba(157, 180, 198,0.6)", letterSpacing: "0.12em" }} className="block text-xs font-bold uppercase mb-2">Title</label>
                                 <input type="text" className={inputClass} style={inputStyle} {...regEditSection("title", { required: "Title is required" })} />
                                 {errEditSection.title && <p style={{ color: "#e07070" }} className="text-xs mt-1">{errEditSection.title.message}</p>}
                             </div>
                             <div>
-                                <label style={{ color: "rgba(200,169,110,0.6)", letterSpacing: "0.12em" }} className="block text-xs font-bold uppercase mb-2">Order</label>
+                                <label style={{ color: "rgba(157, 180, 198,0.6)", letterSpacing: "0.12em" }} className="block text-xs font-bold uppercase mb-2">Order</label>
                                 <input type="number" min={1} className={inputClass} style={inputStyle} {...regEditSection("order", { required: true, min: 1 })} />
                             </div>
                             <div className="flex gap-3 pt-2">
-                                <button type="submit" disabled={submittingEditSection} style={{ background: "#c8a96e", color: "#0e0d0b" }} className="flex-1 py-3 rounded-sm text-sm font-semibold transition-colors disabled:opacity-50 hover:opacity-90">
+                                <button type="submit" disabled={submittingEditSection} style={{ background: "#9DB4C6", color: "#0B0F14" }} className="flex-1 py-3 rounded-sm text-sm font-semibold transition-colors disabled:opacity-50 hover:opacity-90">
                                     {submittingEditSection ? <IconLoader /> : "Save Changes"}
                                 </button>
-                                <button type="button" onClick={() => setEditingSection(null)} style={{ border: "1px solid rgba(200,169,110,0.12)", color: "rgba(237,232,223,0.45)" }} className="flex-1 py-3 rounded-sm text-sm font-semibold hover:text-[#ede8df] transition-colors">
+                                <button type="button" onClick={() => setEditingSection(null)} style={{ border: "1px solid rgba(157, 180, 198,0.12)", color: "rgba(245, 248, 250,0.45)" }} className="flex-1 py-3 rounded-sm text-sm font-semibold hover:text-[#F5F8FA] transition-colors">
                                     Cancel
                                 </button>
                             </div>
@@ -461,11 +461,11 @@ function CurriculumTab({ courseId }: { courseId: string }) {
 
             {/* Sections list */}
             {sections.length === 0 && !showAddSection ? (
-                <div className="text-center py-20 rounded-sm" style={{ border: "1px dashed rgba(200,169,110,0.12)", background: "rgba(200,169,110,0.01)" }}>
-                    <div style={{ background: "rgba(200,169,110,0.08)", border: "1px solid rgba(200,169,110,0.15)" }} className="w-14 h-14 mx-auto rounded-sm flex items-center justify-center mb-4">
-                        <span style={{ color: "rgba(200,169,110,0.5)" }}><IconPlus /></span>
+                <div className="text-center py-20 rounded-sm" style={{ border: "1px dashed rgba(157, 180, 198,0.12)", background: "rgba(157, 180, 198,0.01)" }}>
+                    <div style={{ background: "rgba(157, 180, 198,0.08)", border: "1px solid rgba(157, 180, 198,0.15)" }} className="w-14 h-14 mx-auto rounded-sm flex items-center justify-center mb-4">
+                        <span style={{ color: "rgba(157, 180, 198,0.5)" }}><IconPlus /></span>
                     </div>
-                    <p style={{ color: "rgba(237,232,223,0.35)" }} className="text-sm">No sections yet. Add one to get started.</p>
+                    <p style={{ color: "rgba(245, 248, 250,0.35)" }} className="text-sm">No sections yet. Add one to get started.</p>
                 </div>
             ) : (
                 <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleSectionDragEnd}>
@@ -587,38 +587,38 @@ function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete
         setShowAddLesson(false);
     };
 
-    const inputClass = "w-full rounded-sm px-4 py-2.5 text-sm focus:outline-none transition-all auth-input placeholder:text-[rgba(237,232,223,0.2)]";
-    const inputStyle = { background: "rgba(200,169,110,0.04)", border: "1px solid rgba(200,169,110,0.15)", color: "#ede8df" };
+    const inputClass = "w-full rounded-sm px-4 py-2.5 text-sm focus:outline-none transition-all auth-input placeholder:text-[rgba(245, 248, 250,0.2)]";
+    const inputStyle = { background: "rgba(157, 180, 198,0.04)", border: "1px solid rgba(157, 180, 198,0.15)", color: "#F5F8FA" };
 
     return (
-        <div style={{ background: "rgba(200,169,110,0.02)", border: "1px solid rgba(200,169,110,0.1)" }} className="rounded-sm overflow-hidden transition-colors hover:border-[rgba(200,169,110,0.2)]">
+        <div style={{ background: "rgba(157, 180, 198,0.02)", border: "1px solid rgba(157, 180, 198,0.1)" }} className="rounded-sm overflow-hidden transition-colors hover:border-[rgba(157, 180, 198,0.2)]">
             {/* Section header row */}
             <div className="flex items-center gap-4 px-5 py-4">
                 {/* Drag handle */}
-                <button {...dragHandleProps} style={{ color: "rgba(200,169,110,0.25)" }} className="hover:text-[rgba(200,169,110,0.5)] cursor-grab active:cursor-grabbing p-1 -ml-1" title="Drag to reorder sections">
+                <button {...dragHandleProps} style={{ color: "rgba(157, 180, 198,0.25)" }} className="hover:text-[rgba(157, 180, 198,0.5)] cursor-grab active:cursor-grabbing p-1 -ml-1" title="Drag to reorder sections">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" /></svg>
                 </button>
-                <button onClick={onToggle} style={{ color: "rgba(200,169,110,0.4)" }} className="hover:text-[#c8a96e] transition-colors">
+                <button onClick={onToggle} style={{ color: "rgba(157, 180, 198,0.4)" }} className="hover:text-[#9DB4C6] transition-colors">
                     {isExpanded ? <IconChevronDown /> : <IconChevronRight />}
                 </button>
                 <div className="flex-1 min-w-0">
                     <button onClick={onToggle} className="text-left w-full">
-                        <p style={{ color: "#ede8df" }} className="font-semibold truncate">{section.title}</p>
-                        <p style={{ color: "rgba(200,169,110,0.4)" }} className="text-xs mt-0.5">Order: {section.order} · {lessons.length} lesson{lessons.length !== 1 ? 's' : ''}</p>
+                        <p style={{ color: "#F5F8FA" }} className="font-semibold truncate">{section.title}</p>
+                        <p style={{ color: "rgba(157, 180, 198,0.4)" }} className="text-xs mt-0.5">Order: {section.order} · {lessons.length} lesson{lessons.length !== 1 ? 's' : ''}</p>
                     </button>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                    <button onClick={onEdit} style={{ color: "rgba(200,169,110,0.35)" }} className="p-2 rounded-sm transition-colors hover:text-[#c8a96e]" title="Edit section">
+                    <button onClick={onEdit} style={{ color: "rgba(157, 180, 198,0.35)" }} className="p-2 rounded-sm transition-colors hover:text-[#9DB4C6]" title="Edit section">
                         <IconEdit />
                     </button>
-                    <button onClick={onDelete} style={{ color: "rgba(200,169,110,0.35)" }} className="p-2 rounded-sm transition-colors hover:text-[#e07070]" title="Delete section">
+                    <button onClick={onDelete} style={{ color: "rgba(157, 180, 198,0.35)" }} className="p-2 rounded-sm transition-colors hover:text-[#e07070]" title="Delete section">
                         <IconTrash />
                     </button>
                 </div>
             </div>
 
         { isExpanded && (
-            <div className="px-5 pb-5 pt-4" style={{ borderTop: "1px solid rgba(200,169,110,0.07)" }}>
+            <div className="px-5 pb-5 pt-4" style={{ borderTop: "1px solid rgba(157, 180, 198,0.07)" }}>
                 {lessons.length > 0 && (
                     <div className="space-y-2 mb-4">
                         {sortedLessons.length > 0 ? (
@@ -642,8 +642,8 @@ function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete
                 )}
 
                 {showAddLesson ? (
-                    <div style={{ background: "rgba(200,169,110,0.03)", border: "1px solid rgba(200,169,110,0.12)" }} className="rounded-sm p-4">
-                        <h4 style={{ color: "rgba(200,169,110,0.55)", letterSpacing: "0.12em" }} className="text-xs font-bold uppercase mb-3">New Lesson</h4>
+                    <div style={{ background: "rgba(157, 180, 198,0.03)", border: "1px solid rgba(157, 180, 198,0.12)" }} className="rounded-sm p-4">
+                        <h4 style={{ color: "rgba(157, 180, 198,0.55)", letterSpacing: "0.12em" }} className="text-xs font-bold uppercase mb-3">New Lesson</h4>
                         <form onSubmit={handleSubmit(onAddLesson)} className="space-y-3">
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="col-span-2">
@@ -661,15 +661,15 @@ function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete
                                     <input type="number" min={1} placeholder="Order" className={inputClass} style={inputStyle} {...register("order", { required: true, min: 1 })} />
                                 </div>
                                 <div className="col-span-2 flex items-center gap-2">
-                                    <input type="checkbox" id={`preview-${section._id}`} className="w-4 h-4" style={{ accentColor: "#c8a96e" }} {...register("isPreview")} />
-                                    <label htmlFor={`preview-${section._id}`} style={{ color: "rgba(237,232,223,0.5)" }} className="text-sm select-none">Free preview lesson</label>
+                                    <input type="checkbox" id={`preview-${section._id}`} className="w-4 h-4" style={{ accentColor: "#9DB4C6" }} {...register("isPreview")} />
+                                    <label htmlFor={`preview-${section._id}`} style={{ color: "rgba(245, 248, 250,0.5)" }} className="text-sm select-none">Free preview lesson</label>
                                 </div>
                             </div>
                             <div className="flex gap-2 pt-1">
-                                <button type="submit" disabled={isSubmitting} style={{ background: "#c8a96e", color: "#0e0d0b" }} className="px-4 py-2 rounded-sm text-sm font-semibold transition-colors disabled:opacity-50 hover:opacity-90">
+                                <button type="submit" disabled={isSubmitting} style={{ background: "#9DB4C6", color: "#0B0F14" }} className="px-4 py-2 rounded-sm text-sm font-semibold transition-colors disabled:opacity-50 hover:opacity-90">
                                     {isSubmitting ? <IconLoader /> : "Add Lesson"}
                                 </button>
-                                <button type="button" onClick={() => { setShowAddLesson(false); reset(); }} style={{ border: "1px solid rgba(200,169,110,0.12)", color: "rgba(237,232,223,0.45)" }} className="px-4 py-2 rounded-sm text-sm font-semibold hover:text-[#ede8df] transition-colors">
+                                <button type="button" onClick={() => { setShowAddLesson(false); reset(); }} style={{ border: "1px solid rgba(157, 180, 198,0.12)", color: "rgba(245, 248, 250,0.45)" }} className="px-4 py-2 rounded-sm text-sm font-semibold hover:text-[#F5F8FA] transition-colors">
                                     Cancel
                                 </button>
                             </div>
@@ -678,8 +678,8 @@ function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete
                 ) : (
                     <button
                         onClick={() => setShowAddLesson(true)}
-                        style={{ border: "1px dashed rgba(200,169,110,0.15)", color: "rgba(200,169,110,0.45)" }}
-                        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-sm text-sm hover:text-[#c8a96e] hover:border-[rgba(200,169,110,0.3)] transition-colors"
+                        style={{ border: "1px dashed rgba(157, 180, 198,0.15)", color: "rgba(157, 180, 198,0.45)" }}
+                        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-sm text-sm hover:text-[#9DB4C6] hover:border-[rgba(157, 180, 198,0.3)] transition-colors"
                     >
                         <IconPlus />
                         Add Lesson
@@ -752,46 +752,46 @@ function LessonRow({ lesson, sectionId, onDelete, onUpload, dragHandleProps }: {
     const statusBadge = () => {
         switch (status) {
             case "queued":
-                return <span style={{ color: "#c8a96e", background: "rgba(200,169,110,0.08)", border: "1px solid rgba(200,169,110,0.2)" }} className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm flex items-center gap-1"><IconSpinSm />Queued</span>;
+                return <span style={{ color: "#9DB4C6", background: "rgba(157, 180, 198,0.08)", border: "1px solid rgba(157, 180, 198,0.2)" }} className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm flex items-center gap-1"><IconSpinSm />Queued</span>;
             case "processing":
-                return <span style={{ color: "#c8a96e", background: "rgba(200,169,110,0.08)", border: "1px solid rgba(200,169,110,0.2)" }} className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm flex items-center gap-1"><IconSpinSm />Processing</span>;
+                return <span style={{ color: "#9DB4C6", background: "rgba(157, 180, 198,0.08)", border: "1px solid rgba(157, 180, 198,0.2)" }} className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm flex items-center gap-1"><IconSpinSm />Processing</span>;
             case "done":
-                return <span style={{ color: "rgba(200,169,110,0.9)", background: "rgba(200,169,110,0.1)", border: "1px solid rgba(200,169,110,0.25)" }} className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm">Ready</span>;
+                return <span style={{ color: "rgba(157, 180, 198,0.9)", background: "rgba(157, 180, 198,0.1)", border: "1px solid rgba(157, 180, 198,0.25)" }} className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm">Ready</span>;
             case "failed":
                 return <span style={{ color: "#e07070", background: "rgba(224,112,112,0.08)", border: "1px solid rgba(224,112,112,0.2)" }} className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm">Failed</span>;
             default:
-                return <span style={{ color: "rgba(237,232,223,0.3)", background: "rgba(200,169,110,0.04)", border: "1px solid rgba(200,169,110,0.1)" }} className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm">No video</span>;
+                return <span style={{ color: "rgba(245, 248, 250,0.3)", background: "rgba(157, 180, 198,0.04)", border: "1px solid rgba(157, 180, 198,0.1)" }} className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm">No video</span>;
         }
     };
 
     return (
-        <div style={{ background: "rgba(200,169,110,0.02)", border: "1px solid rgba(200,169,110,0.08)" }} className="flex items-center gap-3 px-4 py-3 rounded-sm group hover:border-[rgba(200,169,110,0.18)] transition-colors">
+        <div style={{ background: "rgba(157, 180, 198,0.02)", border: "1px solid rgba(157, 180, 198,0.08)" }} className="flex items-center gap-3 px-4 py-3 rounded-sm group hover:border-[rgba(157, 180, 198,0.18)] transition-colors">
             {dragHandleProps && (
-                <button {...dragHandleProps} style={{ color: "rgba(200,169,110,0.2)" }} className="hover:text-[rgba(200,169,110,0.45)] cursor-grab active:cursor-grabbing p-1 -ml-2" title="Drag to reorder lessons">
+                <button {...dragHandleProps} style={{ color: "rgba(157, 180, 198,0.2)" }} className="hover:text-[rgba(157, 180, 198,0.45)] cursor-grab active:cursor-grabbing p-1 -ml-2" title="Drag to reorder lessons">
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" /></svg>
                 </button>
             )}
-            <div style={{ background: "rgba(200,169,110,0.08)", border: "1px solid rgba(200,169,110,0.12)" }} className="w-8 h-8 rounded-sm flex items-center justify-center shrink-0 text-xs font-bold">
-                <span style={{ color: "rgba(200,169,110,0.6)" }}>{lesson.order}</span>
+            <div style={{ background: "rgba(157, 180, 198,0.08)", border: "1px solid rgba(157, 180, 198,0.12)" }} className="w-8 h-8 rounded-sm flex items-center justify-center shrink-0 text-xs font-bold">
+                <span style={{ color: "rgba(157, 180, 198,0.6)" }}>{lesson.order}</span>
             </div>
             <div className="flex-1 min-w-0">
-                <p style={{ color: "#ede8df" }} className="text-sm font-medium truncate">{lesson.title}</p>
+                <p style={{ color: "#F5F8FA" }} className="text-sm font-medium truncate">{lesson.title}</p>
                 <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                    {lesson.isPreview && <span style={{ color: "#c8a96e", background: "rgba(200,169,110,0.08)", border: "1px solid rgba(200,169,110,0.2)" }} className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm">Preview</span>}
-                    <span style={{ color: "rgba(200,169,110,0.4)" }} className="text-xs">{lesson.duration} min</span>
+                    {lesson.isPreview && <span style={{ color: "#9DB4C6", background: "rgba(157, 180, 198,0.08)", border: "1px solid rgba(157, 180, 198,0.2)" }} className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm">Preview</span>}
+                    <span style={{ color: "rgba(157, 180, 198,0.4)" }} className="text-xs">{lesson.duration} min</span>
                     {statusBadge()}
                     {hasVideo && (
-                        <a href={lesson.videoUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#c8a96e" }} className="text-[10px] font-bold hover:opacity-70 underline underline-offset-2 transition-colors" title={lesson.videoUrl}>
+                        <a href={lesson.videoUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#9DB4C6" }} className="text-[10px] font-bold hover:opacity-70 underline underline-offset-2 transition-colors" title={lesson.videoUrl}>
                             View HLS
                         </a>
                     )}
                 </div>
             </div>
             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button onClick={onUpload} disabled={isProcessing} style={{ color: "rgba(200,169,110,0.4)" }} className="p-2 rounded-sm transition-colors hover:text-[#c8a96e] hover:bg-[rgba(200,169,110,0.08)] disabled:opacity-20 disabled:cursor-not-allowed" title={isProcessing ? "Processing…" : "Upload video"}>
+                <button onClick={onUpload} disabled={isProcessing} style={{ color: "rgba(157, 180, 198,0.4)" }} className="p-2 rounded-sm transition-colors hover:text-[#9DB4C6] hover:bg-[rgba(157, 180, 198,0.08)] disabled:opacity-20 disabled:cursor-not-allowed" title={isProcessing ? "Processing…" : "Upload video"}>
                     <IconVideo />
                 </button>
-                <button onClick={onDelete} style={{ color: "rgba(200,169,110,0.4)" }} className="p-2 rounded-sm transition-colors hover:text-[#e07070] hover:bg-[rgba(224,112,112,0.08)]" title="Delete lesson">
+                <button onClick={onDelete} style={{ color: "rgba(157, 180, 198,0.4)" }} className="p-2 rounded-sm transition-colors hover:text-[#e07070] hover:bg-[rgba(224,112,112,0.08)]" title="Delete lesson">
                     <IconTrash />
                 </button>
             </div>
@@ -857,32 +857,32 @@ function VideoUploadModal({ lesson, onClose }: { lesson: Lesson; onClose: () => 
                 onClick={handleClose}
             />
 
-            <div style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.15)" }} className="relative w-full max-w-lg rounded-sm shadow-2xl overflow-hidden">
+            <div style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.15)" }} className="relative w-full max-w-lg rounded-sm shadow-2xl overflow-hidden">
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(200,169,110,0.08)", background: "rgba(200,169,110,0.02)" }}>
+                <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(157, 180, 198,0.08)", background: "rgba(157, 180, 198,0.02)" }}>
                     <div className="flex items-center gap-2">
-                        <span style={{ color: "#c8a96e" }}><IconUpload /></span>
-                        <h3 style={{ color: "#ede8df" }} className="font-bold">Upload Video</h3>
+                        <span style={{ color: "#9DB4C6" }}><IconUpload /></span>
+                        <h3 style={{ color: "#F5F8FA" }} className="font-bold">Upload Video</h3>
                     </div>
-                    <button onClick={handleClose} disabled={isActive} style={{ color: "rgba(200,169,110,0.4)" }} className="p-2 rounded-sm hover:text-[#c8a96e] transition-colors disabled:opacity-20 disabled:cursor-not-allowed">
+                    <button onClick={handleClose} disabled={isActive} style={{ color: "rgba(157, 180, 198,0.4)" }} className="p-2 rounded-sm hover:text-[#9DB4C6] transition-colors disabled:opacity-20 disabled:cursor-not-allowed">
                         <IconX />
                     </button>
                 </div>
 
                 <div className="p-6 space-y-5">
                     {/* Lesson info */}
-                    <div style={{ background: "rgba(200,169,110,0.04)", border: "1px solid rgba(200,169,110,0.1)" }} className="rounded-sm px-4 py-3">
-                        <p style={{ color: "rgba(200,169,110,0.55)", letterSpacing: "0.12em" }} className="text-xs uppercase font-bold mb-0.5">Lesson</p>
-                        <p style={{ color: "#ede8df" }} className="text-sm font-semibold">{lesson.title}</p>
+                    <div style={{ background: "rgba(157, 180, 198,0.04)", border: "1px solid rgba(157, 180, 198,0.1)" }} className="rounded-sm px-4 py-3">
+                        <p style={{ color: "rgba(157, 180, 198,0.55)", letterSpacing: "0.12em" }} className="text-xs uppercase font-bold mb-0.5">Lesson</p>
+                        <p style={{ color: "#F5F8FA" }} className="text-sm font-semibold">{lesson.title}</p>
                     </div>
 
                     {/* Warning during upload */}
                     {isActive && (
-                        <div style={{ background: "rgba(200,169,110,0.06)", border: "1px solid rgba(200,169,110,0.25)" }} className="flex items-start gap-3 rounded-sm p-4">
+                        <div style={{ background: "rgba(157, 180, 198,0.06)", border: "1px solid rgba(157, 180, 198,0.25)" }} className="flex items-start gap-3 rounded-sm p-4">
                             <IconWarning />
                             <div>
-                                <p style={{ color: "#c8a96e" }} className="text-sm font-bold">Do not close or refresh this page</p>
-                                <p style={{ color: "rgba(200,169,110,0.55)" }} className="text-xs mt-1">
+                                <p style={{ color: "#9DB4C6" }} className="text-sm font-bold">Do not close or refresh this page</p>
+                                <p style={{ color: "rgba(157, 180, 198,0.55)" }} className="text-xs mt-1">
                                     Your video is being {phase === 'uploading' ? 'uploaded to storage' : 'submitted for processing'}. Leaving now will interrupt the operation.
                                 </p>
                             </div>
@@ -895,22 +895,22 @@ function VideoUploadModal({ lesson, onClose }: { lesson: Lesson; onClose: () => 
                             <div
                                 onClick={() => fileInputRef.current?.click()}
                                 className="cursor-pointer rounded-sm p-8 flex flex-col items-center gap-3 transition-colors group"
-                                style={{ border: "2px dashed rgba(200,169,110,0.15)" }}
-                                onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(200,169,110,0.35)")}
-                                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(200,169,110,0.15)")}
+                                style={{ border: "2px dashed rgba(157, 180, 198,0.15)" }}
+                                onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(157, 180, 198,0.35)")}
+                                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(157, 180, 198,0.15)")}
                             >
-                                <div style={{ background: "rgba(200,169,110,0.08)", border: "1px solid rgba(200,169,110,0.2)" }} className="w-12 h-12 rounded-sm flex items-center justify-center">
-                                    <span style={{ color: "#c8a96e" }}><IconVideoLg /></span>
+                                <div style={{ background: "rgba(157, 180, 198,0.08)", border: "1px solid rgba(157, 180, 198,0.2)" }} className="w-12 h-12 rounded-sm flex items-center justify-center">
+                                    <span style={{ color: "#9DB4C6" }}><IconVideoLg /></span>
                                 </div>
                                 {file ? (
                                     <>
-                                        <p style={{ color: "#ede8df" }} className="text-sm font-semibold">{file.name}</p>
-                                        <p style={{ color: "rgba(200,169,110,0.45)" }} className="text-xs">{(file.size / 1024 / 1024).toFixed(1)} MB · Click to change</p>
+                                        <p style={{ color: "#F5F8FA" }} className="text-sm font-semibold">{file.name}</p>
+                                        <p style={{ color: "rgba(157, 180, 198,0.45)" }} className="text-xs">{(file.size / 1024 / 1024).toFixed(1)} MB · Click to change</p>
                                     </>
                                 ) : (
                                     <>
-                                        <p style={{ color: "#ede8df" }} className="text-sm font-semibold">Click to select a video</p>
-                                        <p style={{ color: "rgba(200,169,110,0.45)" }} className="text-xs">MP4, MOV, MKV, WebM supported</p>
+                                        <p style={{ color: "#F5F8FA" }} className="text-sm font-semibold">Click to select a video</p>
+                                        <p style={{ color: "rgba(157, 180, 198,0.45)" }} className="text-xs">MP4, MOV, MKV, WebM supported</p>
                                     </>
                                 )}
                             </div>
@@ -922,26 +922,26 @@ function VideoUploadModal({ lesson, onClose }: { lesson: Lesson; onClose: () => 
                     {/* Progress bar */}
                     {(phase === 'uploading' || phase === 'processing') && (
                         <div className="space-y-2">
-                            <div className="flex justify-between text-xs" style={{ color: "rgba(200,169,110,0.5)" }}>
+                            <div className="flex justify-between text-xs" style={{ color: "rgba(157, 180, 198,0.5)" }}>
                                 <span>{phase === 'uploading' ? `Uploading… ${progress}%` : 'Submitting to processing queue…'}</span>
                                 <span>{phase === 'uploading' ? `${progress}%` : ''}</span>
                             </div>
-                            <div className="w-full rounded-full h-2 overflow-hidden" style={{ background: "rgba(200,169,110,0.1)" }}>
-                                <div className="h-2 rounded-full transition-all duration-300" style={{ width: phase === 'uploading' ? `${progress}%` : '100%', background: "#c8a96e" }} />
+                            <div className="w-full rounded-full h-2 overflow-hidden" style={{ background: "rgba(157, 180, 198,0.1)" }}>
+                                <div className="h-2 rounded-full transition-all duration-300" style={{ width: phase === 'uploading' ? `${progress}%` : '100%', background: "#9DB4C6" }} />
                             </div>
-                            {phase === 'processing' && <p style={{ color: "rgba(200,169,110,0.4)" }} className="text-xs text-center">Waiting for server acknowledgment…</p>}
+                            {phase === 'processing' && <p style={{ color: "rgba(157, 180, 198,0.4)" }} className="text-xs text-center">Waiting for server acknowledgment…</p>}
                         </div>
                     )}
 
                     {/* Done state */}
                     {phase === 'done' && (
                         <div className="flex flex-col items-center gap-3 py-4">
-                            <div style={{ background: "rgba(200,169,110,0.1)", border: "1px solid rgba(200,169,110,0.25)" }} className="w-14 h-14 rounded-full flex items-center justify-center">
-                                <span style={{ color: "#c8a96e" }}><IconCheck /></span>
+                            <div style={{ background: "rgba(157, 180, 198,0.1)", border: "1px solid rgba(157, 180, 198,0.25)" }} className="w-14 h-14 rounded-full flex items-center justify-center">
+                                <span style={{ color: "#9DB4C6" }}><IconCheck /></span>
                             </div>
-                            <p style={{ color: "#ede8df" }} className="text-base font-bold">Video queued for processing</p>
-                            <p style={{ color: "rgba(200,169,110,0.5)" }} className="text-sm text-center max-w-xs">
-                                Job submitted (ID: <span style={{ color: "#c8a96e" }} className="font-mono">{jobId}</span>). You can safely navigate away.
+                            <p style={{ color: "#F5F8FA" }} className="text-base font-bold">Video queued for processing</p>
+                            <p style={{ color: "rgba(157, 180, 198,0.5)" }} className="text-sm text-center max-w-xs">
+                                Job submitted (ID: <span style={{ color: "#9DB4C6" }} className="font-mono">{jobId}</span>). You can safely navigate away.
                             </p>
                         </div>
                     )}
@@ -950,18 +950,18 @@ function VideoUploadModal({ lesson, onClose }: { lesson: Lesson; onClose: () => 
                 {/* Footer */}
                 <div className="px-6 pb-6 flex gap-3">
                     {(phase === 'idle' || phase === 'error') && (
-                        <button onClick={handleStart} disabled={!file} style={{ background: file ? "#c8a96e" : "rgba(200,169,110,0.2)", color: file ? "#0e0d0b" : "rgba(237,232,223,0.3)" }}
+                        <button onClick={handleStart} disabled={!file} style={{ background: file ? "#9DB4C6" : "rgba(157, 180, 198,0.2)", color: file ? "#0B0F14" : "rgba(245, 248, 250,0.3)" }}
                             className="flex-1 py-3 rounded-sm font-semibold text-sm transition-all disabled:cursor-not-allowed hover:opacity-90">
                             Start Upload
                         </button>
                     )}
                     {phase === 'done' && (
-                        <button onClick={handleClose} style={{ background: "rgba(200,169,110,0.08)", border: "1px solid rgba(200,169,110,0.15)", color: "rgba(237,232,223,0.6)" }} className="flex-1 py-3 rounded-sm font-semibold text-sm transition-colors hover:text-[#ede8df]">
+                        <button onClick={handleClose} style={{ background: "rgba(157, 180, 198,0.08)", border: "1px solid rgba(157, 180, 198,0.15)", color: "rgba(245, 248, 250,0.6)" }} className="flex-1 py-3 rounded-sm font-semibold text-sm transition-colors hover:text-[#F5F8FA]">
                             Close
                         </button>
                     )}
                     {!isActive && phase !== 'done' && (
-                        <button onClick={handleClose} style={{ border: "1px solid rgba(200,169,110,0.12)", color: "rgba(237,232,223,0.45)" }} className="py-3 px-5 rounded-sm text-sm font-semibold hover:text-[#ede8df] transition-colors">
+                        <button onClick={handleClose} style={{ border: "1px solid rgba(157, 180, 198,0.12)", color: "rgba(245, 248, 250,0.45)" }} className="py-3 px-5 rounded-sm text-sm font-semibold hover:text-[#F5F8FA] transition-colors">
                             Cancel
                         </button>
                     )}

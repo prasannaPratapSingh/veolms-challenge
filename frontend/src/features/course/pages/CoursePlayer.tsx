@@ -50,15 +50,15 @@ function SidebarSection({ section, currentLessonId, completedLessons, onSelectLe
 }) {
   const [open, setOpen] = useState(true);
   return (
-    <div style={{ borderBottom: "1px solid rgba(200,169,110,0.07)" }}>
+    <div style={{ borderBottom: "1px solid rgba(157, 180, 198,0.07)" }}>
       <button onClick={() => setOpen(v => !v)}
         className="w-full flex items-center justify-between px-4 py-3 transition-colors text-left"
         style={{ background: "transparent" }}
-        onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(200,169,110,0.03)")}
+        onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(157, 180, 198,0.03)")}
         onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = "transparent")}>
-        <span style={{ color: "rgba(200,169,110,0.6)", letterSpacing: "0.08em" }} className="text-xs font-bold uppercase truncate pr-2">{section.title}</span>
+        <span style={{ color: "rgba(157, 180, 198,0.6)", letterSpacing: "0.08em" }} className="text-xs font-bold uppercase truncate pr-2">{section.title}</span>
         <svg className={`w-3.5 h-3.5 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-          style={{ color: "rgba(200,169,110,0.4)" }}
+          style={{ color: "rgba(157, 180, 198,0.4)" }}
           fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
         </svg>
@@ -75,22 +75,22 @@ function SidebarSection({ section, currentLessonId, completedLessons, onSelectLe
                 <button key={lesson._id} onClick={() => hasVideo && onSelectLesson(lesson)} disabled={!hasVideo}
                   className={`w-full flex items-start gap-3 px-4 py-3 text-left transition-colors relative ${!hasVideo ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}
                   style={{
-                    background: isActive ? "rgba(200,169,110,0.08)" : "transparent",
-                    borderLeft: isActive ? "2px solid #c8a96e" : "2px solid transparent",
+                    background: isActive ? "rgba(157, 180, 198,0.08)" : "transparent",
+                    borderLeft: isActive ? "2px solid #9DB4C6" : "2px solid transparent",
                   }}
-                  onMouseEnter={e => { if (!isActive && hasVideo) (e.currentTarget as HTMLElement).style.background = "rgba(200,169,110,0.04)"; }}
+                  onMouseEnter={e => { if (!isActive && hasVideo) (e.currentTarget as HTMLElement).style.background = "rgba(157, 180, 198,0.04)"; }}
                   onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
                   <div className="mt-0.5 shrink-0">
                     {!hasVideo ? <LockIcon /> : isCompleted ? <CheckCircleIcon /> : (
-                      <svg className="w-3.5 h-3.5 shrink-0" style={{ color: "rgba(200,169,110,0.3)" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <svg className="w-3.5 h-3.5 shrink-0" style={{ color: "rgba(157, 180, 198,0.3)" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                       </svg>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p style={{ color: isActive ? "#ede8df" : "rgba(237,232,223,0.5)" }} className="text-xs font-medium leading-snug truncate">{lesson.title}</p>
-                    {lesson.duration > 0 && <p style={{ color: "rgba(200,169,110,0.3)" }} className="text-[10px] mt-0.5">{formatTime(lesson.duration)}</p>}
+                    <p style={{ color: isActive ? "#F5F8FA" : "rgba(245, 248, 250,0.5)" }} className="text-xs font-medium leading-snug truncate">{lesson.title}</p>
+                    {lesson.duration > 0 && <p style={{ color: "rgba(157, 180, 198,0.3)" }} className="text-[10px] mt-0.5">{formatTime(lesson.duration)}</p>}
                   </div>
                 </button>
               );
@@ -399,41 +399,41 @@ export default function CoursePlayer() {
   useEffect(() => () => { if (advanceTimerRef.current) clearTimeout(advanceTimerRef.current); }, []);
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center pt-[68px]" style={{ background: "#0e0d0b" }}>
-      <span className="w-10 h-10 border-4 rounded-full animate-spin" style={{ borderColor: "rgba(200,169,110,0.15)", borderTopColor: "#c8a96e" }}/>
+    <div className="min-h-screen flex items-center justify-center pt-[68px]" style={{ background: "#0B0F14" }}>
+      <span className="w-10 h-10 border-4 rounded-full animate-spin" style={{ borderColor: "rgba(157, 180, 198,0.15)", borderTopColor: "#9DB4C6" }}/>
     </div>
   );
   if (notFound || !course) return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-4 pt-[68px]" style={{ background: "#0e0d0b" }}>
-      <p style={{ color: "rgba(237,232,223,0.4)" }} className="text-lg">Course not found.</p>
-      <button onClick={() => navigate(-1)} style={{ color: "#c8a96e" }} className="text-sm underline underline-offset-4">← Go back</button>
+    <div className="min-h-screen flex flex-col items-center justify-center gap-4 pt-[68px]" style={{ background: "#0B0F14" }}>
+      <p style={{ color: "rgba(245, 248, 250,0.4)" }} className="text-lg">Course not found.</p>
+      <button onClick={() => navigate(-1)} style={{ color: "#9DB4C6" }} className="text-sm underline underline-offset-4">← Go back</button>
     </div>
   );
 
   const totalCount = flatLessons(course.sections).length;
 
   return (
-    <div className="h-screen flex flex-col pt-[68px] overflow-hidden" style={{ background: "#0e0d0b", color: "#ede8df" }}>
+    <div className="h-screen flex flex-col pt-[68px] overflow-hidden" style={{ background: "#0B0F14", color: "#F5F8FA" }}>
       {/* Header */}
-      <div className="h-12 shrink-0 flex items-center px-3 sm:px-4 gap-3" style={{ background: "#161510", borderBottom: "1px solid rgba(200,169,110,0.1)" }}>
+      <div className="h-12 shrink-0 flex items-center px-3 sm:px-4 gap-3" style={{ background: "#1E2A39", borderBottom: "1px solid rgba(157, 180, 198,0.1)" }}>
         <button onClick={() => navigate(`/course/${courseId}`)}
           className="flex items-center gap-1.5 text-sm font-medium shrink-0 transition-colors"
-          style={{ color: "rgba(200,169,110,0.5)" }}
-          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#c8a96e")}
-          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "rgba(200,169,110,0.5)")}>
+          style={{ color: "rgba(157, 180, 198,0.5)" }}
+          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#9DB4C6")}
+          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "rgba(157, 180, 198,0.5)")}>
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/>
           </svg>
           <span className="hidden sm:inline">Back</span>
         </button>
-        <div className="w-px h-4 shrink-0" style={{ background: "rgba(200,169,110,0.1)" }}/>
-        <h1 style={{ color: "#ede8df" }} className="text-sm font-semibold truncate flex-1">{course.title}</h1>
-        {currentLesson && <span style={{ color: "rgba(200,169,110,0.4)" }} className="text-xs truncate max-w-[160px] hidden md:block">{currentLesson.title}</span>}
+        <div className="w-px h-4 shrink-0" style={{ background: "rgba(157, 180, 198,0.1)" }}/>
+        <h1 style={{ color: "#F5F8FA" }} className="text-sm font-semibold truncate flex-1">{course.title}</h1>
+        {currentLesson && <span style={{ color: "rgba(157, 180, 198,0.4)" }} className="text-xs truncate max-w-[160px] hidden md:block">{currentLesson.title}</span>}
         <button onClick={() => setSidebarOpen(v => !v)}
           className="p-1.5 transition-colors shrink-0 ml-auto sm:ml-0"
-          style={{ color: "rgba(200,169,110,0.5)" }}
-          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#c8a96e")}
-          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "rgba(200,169,110,0.5)")}
+          style={{ color: "rgba(157, 180, 198,0.5)" }}
+          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#9DB4C6")}
+          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "rgba(157, 180, 198,0.5)")}
           title="Toggle course content">
           <MenuIcon/>
         </button>
@@ -473,19 +473,19 @@ export default function CoursePlayer() {
                 exit={{ width: 0, opacity: 0 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                 className="shrink-0 flex flex-col overflow-hidden fixed right-0 top-0 bottom-0 z-30 md:relative md:z-auto"
-                style={{ background: "#161510", borderLeft: "1px solid rgba(200,169,110,0.1)", minWidth: 0 }}
+                style={{ background: "#1E2A39", borderLeft: "1px solid rgba(157, 180, 198,0.1)", minWidth: 0 }}
               >
-                <div className="px-4 py-3 shrink-0 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(200,169,110,0.08)" }}>
+                <div className="px-4 py-3 shrink-0 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(157, 180, 198,0.08)" }}>
                   <div>
-                    <h2 style={{ color: "#ede8df" }} className="text-sm font-bold">Course Content</h2>
-                    <p style={{ color: "rgba(200,169,110,0.4)" }} className="text-xs mt-0.5">{totalCount} lessons</p>
+                    <h2 style={{ color: "#F5F8FA" }} className="text-sm font-bold">Course Content</h2>
+                    <p style={{ color: "rgba(157, 180, 198,0.4)" }} className="text-xs mt-0.5">{totalCount} lessons</p>
                   </div>
                   <button
                     onClick={() => setSidebarOpen(false)}
                     className="md:hidden p-1.5 transition-colors"
-                    style={{ color: "rgba(200,169,110,0.4)" }}
-                    onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#c8a96e")}
-                    onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "rgba(200,169,110,0.4)")}
+                    style={{ color: "rgba(157, 180, 198,0.4)" }}
+                    onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#9DB4C6")}
+                    onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "rgba(157, 180, 198,0.4)")}
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

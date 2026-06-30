@@ -21,9 +21,9 @@ export default function HowItWorks() {
     <section
       id="how-it-works"
       style={{
-        background: "#161510",
-        borderTop: "1px solid rgba(200,169,110,0.08)",
-        borderBottom: "1px solid rgba(200,169,110,0.08)",
+        background: "#1E2A39",
+        borderTop: "1px solid rgba(157, 180, 198,0.08)",
+        borderBottom: "1px solid rgba(157, 180, 198,0.08)",
         padding: "8rem 1.5rem",
         position: "relative",
         overflow: "hidden",
@@ -36,10 +36,10 @@ export default function HowItWorks() {
           position: "absolute",
           top: "-5rem",
           right: "-3rem",
-          fontFamily: "'Playfair Display', serif",
+          fontFamily: "'Helvetica', Arial, sans-serif",
           fontSize: "clamp(10rem, 22vw, 20rem)",
           fontWeight: 900,
-          color: "rgba(200,169,110,0.025)",
+          color: "rgba(157, 180, 198,0.025)",
           lineHeight: 1,
           userSelect: "none",
           pointerEvents: "none",
@@ -67,10 +67,10 @@ export default function HowItWorks() {
               marginBottom: "0.75rem",
             }}
           >
-            <span style={{ display: "block", width: "20px", height: "1px", background: "#c8a96e" }} />
+            <span style={{ display: "block", width: "20px", height: "1px", background: "#9DB4C6" }} />
             <span
               style={{
-                color: "#c8a96e",
+                color: "#9DB4C6",
                 fontSize: "0.65rem",
                 fontWeight: 600,
                 letterSpacing: "0.16em",
@@ -79,12 +79,12 @@ export default function HowItWorks() {
             >
               The Process
             </span>
-            <span style={{ display: "block", width: "20px", height: "1px", background: "#c8a96e" }} />
+            <span style={{ display: "block", width: "20px", height: "1px", background: "#9DB4C6" }} />
           </div>
           <h2
             style={{
-              fontFamily: "'Playfair Display', serif",
-              color: "#ede8df",
+              fontFamily: "'Helvetica', Arial, sans-serif",
+              color: "#F5F8FA",
               fontSize: "clamp(2rem, 3.5vw, 3rem)",
               fontWeight: 800,
               letterSpacing: "-0.03em",
@@ -112,22 +112,22 @@ export default function HowItWorks() {
             <motion.div
               key={step.num}
               variants={stepItem}
-              whileHover={{ background: "rgba(200,169,110,0.03)" }}
+              whileHover={{ background: "rgba(157, 180, 198,0.03)" }}
               transition={{ duration: 0.2 }}
               style={{
                 padding: "2.5rem 2.5rem",
-                borderRight: i < STEPS.length - 1 ? "1px solid rgba(200,169,110,0.08)" : "none",
-                borderTop: "1px solid rgba(200,169,110,0.08)",
+                borderRight: i < STEPS.length - 1 ? "1px solid rgba(157, 180, 198,0.08)" : "none",
+                borderTop: "1px solid rgba(157, 180, 198,0.08)",
                 position: "relative",
               }}
             >
               {/* Large editorial step number */}
               <div
                 style={{
-                  fontFamily: "'Playfair Display', serif",
+                  fontFamily: "'Helvetica', Arial, sans-serif",
                   fontSize: "5rem",
                   fontWeight: 900,
-                  color: "rgba(200,169,110,0.1)",
+                  color: "rgba(157, 180, 198,0.1)",
                   lineHeight: 0.9,
                   letterSpacing: "-0.04em",
                   marginBottom: "1.5rem",
@@ -137,7 +137,7 @@ export default function HowItWorks() {
               </div>
               <h3
                 style={{
-                  color: "#ede8df",
+                  color: "#F5F8FA",
                   fontSize: "1.05rem",
                   fontWeight: 600,
                   marginBottom: "0.75rem",
@@ -149,7 +149,7 @@ export default function HowItWorks() {
               </h3>
               <p
                 style={{
-                  color: "rgba(237,232,223,0.4)",
+                  color: "rgba(245, 248, 250,0.4)",
                   fontSize: "0.85rem",
                   lineHeight: 1.75,
                   margin: 0,
@@ -167,7 +167,7 @@ export default function HowItWorks() {
                   left: "2.5rem",
                   width: "32px",
                   height: "2px",
-                  background: "rgba(200,169,110,0.3)",
+                  background: "rgba(157, 180, 198,0.3)",
                 }}
               />
             </motion.div>
