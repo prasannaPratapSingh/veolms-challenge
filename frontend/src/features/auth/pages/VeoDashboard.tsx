@@ -5,10 +5,11 @@ import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../hook/auth.hook";
 import { useCourse } from "../../course/hook/course.hook";
+import StudentsTab from "../components/StudentsTab";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-type Tab = "overview" | "courses" | "upload";
+type Tab = "overview" | "courses" | "upload" | "students";
 
 interface UploadCourseForm {
   title: string;
@@ -102,6 +103,16 @@ export default function VeoDashboard() {
                 </svg>
               }
             />
+            <SidebarButton
+              active={activeTab === "students"}
+              onClick={() => setActiveTab("students")}
+              label="Students"
+              icon={
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              }
+            />
           </nav>
         </div>
 
@@ -137,6 +148,7 @@ export default function VeoDashboard() {
             {activeTab === "overview" && <OverviewTab key="overview" user={user} />}
             {activeTab === "courses" && <CoursesTab key="courses" courses={courses} fetchCourses={fetchCoursesAdmin} handlePublishToggle={handlePublishToggle} handleUpdateCourse={handleUpdateCourse} navigate={navigate} />}
             {activeTab === "upload" && <UploadTab key="upload" onSuccess={(courseId) => navigate(`/admin/course/${courseId}`)} handleUploadCourse={handleUploadCourse} />}
+            {activeTab === "students" && <StudentsTab key="students" />}
           </AnimatePresence>
         </div>
       </main>
@@ -206,6 +218,7 @@ function OverviewTab({ user }: { user: any }) {
           { label: "Total Learners", value: `${analytics?.users}` },
           { label: "Active Courses", value: `${analytics?.courses}` },
           { label: "Total Enrollments", value: `${analytics?.enrollments}` },
+          { label: "Total Earnings", value: analytics?.totalEarnings != null ? `₹${Number(analytics.totalEarnings).toLocaleString("en-IN")}` : "₹0" },
         ].map((card, i) => (
           <motion.div
             key={card.label}

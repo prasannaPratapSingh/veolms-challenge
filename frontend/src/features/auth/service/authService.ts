@@ -40,3 +40,13 @@ export const getMeUuser = async () => {
         throw error;
     }
 }
+
+export const updateProfile = async (name: string, avatar?: File) => {
+    const formData = new FormData();
+    formData.append("name", name);
+    if (avatar) formData.append("avatar", avatar);
+    const response = await axiosInstance.patch('/user/updateProfile', formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
+}

@@ -4,6 +4,8 @@ import { User } from "../user/user.model.js";
 import ApiError from "../../utils/ApiError.js";
 import ApiResponse from "../../utils/ApiResponse.js";
 import { Enrollment } from "../enrollments/enrollments.model.js";
+import imageKit from "../../infrastructure/imagekit/imagekit.instance.js";
+import { ImageKitService } from "../../infrastructure/imagekit/imagekit.service.js";
 
 export const getProfile = asyncHandler(async (
     req: Request,
@@ -64,3 +66,28 @@ export const getAllEnrollments = asyncHandler(async (
 
 })
 
+export const updateProfile = asyncHandler(async (
+    req: Request,
+    res: Response
+) => {
+
+    const name = req.body.name;
+    const userId = req.user?.id;
+    if (!userId) {
+        throw new ApiError(401, "Unauthorized user")
+    }
+
+    const imageBuffer = req.file?.buffer;
+    let imageUrl;
+    if (imageBuffer) {
+        const fileName = userId;
+        imageUrl = await ImageKitService.uploadBuffer(imageBuffer, fileName)
+        await User.findByIdAndUpdate(userId, { name, avatarUrl: imageUrl });
+    } else {
+        await User.findByIdAndUpdate(userId, { name });
+    }
+
+    return res.status(200).json(new ApiResponse(200, "User profile updated successfully"));
+
+
+})

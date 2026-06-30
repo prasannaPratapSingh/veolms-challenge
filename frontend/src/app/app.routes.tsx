@@ -8,6 +8,7 @@ import SignUp from "../features/auth/pages/SignUp";
 import AdminLogin from "../features/auth/pages/AdminLogin";
 import VeoDashboard from "../features/auth/pages/VeoDashboard";
 import UserDashboard from "../features/auth/pages/UserDashboard";
+import UserProfile from "../features/auth/pages/UserProfile";
 import CourseEditor from "../features/course/pages/CourseEditor";
 import CourseDetail from "../features/course/pages/CourseDetail";
 import CoursePlayer from "../features/course/pages/CoursePlayer";
@@ -69,9 +70,11 @@ export const routes = createBrowserRouter([
         children: [
             {
                 path: "/dashboard",
-                element: <Protected>
-                    <UserDashboard />
-                </Protected>,
+                element: <Protected><UserDashboard /></Protected>,
+            },
+            {
+                path: "/profile",
+                element: <Protected><UserProfile /></Protected>,
             },
             {
                 path: "/my-courses",

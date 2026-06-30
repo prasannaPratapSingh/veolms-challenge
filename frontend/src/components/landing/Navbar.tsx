@@ -143,6 +143,11 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                           Dashboard
                         </button>
                       </Link>
+                      <Link to="/profile" onClick={() => setDropdownOpen(false)}>
+                        <button className="w-full text-left px-4 py-3 text-sm text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer bg-transparent border-0 font-medium">
+                          Profile
+                        </button>
+                      </Link>
                       <button
                         onClick={onLogout}
                         className="w-full text-left px-4 py-3 text-sm text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer bg-transparent border-0 font-medium"
@@ -251,6 +256,13 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                     className="text-white/70 text-base font-medium py-3 border-b border-white/[0.05] no-underline hover:text-white transition-colors"
                   >
                     Dashboard
+                  </Link>
+                  <Link
+                    to="/profile"
+                    onClick={() => setMobileOpen(false)}
+                    className="text-white/70 text-base font-medium py-3 border-b border-white/[0.05] no-underline hover:text-white transition-colors"
+                  >
+                    Profile
                   </Link>
                   <button
                     onClick={onLogout}

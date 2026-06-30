@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux"
 import { useCallback } from "react";
 import type { loginBody, registerBody } from "../../../types/auth.type"
 import { setError, setLoading, setUser } from "../state/auth.slice";
-import { getMeUuser, login, logout, register } from "../service/authService";
+import { getMeUuser, login, logout, register, updateProfile } from "../service/authService";
 import { toast } from "react-hot-toast";
 
 export const useAuth = () => {
@@ -72,6 +72,21 @@ export const useAuth = () => {
         }
     }, [dispatch]);
 
-    return { handleLogin, handleLogout, handleRegister, handleGetMe };
+    const handleUpdateProfile = useCallback(async (name: string, avatar?: File) => {
+        try {
+            await updateProfile(name, avatar);
+            // Re-fetch user so Redux + all consumers see fresh name/avatar
+            const fresh = await getMeUuser();
+            dispatch(setUser(fresh));
+            toast.success("Profile updated successfully!");
+        } catch (error: any) {
+            const message = error?.response?.data?.message || error?.message || "Profile update failed";
+            dispatch(setError(message));
+            toast.error(message);
+            throw error;
+        }
+    }, [dispatch]);
+
+    return { handleLogin, handleLogout, handleRegister, handleGetMe, handleUpdateProfile };
 
 }
