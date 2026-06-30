@@ -63,13 +63,16 @@ export default function UserProfile() {
   const initial = displayName.charAt(0).toUpperCase();
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white pt-[68px]">
+    <div className="min-h-screen pt-[68px]" style={{ background: "#0e0d0b", color: "#ede8df" }}>
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
 
         {/* Back link */}
         <button
           onClick={() => navigate("/dashboard")}
-          className="flex items-center gap-2 text-white/40 hover:text-white text-sm font-medium mb-8 transition-colors"
+          className="flex items-center gap-2 text-sm font-medium mb-8 transition-colors"
+          style={{ color: "rgba(237,232,223,0.35)" }}
+          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = "#ede8df")}
+          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = "rgba(237,232,223,0.35)")}
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -83,26 +86,27 @@ export default function UserProfile() {
           transition={{ duration: 0.5, ease: EASE }}
           className="mb-10"
         >
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-1">
+          <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df" }} className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-1">
             Your Profile
           </h1>
-          <p className="text-neutral-400 text-sm">Manage your name and avatar</p>
+          <p style={{ color: "rgba(237,232,223,0.4)" }} className="text-sm font-light">Manage your name and avatar</p>
         </motion.div>
 
         {/* Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.08, ease: EASE }}
-          className="bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden"
+          style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.12)" }}
+          className="rounded-sm overflow-hidden"
         >
           {/* Avatar section */}
-          <div className="px-6 sm:px-8 pt-8 pb-6 border-b border-white/5 flex flex-col sm:flex-row items-center sm:items-end gap-6">
+          <div className="px-6 sm:px-8 pt-8 pb-6 flex flex-col sm:flex-row items-center sm:items-end gap-6" style={{ borderBottom: "1px solid rgba(200,169,110,0.08)" }}>
             <div className="relative group">
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-white/10 bg-neutral-800 flex items-center justify-center shrink-0">
+              <div style={{ border: "2px solid rgba(200,169,110,0.2)", background: "#1d1b16" }} className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden flex items-center justify-center shrink-0">
                 {preview ? (
                   <img src={preview} alt={displayName} className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-3xl font-bold text-white/60">{initial}</span>
+                  <span style={{ color: "#c8a96e" }} className="text-3xl font-bold">{initial}</span>
                 )}
               </div>
               {/* Overlay click target */}
@@ -127,17 +131,18 @@ export default function UserProfile() {
             </div>
 
             <div className="text-center sm:text-left">
-              <p className="text-white font-bold text-lg leading-tight">{displayName || "—"}</p>
-              <p className="text-neutral-500 text-sm mt-0.5">{email}</p>
+              <p style={{ color: "#ede8df" }} className="font-bold text-lg leading-tight">{displayName || "—"}</p>
+              <p style={{ color: "rgba(237,232,223,0.35)" }} className="text-sm mt-0.5">{email}</p>
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="mt-3 text-xs font-semibold text-white/50 hover:text-white transition-colors underline underline-offset-2"
+                style={{ color: "rgba(200,169,110,0.5)" }}
+                className="mt-3 text-xs font-semibold transition-colors underline underline-offset-2 hover:text-[#c8a96e]"
               >
                 Change avatar
               </button>
               {avatarFile && (
-                <p className="text-xs text-white/30 mt-1 truncate max-w-[180px]">{avatarFile.name}</p>
+                <p style={{ color: "rgba(237,232,223,0.25)" }} className="text-xs mt-1 truncate max-w-[180px]">{avatarFile.name}</p>
               )}
             </div>
           </div>
@@ -146,12 +151,13 @@ export default function UserProfile() {
           <form onSubmit={handleSubmit(onSubmit)} className="px-6 sm:px-8 py-8 space-y-6">
             {/* Name */}
             <div>
-              <label className="block text-xs font-bold text-neutral-400 uppercase tracking-widest mb-2">
+              <label style={{ color: "rgba(200,169,110,0.6)", letterSpacing: "0.12em" }} className="block text-xs font-bold uppercase mb-2">
                 Full Name
               </label>
               <input
                 type="text"
-                className="w-full bg-neutral-900/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/20 transition-all placeholder:text-neutral-600"
+                style={{ background: "rgba(200,169,110,0.04)", border: "1px solid rgba(200,169,110,0.15)", color: "#ede8df" }}
+                className="w-full rounded-sm px-4 py-3 text-sm focus:outline-none transition-all placeholder:text-[rgba(237,232,223,0.2)] auth-input"
                 placeholder="Your full name"
                 {...register("name", {
                   required: "Name is required",
@@ -160,22 +166,23 @@ export default function UserProfile() {
                 })}
               />
               {errors.name && (
-                <p className="text-red-400 text-xs mt-1.5">{errors.name.message}</p>
+                <p style={{ color: "#e07070" }} className="text-xs mt-1.5">{errors.name.message}</p>
               )}
             </div>
 
             {/* Email — read only */}
             <div>
-              <label className="block text-xs font-bold text-neutral-400 uppercase tracking-widest mb-2">
+              <label style={{ color: "rgba(200,169,110,0.6)", letterSpacing: "0.12em" }} className="block text-xs font-bold uppercase mb-2">
                 Email Address
               </label>
               <input
                 type="email"
                 value={email}
                 readOnly
-                className="w-full bg-white/[0.02] border border-white/5 rounded-xl px-4 py-3 text-sm text-white/40 cursor-not-allowed select-none"
+                style={{ background: "rgba(200,169,110,0.02)", border: "1px solid rgba(200,169,110,0.08)", color: "rgba(237,232,223,0.3)" }}
+                className="w-full rounded-sm px-4 py-3 text-sm cursor-not-allowed select-none"
               />
-              <p className="text-neutral-600 text-xs mt-1.5">Email cannot be changed</p>
+              <p style={{ color: "rgba(237,232,223,0.2)" }} className="text-xs mt-1.5">Email cannot be changed</p>
             </div>
 
             {/* Save */}
@@ -183,9 +190,10 @@ export default function UserProfile() {
               <motion.button
                 type="submit"
                 disabled={isSubmitting}
-                whileHover={!isSubmitting ? { scale: 1.01 } : {}}
+                whileHover={!isSubmitting ? { boxShadow: "0 0 24px rgba(200,169,110,0.2)" } : {}}
                 whileTap={!isSubmitting ? { scale: 0.98 } : {}}
-                className="w-full sm:w-auto px-8 py-3 bg-white text-black font-bold text-sm rounded-xl hover:bg-neutral-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                style={{ background: isSubmitting ? "rgba(200,169,110,0.3)" : "#c8a96e", color: "#0e0d0b" }}
+                className="w-full sm:w-auto px-8 py-3 font-bold text-sm rounded-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isSubmitting ? <><Spinner /> Saving…</> : "Save Changes"}
               </motion.button>

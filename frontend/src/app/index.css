@@ -1,12 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
+:root {
+  --bg:        #0e0d0b;
+  --surface:   #161510;
+  --surface-2: #1d1b16;
+  --accent:    #c8a96e;
+  --accent-lo: rgba(200, 169, 110, 0.12);
+  --border:    rgba(200, 169, 110, 0.12);
+  --border-lo: rgba(200, 169, 110, 0.07);
+  --text:      #ede8df;
+  --text-muted:rgba(237, 232, 223, 0.45);
+  --error:     #e07070;
+}
+
 *, *::before, *::after {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  box-sizing: border-box;
 }
 
 html {
-  background-color: black;
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(200,169,110,0.15); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(200,169,110,0.3); }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
@@ -15,4 +39,16 @@ html {
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
+}
+
+/* Auth input focus glow */
+.auth-input:focus {
+  border-color: rgba(200, 169, 110, 0.4) !important;
+  box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.08);
+}
+
+/* Selection */
+::selection {
+  background: rgba(200, 169, 110, 0.25);
+  color: #ede8df;
 }

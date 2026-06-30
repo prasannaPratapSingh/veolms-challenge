@@ -12,11 +12,11 @@ export default function LandingPage() {
   useEffect(() => {
     document.title = "LearnSphere — Learn skills that move careers forward";
 
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href =
-      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap";
-    document.head.appendChild(link);
+    const fonts = document.createElement("link");
+    fonts.rel = "stylesheet";
+    fonts.href =
+      "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=DM+Sans:wght@300;400;500;600;700&display=swap";
+    document.head.appendChild(fonts);
 
     let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
     if (!meta) {
@@ -28,20 +28,26 @@ export default function LandingPage() {
       "LearnSphere is an online learning platform with 500+ expert-led courses in tech, design, and business. Buy once, learn forever.";
 
     return () => {
-      document.head.removeChild(link);
+      document.head.removeChild(fonts);
     };
   }, []);
 
   return (
     <div
       style={{
-        fontFamily:
-          "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif",
         WebkitFontSmoothing: "antialiased",
         MozOsxFontSmoothing: "grayscale",
         overflowX: "hidden",
-        background: "#0a0a0a",
-      }}
+        background: "#0e0d0b",
+        "--accent": "#c8a96e",
+        "--accent-muted": "rgba(200,169,110,0.15)",
+        "--surface": "#161510",
+        "--surface-2": "#1d1b16",
+        "--border": "rgba(200,169,110,0.12)",
+        "--text": "#ede8df",
+        "--text-muted": "rgba(237,232,223,0.45)",
+      } as React.CSSProperties}
     >
       <Navbar />
       <main>

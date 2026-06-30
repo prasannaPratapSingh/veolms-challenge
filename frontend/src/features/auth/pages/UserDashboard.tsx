@@ -64,11 +64,12 @@ function SidebarButton({ active, onClick, label, icon, onClose }: {
   return (
     <button
       onClick={() => { onClick(); onClose?.(); }}
-      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all group ${
-        active ? "bg-white text-black shadow-lg" : "text-white/50 hover:text-white hover:bg-white/[0.03] border border-transparent"
-      }`}
+      style={active ? { background: "#c8a96e", color: "#0e0d0b", border: "1px solid #c8a96e" } : { color: "rgba(237,232,223,0.45)", border: "1px solid transparent" }}
+      className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm text-sm font-semibold transition-all group hover:text-[#ede8df]`}
+      onMouseEnter={e => { if (!active) (e.currentTarget as HTMLElement).style.background = "rgba(200,169,110,0.06)"; }}
+      onMouseLeave={e => { if (!active) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
     >
-      <span className={`${active ? "text-black" : "text-white/30 group-hover:text-white/60"} transition-colors`}>{icon}</span>
+      <span style={{ color: active ? "#0e0d0b" : "rgba(200,169,110,0.5)" }} className="transition-colors">{icon}</span>
       {label}
     </button>
   );
@@ -80,10 +81,11 @@ function StatCard({ label, value, delay }: { label: string; value: string | numb
     <motion.div
       initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay, ease: EASE }}
-      className="bg-white/[0.02] border border-white/5 hover:border-white/10 rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1"
+      style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.1)" }}
+      className="rounded-sm p-5 transition-all duration-300 hover:-translate-y-1"
     >
-      <p className="text-neutral-400 text-xs font-bold tracking-widest uppercase mb-3">{label}</p>
-      <p className="text-white text-2xl sm:text-3xl font-extrabold tracking-tighter">{value}</p>
+      <p style={{ color: "rgba(200,169,110,0.6)", letterSpacing: "0.12em" }} className="text-xs font-bold uppercase mb-3">{label}</p>
+      <p style={{ fontFamily: "'Playfair Display', serif", color: "#c8a96e" }} className="text-2xl sm:text-3xl font-extrabold tracking-tight">{value}</p>
     </motion.div>
   );
 }
@@ -100,24 +102,28 @@ function CourseCard({ enrollment, onViewProgress, showViewProgress }: {
   return (
     <div
       onClick={() => navigate(`/course/${course._id}/learn`)}
-      className="group bg-white/[0.02] border border-white/5 hover:border-white/15 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50 cursor-pointer"
+      style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.1)" }}
+      className="group rounded-sm overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer"
+      onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(200,169,110,0.25)")}
+      onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(200,169,110,0.1)")}
     >
       <div className="aspect-video bg-neutral-900 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/40 z-10" />
+        <div className="absolute inset-0 bg-black/30 z-10" />
         {course.thumbnail ? (
           <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-white/20 text-sm font-medium">No Cover</div>
+          <div className="w-full h-full flex items-center justify-center text-sm font-medium" style={{ color: "rgba(200,169,110,0.2)" }}>No Cover</div>
         )}
       </div>
       <div className="p-4 sm:p-5 flex-1 flex flex-col">
-        <h3 className="font-bold text-sm sm:text-base leading-snug mb-2 line-clamp-2 text-white">{course.title}</h3>
-        {course.createdBy && <p className="text-neutral-500 text-xs mb-3 truncate">{course.createdBy}</p>}
-        <p className="text-neutral-600 text-xs mt-auto">Enrolled {enrolledDate}</p>
+        <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df" }} className="font-bold text-sm sm:text-base leading-snug mb-2 line-clamp-2">{course.title}</h3>
+        {course.createdBy && <p style={{ color: "rgba(237,232,223,0.35)" }} className="text-xs mb-3 truncate">{course.createdBy}</p>}
+        <p style={{ color: "rgba(200,169,110,0.35)" }} className="text-xs mt-auto">Enrolled {enrolledDate}</p>
         {showViewProgress && onViewProgress && (
           <button
             onClick={(e) => { e.stopPropagation(); onViewProgress(); }}
-            className="mt-4 w-full py-2 rounded-xl border border-white/10 text-xs font-bold text-white/70 hover:text-white hover:bg-white/5 transition-colors"
+            style={{ border: "1px solid rgba(200,169,110,0.2)", color: "rgba(200,169,110,0.7)" }}
+            className="mt-4 w-full py-2 rounded-sm text-xs font-bold transition-colors hover:bg-[rgba(200,169,110,0.08)]"
           >
             View Progress
           </button>
@@ -144,10 +150,10 @@ function OverviewTab({ name, enrollments, progress, onSetTab }: {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: EASE }}>
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white mb-2">
+        <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df" }} className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2">
           Welcome back, {name.split(" ")[0] || "Learner"}
         </h1>
-        <p className="text-neutral-400 text-sm sm:text-base">Your learning dashboard</p>
+        <p style={{ color: "rgba(237,232,223,0.4)" }} className="text-sm sm:text-base font-light">Your learning dashboard</p>
       </div>
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-10">
         <StatCard label="Enrolled" value={enrollments.length} delay={0} />
@@ -156,15 +162,15 @@ function OverviewTab({ name, enrollments, progress, onSetTab }: {
         <StatCard label="Avg %" value={`${avgCompletion}%`} delay={0.15} />
       </div>
       <div className="mb-5 flex items-center justify-between">
-        <h2 className="text-base sm:text-lg font-bold text-white">My Enrolled Courses</h2>
+        <h2 style={{ color: "#ede8df" }} className="text-base sm:text-lg font-bold">My Enrolled Courses</h2>
         {enrollments.length > 0 && (
-          <button onClick={() => onSetTab("my-courses")} className="text-xs text-neutral-500 hover:text-white transition-colors">View all →</button>
+          <button onClick={() => onSetTab("my-courses")} style={{ color: "rgba(200,169,110,0.6)" }} className="text-xs transition-colors hover:text-[#c8a96e]">View all →</button>
         )}
       </div>
       {enrollments.length === 0 ? (
-        <div className="text-center py-16 sm:py-24 border border-dashed border-white/5 rounded-3xl bg-white/[0.01]">
-          <p className="text-neutral-500 mb-3">No courses enrolled yet.</p>
-          <a href="/courses" className="text-sm font-bold text-white underline underline-offset-4 hover:text-white/80 transition-colors">Browse courses →</a>
+        <div className="text-center py-16 sm:py-24 rounded-sm" style={{ border: "1px dashed rgba(200,169,110,0.12)", background: "rgba(200,169,110,0.02)" }}>
+          <p style={{ color: "rgba(237,232,223,0.3)" }} className="mb-3">No courses enrolled yet.</p>
+          <a href="/courses" style={{ color: "#c8a96e" }} className="text-sm font-bold underline underline-offset-4 transition-colors">Browse courses →</a>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
@@ -184,13 +190,13 @@ function MyCoursesTab({ enrollments, onViewProgress }: { enrollments: Enrollment
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: EASE }}>
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white mb-2">My Courses</h1>
-        <p className="text-neutral-400 text-sm sm:text-base">All your enrolled courses</p>
+        <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df" }} className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2">My Courses</h1>
+        <p style={{ color: "rgba(237,232,223,0.4)" }} className="text-sm sm:text-base font-light">All your enrolled courses</p>
       </div>
       {enrollments.length === 0 ? (
-        <div className="text-center py-16 sm:py-24 border border-dashed border-white/5 rounded-3xl bg-white/[0.01]">
-          <p className="text-neutral-500 mb-3">No courses enrolled yet.</p>
-          <a href="/courses" className="text-sm font-bold text-white underline underline-offset-4 hover:text-white/80 transition-colors">Browse courses →</a>
+        <div className="text-center py-16 sm:py-24 rounded-sm" style={{ border: "1px dashed rgba(200,169,110,0.12)", background: "rgba(200,169,110,0.02)" }}>
+          <p style={{ color: "rgba(237,232,223,0.3)" }} className="mb-3">No courses enrolled yet.</p>
+          <a href="/courses" style={{ color: "#c8a96e" }} className="text-sm font-bold underline underline-offset-4 transition-colors">Browse courses →</a>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
@@ -217,12 +223,12 @@ function ProgressTab({ progress, filteredCourseId }: { progress: ProgressRecord[
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: EASE }}>
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white mb-2">Progress</h1>
-        <p className="text-neutral-400 text-sm sm:text-base">Track your lesson completion across all courses</p>
+        <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df" }} className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2">Progress</h1>
+        <p style={{ color: "rgba(237,232,223,0.4)" }} className="text-sm sm:text-base font-light">Track your lesson completion across all courses</p>
       </div>
       {entries.length === 0 ? (
-        <div className="text-center py-16 sm:py-24 border border-dashed border-white/5 rounded-3xl bg-white/[0.01]">
-          <p className="text-neutral-500">No progress data yet. Start learning!</p>
+        <div className="text-center py-16 sm:py-24 rounded-sm" style={{ border: "1px dashed rgba(200,169,110,0.12)", background: "rgba(200,169,110,0.02)" }}>
+          <p style={{ color: "rgba(237,232,223,0.3)" }}>No progress data yet. Start learning!</p>
         </div>
       ) : (
         <div className="space-y-6 sm:space-y-8">
@@ -230,22 +236,22 @@ function ProgressTab({ progress, filteredCourseId }: { progress: ProgressRecord[
             const completedCount = records.filter((r) => r.completed).length;
             return (
               <motion.div key={courseId} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.07, ease: EASE }}
-                className="bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden">
-                <div className="px-4 sm:px-6 py-4 border-b border-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                  <h3 className="font-bold text-white text-sm sm:text-base line-clamp-1">{title}</h3>
-                  <span className="text-xs font-bold text-neutral-400 shrink-0">{completedCount} / {records.length} lessons</span>
+                style={{ background: "#161510", border: "1px solid rgba(200,169,110,0.1)" }} className="rounded-sm overflow-hidden">
+                <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1" style={{ borderBottom: "1px solid rgba(200,169,110,0.07)" }}>
+                  <h3 style={{ color: "#ede8df" }} className="font-bold text-sm sm:text-base line-clamp-1">{title}</h3>
+                  <span style={{ color: "rgba(200,169,110,0.5)" }} className="text-xs font-bold shrink-0">{completedCount} / {records.length} lessons</span>
                 </div>
-                <ul className="divide-y divide-white/[0.03]">
+                <ul className="divide-y" style={{ borderColor: "rgba(200,169,110,0.05)" }}>
                   {records.map((record) => (
-                    <li key={record.lessonId._id} className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3">
-                      <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center shrink-0 border ${record.completed ? "bg-white/10 border-white/20" : "border-white/10 bg-transparent"}`}>
+                    <li key={record.lessonId._id} className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3" style={{ borderBottom: "1px solid rgba(200,169,110,0.05)" }}>
+                      <div style={{ border: record.completed ? "1px solid rgba(200,169,110,0.3)" : "1px solid rgba(200,169,110,0.1)", background: record.completed ? "rgba(200,169,110,0.1)" : "transparent" }} className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center shrink-0">
                         {record.completed && <CheckIcon />}
                       </div>
-                      <span className={`text-xs sm:text-sm font-medium flex-1 min-w-0 truncate ${record.completed ? "text-white/80" : "text-neutral-500"}`}>
+                      <span style={{ color: record.completed ? "rgba(237,232,223,0.75)" : "rgba(237,232,223,0.3)" }} className="text-xs sm:text-sm font-medium flex-1 min-w-0 truncate">
                         {record.lessonId.title}
                       </span>
                       {record.completed && record.completedAt && (
-                        <span className="ml-auto text-xs text-neutral-600 shrink-0">
+                        <span style={{ color: "rgba(200,169,110,0.4)" }} className="ml-auto text-xs shrink-0">
                           {new Date(record.completedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                         </span>
                       )}
@@ -270,24 +276,21 @@ function SidebarContent({ activeTab, handleSetTab, displayName, avatarUrl, initi
     <div className="flex flex-col h-full">
       <div className="p-6 flex-1">
         {/* Logo */}
-        <div className="mb-8 flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-white flex items-center justify-center shadow-lg">
-            <span className="font-bold text-black text-xs">L</span>
-          </div>
-          <span className="font-extrabold text-lg tracking-tighter">LearnSphere</span>
+        <div className="mb-8">
+          <span style={{ fontFamily: "'Playfair Display', serif", color: "#ede8df", fontSize: "1.2rem", fontWeight: 800, letterSpacing: "-0.02em" }}>LearnSphere</span>
         </div>
         {/* User Info */}
         <div className="flex items-center gap-3 mb-8 px-1">
-          <div className="w-10 h-10 rounded-full bg-neutral-800 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden">
+          <div style={{ background: "rgba(200,169,110,0.1)", border: "1px solid rgba(200,169,110,0.2)" }} className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 overflow-hidden">
             {avatarUrl ? (
               <img src={avatarUrl} alt={displayName} className="w-full h-full object-cover" />
             ) : (
-              <span className="text-sm font-bold text-white/70">{initial}</span>
+              <span style={{ color: "#c8a96e" }} className="text-sm font-bold">{initial}</span>
             )}
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-white truncate">{displayName}</p>
-            <span className="inline-block text-[10px] font-bold tracking-widest uppercase text-white/40 bg-white/5 px-2 py-0.5 rounded-full mt-0.5">Learner</span>
+            <p style={{ color: "#ede8df" }} className="text-sm font-semibold truncate">{displayName}</p>
+            <span style={{ color: "rgba(200,169,110,0.5)", background: "rgba(200,169,110,0.08)", border: "1px solid rgba(200,169,110,0.12)" }} className="inline-block text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-sm mt-0.5">Learner</span>
           </div>
         </div>
         {/* Nav */}
@@ -298,12 +301,15 @@ function SidebarContent({ activeTab, handleSetTab, displayName, avatarUrl, initi
         </nav>
       </div>
       {/* Sign out */}
-      <div className="p-6 border-t border-white/5">
+      <div className="p-6" style={{ borderTop: "1px solid rgba(200,169,110,0.08)" }}>
         <motion.button
           onClick={onLogout}
-          whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.04)" }}
+          whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
-          className="w-full py-2.5 rounded-xl border border-white/5 text-sm font-semibold text-white/50 hover:text-white transition-colors flex items-center justify-center gap-2"
+          style={{ border: "1px solid rgba(200,169,110,0.1)", color: "rgba(237,232,223,0.4)" }}
+          className="w-full py-2.5 rounded-sm text-sm font-semibold transition-colors flex items-center justify-center gap-2 hover:text-[#ede8df]"
+          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(200,169,110,0.05)")}
+          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = "transparent")}
         >
           <LogoutIcon /> Sign out
         </motion.button>
@@ -384,15 +390,15 @@ export default function UserDashboard() {
   const sidebarProps = { activeTab, handleSetTab, displayName, avatarUrl, initial, onLogout };
 
   return (
-    <div className="flex h-screen bg-neutral-950 text-white antialiased overflow-hidden pt-[68px]">
+    <div className="flex h-screen antialiased overflow-hidden pt-[68px]" style={{ background: "#0e0d0b", color: "#ede8df" }}>
 
       {/* ── Desktop sidebar ── */}
-      <aside className="hidden md:flex w-64 shrink-0 border-r border-white/5 bg-white/[0.02] flex-col h-full">
+      <aside className="hidden md:flex w-64 shrink-0 flex-col h-full" style={{ background: "#161510", borderRight: "1px solid rgba(200,169,110,0.1)" }}>
         <SidebarContent {...sidebarProps} />
       </aside>
 
       {/* ── Mobile top bar ── */}
-      <div className="md:hidden fixed top-[68px] left-0 right-0 z-40 h-12 bg-neutral-950/95 backdrop-blur border-b border-white/5 flex items-center justify-between px-4">
+      <div className="md:hidden fixed top-[68px] left-0 right-0 z-40 h-12 flex items-center justify-between px-4" style={{ background: "rgba(14,13,11,0.97)", backdropFilter: "blur(14px)", borderBottom: "1px solid rgba(200,169,110,0.1)" }}>
         <span className="text-sm font-semibold text-white capitalize">{activeTab.replace("-", " ")}</span>
         <button onClick={() => setMobileNavOpen(v => !v)} className="p-2 text-white/60 hover:text-white transition-colors" aria-label="Toggle navigation">
           {mobileNavOpen ? (
@@ -417,7 +423,7 @@ export default function UserDashboard() {
             <motion.div
               initial={{ x: "-100%" }} animate={{ x: 0 }} exit={{ x: "-100%" }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="md:hidden fixed left-0 top-[116px] bottom-0 w-72 z-50 bg-neutral-950 border-r border-white/5 overflow-y-auto"
+              className="md:hidden fixed left-0 top-[116px] bottom-0 w-72 z-50 overflow-y-auto" style={{ background: "#0e0d0b", borderRight: "1px solid rgba(200,169,110,0.1)" }}
             >
               <SidebarContent {...sidebarProps} onClose={() => setMobileNavOpen(false)} />
             </motion.div>
@@ -426,7 +432,7 @@ export default function UserDashboard() {
       </AnimatePresence>
 
       {/* ── Main content ── */}
-      <main className="flex-1 overflow-y-auto md:pt-0 pt-12">
+      <main className="flex-1 overflow-y-auto md:pt-0 pt-12" style={{ background: "#0e0d0b" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
           {loading ? (
             <div className="flex items-center justify-center h-64"><Spinner size="lg" /></div>

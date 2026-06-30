@@ -29,25 +29,25 @@ export default function CourseCard({ course }: Props) {
   return (
     <motion.article
       onClick={() => navigate(`/course/${course._id}`)}
-      whileHover={{ y: -4, borderColor: "rgba(255,255,255,0.16)" }}
-      transition={{ duration: 0.2, ease: "easeOut" }}
+      whileHover={{ y: -5 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
       style={{
-        background: "#111",
-        border: "1px solid rgba(255,255,255,0.07)",
-        borderRadius: "14px",
+        background: "#161510",
+        border: "1px solid rgba(200,169,110,0.1)",
+        borderRadius: "6px",
         overflow: "hidden",
         cursor: "pointer",
         display: "flex",
         flexDirection: "column",
         position: "relative",
-        height: "100%",  // fill grid row
+        height: "100%",
       }}
     >
       {/* Thumbnail */}
       <div
         style={{
-          height: "180px",
-          background: "#1a1a1a",
+          height: "190px",
+          background: "#1d1b16",
           overflow: "hidden",
           position: "relative",
           flexShrink: 0,
@@ -62,10 +62,10 @@ export default function CourseCard({ course }: Props) {
               height: "100%",
               objectFit: "cover",
               display: "block",
-              transition: "transform 0.4s ease",
+              transition: "transform 0.5s ease",
             }}
             onMouseEnter={(e) =>
-              ((e.currentTarget as HTMLImageElement).style.transform = "scale(1.04)")
+              ((e.currentTarget as HTMLImageElement).style.transform = "scale(1.05)")
             }
             onMouseLeave={(e) =>
               ((e.currentTarget as HTMLImageElement).style.transform = "scale(1)")
@@ -79,30 +79,40 @@ export default function CourseCard({ course }: Props) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "rgba(255,255,255,0.12)",
-              fontSize: "0.8rem",
-              fontWeight: 500,
-              letterSpacing: "0.05em",
+              color: "rgba(200,169,110,0.15)",
+              fontSize: "0.72rem",
+              fontWeight: 600,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
             }}
           >
-            NO IMAGE
+            No Image
           </div>
         )}
 
-        {/* Published badge */}
+        {/* Overlay gradient */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(to top, rgba(14,13,11,0.4) 0%, transparent 50%)",
+            pointerEvents: "none",
+          }}
+        />
+
         {course.isPublished && (
           <span
             style={{
               position: "absolute",
-              top: "10px",
-              left: "10px",
-              background: "#fff",
-              color: "#000",
-              fontSize: "0.62rem",
+              top: "12px",
+              left: "12px",
+              background: "#c8a96e",
+              color: "#0e0d0b",
+              fontSize: "0.58rem",
               fontWeight: 700,
               padding: "0.2rem 0.55rem",
-              borderRadius: "4px",
-              letterSpacing: "0.07em",
+              borderRadius: "2px",
+              letterSpacing: "0.1em",
               textTransform: "uppercase",
             }}
           >
@@ -114,22 +124,21 @@ export default function CourseCard({ course }: Props) {
       {/* Body */}
       <div
         style={{
-          padding: "1.25rem 1.4rem 1.4rem",
+          padding: "1.4rem 1.5rem 1.5rem",
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          gap: 0,
         }}
       >
-        {/* Title */}
         <h3
           style={{
-            color: "#fff",
-            fontSize: "1rem",
+            fontFamily: "'Playfair Display', serif",
+            color: "#ede8df",
+            fontSize: "1.05rem",
             fontWeight: 700,
-            lineHeight: 1.35,
-            marginBottom: "0.5rem",
-            letterSpacing: "-0.02em",
+            lineHeight: 1.3,
+            marginBottom: "0.6rem",
+            letterSpacing: "-0.01em",
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
@@ -139,42 +148,42 @@ export default function CourseCard({ course }: Props) {
           {course.title}
         </h3>
 
-        {/* Description */}
         <p
           style={{
-            color: "rgba(255,255,255,0.38)",
-            fontSize: "0.8rem",
-            lineHeight: 1.6,
-            marginBottom: "1.1rem",
+            color: "rgba(237,232,223,0.35)",
+            fontSize: "0.78rem",
+            lineHeight: 1.65,
+            marginBottom: "1.25rem",
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
+            fontWeight: 300,
           }}
         >
           {course.description}
         </p>
 
-        {/* Instructor row */}
-        <div style={{ marginBottom: "1.1rem" }}>
+        {/* Instructor */}
+        <div style={{ marginBottom: "1.25rem" }}>
           <span
             style={{
               display: "block",
-              color: "rgba(255,255,255,0.28)",
-              fontSize: "0.62rem",
-              fontWeight: 600,
-              letterSpacing: "0.08em",
+              color: "rgba(200,169,110,0.5)",
+              fontSize: "0.58rem",
+              fontWeight: 700,
+              letterSpacing: "0.12em",
               textTransform: "uppercase",
-              marginBottom: "0.35rem",
+              marginBottom: "0.3rem",
             }}
           >
             Educator
           </span>
           <p
             style={{
-              color: "rgba(255,255,255,0.55)",
-              fontSize: "0.76rem",
-              fontWeight: 500,
+              color: "rgba(237,232,223,0.5)",
+              fontSize: "0.78rem",
+              fontWeight: 400,
               overflow: "hidden",
               whiteSpace: "nowrap",
               textOverflow: "ellipsis",
@@ -185,16 +194,15 @@ export default function CourseCard({ course }: Props) {
           </p>
         </div>
 
-        {/* Divider */}
         <div
           style={{
             height: "1px",
-            background: "rgba(255,255,255,0.05)",
-            marginBottom: "1.1rem",
+            background: "rgba(200,169,110,0.08)",
+            marginBottom: "1.25rem",
           }}
         />
 
-        {/* Footer — price + CTA */}
+        {/* Footer */}
         <div
           style={{
             marginTop: "auto",
@@ -208,22 +216,23 @@ export default function CourseCard({ course }: Props) {
             <span
               style={{
                 display: "block",
-                color: "rgba(255,255,255,0.28)",
-                fontSize: "0.62rem",
-                fontWeight: 600,
-                letterSpacing: "0.06em",
+                color: "rgba(200,169,110,0.5)",
+                fontSize: "0.58rem",
+                fontWeight: 700,
+                letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                marginBottom: "0.1rem",
+                marginBottom: "0.15rem",
               }}
             >
               Price
             </span>
             <span
               style={{
-                color: "#fff",
-                fontSize: "1.15rem",
-                fontWeight: 800,
-                letterSpacing: "-0.03em",
+                fontFamily: "'Playfair Display', serif",
+                color: "#ede8df",
+                fontSize: "1.25rem",
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
               }}
             >
               ₹{course.price}
@@ -231,33 +240,38 @@ export default function CourseCard({ course }: Props) {
           </div>
 
           <motion.button
-            whileHover={{ background: "#fff", color: "#000" }}
+            whileHover={{
+              background: "#c8a96e",
+              color: "#0e0d0b",
+              borderColor: "#c8a96e",
+            }}
             whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.16 }}
+            transition={{ duration: 0.18 }}
             style={{
-              background: "rgba(255,255,255,0.07)",
-              color: "rgba(255,255,255,0.75)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "7px",
+              background: "transparent",
+              color: "rgba(200,169,110,0.8)",
+              border: "1px solid rgba(200,169,110,0.25)",
+              borderRadius: "3px",
               padding: "0.5rem 1.1rem",
-              fontSize: "0.78rem",
+              fontSize: "0.75rem",
               fontWeight: 600,
               cursor: "pointer",
               whiteSpace: "nowrap",
-              letterSpacing: "-0.01em",
+              letterSpacing: "0.04em",
+              fontFamily: "'DM Sans', sans-serif",
             }}
           >
             Enrol Now
           </motion.button>
         </div>
 
-        {/* Added date */}
         <p
           style={{
-            color: "rgba(255,255,255,0.2)",
-            fontSize: "0.68rem",
-            marginTop: "0.85rem",
-            letterSpacing: "0.02em",
+            color: "rgba(237,232,223,0.18)",
+            fontSize: "0.65rem",
+            marginTop: "0.9rem",
+            letterSpacing: "0.04em",
+            fontWeight: 300,
           }}
         >
           Added {formatDate(course.createdAt)}

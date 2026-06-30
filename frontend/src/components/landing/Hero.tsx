@@ -3,11 +3,11 @@ import { motion } from "framer-motion";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 36 },
   visible: (delay = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: EASE, delay },
+    transition: { duration: 0.9, ease: EASE, delay },
   }),
 };
 
@@ -19,76 +19,142 @@ export default function Hero() {
       id="hero"
       style={{
         minHeight: "100vh",
-        background: "#0a0a0a",
+        background: "#0e0d0b",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        textAlign: "center",
-        padding: "8rem 1.5rem 6rem",
+        padding: "9rem 1.5rem 7rem",
         position: "relative",
         overflow: "hidden",
       }}
     >
-      {/* Grid texture */}
+      {/* Ambient warm glow top */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          top: "-10%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "900px",
+          height: "500px",
+          background:
+            "radial-gradient(ellipse at center, rgba(200,169,110,0.07) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Fine dot texture */}
       <div
         aria-hidden
         style={{
           position: "absolute",
           inset: 0,
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
+            "radial-gradient(rgba(200,169,110,0.06) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
           maskImage:
-            "radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%)",
+            "radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 100%)",
           pointerEvents: "none",
         }}
       />
 
-      <div style={{ position: "relative", maxWidth: "860px" }}>
-        {/* Badge */}
-        <motion.span
+      {/* Thin horizontal rule accent */}
+      <motion.div
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={{ scaleX: 1, opacity: 1 }}
+        transition={{ duration: 1.2, ease: EASE, delay: 0.05 }}
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "5%",
+          right: "5%",
+          height: "1px",
+          background:
+            "linear-gradient(90deg, transparent, rgba(200,169,110,0.12), transparent)",
+          transformOrigin: "center",
+          pointerEvents: "none",
+        }}
+      />
+
+      <div
+        style={{
+          position: "relative",
+          maxWidth: "900px",
+          width: "100%",
+          textAlign: "center",
+        }}
+      >
+        {/* Eyebrow */}
+        <motion.div
           variants={fadeUp}
           initial="hidden"
           animate="visible"
           custom={0}
           style={{
-            display: "inline-block",
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(255,255,255,0.11)",
-            color: "rgba(255,255,255,0.65)",
-            fontSize: "0.75rem",
-            fontWeight: 600,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            padding: "0.35rem 1rem",
-            borderRadius: "100px",
-            marginBottom: "1.8rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "0.75rem",
+            marginBottom: "2.2rem",
           }}
         >
-          500+ Courses · Expert Instructors · Lifetime Access
-        </motion.span>
+          <span
+            style={{
+              display: "block",
+              width: "28px",
+              height: "1px",
+              background: "rgba(200,169,110,0.5)",
+            }}
+          />
+          <span
+            style={{
+              color: "#c8a96e",
+              fontSize: "0.68rem",
+              fontWeight: 600,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+            }}
+          >
+            500+ Courses · Expert Instructors · Lifetime Access
+          </span>
+          <span
+            style={{
+              display: "block",
+              width: "28px",
+              height: "1px",
+              background: "rgba(200,169,110,0.5)",
+            }}
+          />
+        </motion.div>
 
-        {/* Headline */}
+        {/* Headline — editorial serif */}
         <motion.h1
           variants={fadeUp}
           initial="hidden"
           animate="visible"
           custom={0.1}
           style={{
-            fontSize: "clamp(2.6rem, 6vw, 5rem)",
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontSize: "clamp(3rem, 7vw, 6rem)",
             fontWeight: 800,
-            color: "#fff",
-            lineHeight: 1.08,
-            letterSpacing: "",
-            marginBottom: "1.5rem",
+            color: "#ede8df",
+            lineHeight: 1.0,
+            letterSpacing: "-0.02em",
+            marginBottom: "1.8rem",
           }}
         >
           Learn skills that
           <br />
-          <span style={{ color: "#fff" }}>
+          <em
+            style={{
+              fontStyle: "italic",
+              color: "#c8a96e",
+            }}
+          >
             move careers forward.
-          </span>
+          </em>
         </motion.h1>
 
         {/* Sub */}
@@ -96,14 +162,14 @@ export default function Hero() {
           variants={fadeUp}
           initial="hidden"
           animate="visible"
-          custom={0.2}
+          custom={0.22}
           style={{
-            fontSize: "clamp(1rem, 2vw, 1.15rem)",
-            color: "rgba(255,255,255,0.5)",
-            maxWidth: "520px",
-            margin: "0 auto 2.8rem",
-            lineHeight: 1.7,
-            fontWeight: 400,
+            fontSize: "clamp(0.95rem, 1.8vw, 1.1rem)",
+            color: "rgba(237,232,223,0.5)",
+            maxWidth: "500px",
+            margin: "0 auto 3rem",
+            lineHeight: 1.75,
+            fontWeight: 300,
           }}
         >
           On-demand courses built by practitioners not slideshow lecturers.
@@ -115,7 +181,7 @@ export default function Hero() {
           variants={fadeUp}
           initial="hidden"
           animate="visible"
-          custom={0.3}
+          custom={0.34}
           style={{
             display: "flex",
             gap: "1rem",
@@ -125,35 +191,38 @@ export default function Hero() {
         >
           <motion.a
             href="/signup"
-            whileHover={{ scale: 1.03, opacity: 0.92 }}
+            whileHover={{ scale: 1.03, boxShadow: "0 0 32px rgba(200,169,110,0.22)" }}
             whileTap={{ scale: 0.97 }}
             style={{
-              background: "#fff",
-              color: "#000",
+              background: "#c8a96e",
+              color: "#0e0d0b",
               fontWeight: 700,
-              fontSize: "0.95rem",
-              padding: "0.85rem 2rem",
-              borderRadius: "8px",
+              fontSize: "0.9rem",
+              letterSpacing: "0.03em",
+              padding: "0.9rem 2.2rem",
+              borderRadius: "4px",
               textDecoration: "none",
               display: "inline-block",
+              fontFamily: "'DM Sans', sans-serif",
             }}
           >
             Start Learning Free →
           </motion.a>
           <motion.a
             href="#courses"
-            whileHover={{ scale: 1.03, borderColor: "rgba(255,255,255,0.4)" }}
+            whileHover={{ borderColor: "rgba(200,169,110,0.4)", color: "#ede8df" }}
             whileTap={{ scale: 0.97 }}
             style={{
               background: "transparent",
-              color: "rgba(255,255,255,0.7)",
+              color: "rgba(237,232,223,0.55)",
               fontWeight: 500,
-              fontSize: "0.95rem",
-              padding: "0.85rem 2rem",
-              borderRadius: "8px",
+              fontSize: "0.9rem",
+              padding: "0.9rem 2.2rem",
+              borderRadius: "4px",
               textDecoration: "none",
-              border: "1px solid rgba(255,255,255,0.14)",
+              border: "1px solid rgba(237,232,223,0.12)",
               display: "inline-block",
+              transition: "border-color 0.2s, color 0.2s",
             }}
           >
             Browse Courses
@@ -165,9 +234,9 @@ export default function Hero() {
           variants={fadeUp}
           initial="hidden"
           animate="visible"
-          custom={0.45}
+          custom={0.5}
           style={{
-            marginTop: "4rem",
+            marginTop: "4.5rem",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -180,31 +249,54 @@ export default function Hero() {
               <div
                 key={l}
                 style={{
-                  width: "34px",
-                  height: "34px",
+                  width: "32px",
+                  height: "32px",
                   borderRadius: "50%",
-                  background: `hsl(0, 0%, ${20 + i * 8}%)`,
-                  border: "2px solid #0a0a0a",
-                  marginLeft: i === 0 ? 0 : "-9px",
+                  background: `hsl(38, ${18 + i * 5}%, ${20 + i * 5}%)`,
+                  border: "2px solid #0e0d0b",
+                  marginLeft: i === 0 ? 0 : "-8px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "0.68rem",
+                  fontSize: "0.62rem",
                   fontWeight: 700,
-                  color: "#fff",
+                  color: "#c8a96e",
                 }}
               >
                 {l}
               </div>
             ))}
           </div>
-          <span style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.85rem" }}>
+          <span style={{ color: "rgba(237,232,223,0.38)", fontSize: "0.82rem", fontWeight: 300 }}>
             Joined by{" "}
-            <strong style={{ color: "rgba(255,255,255,0.8)" }}>48,000+</strong>{" "}
+            <strong style={{ color: "#c8a96e", fontWeight: 600 }}>48,000+</strong>{" "}
             learners this year
           </span>
         </motion.div>
       </div>
+
+      {/* Decorative large editorial number watermark */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2, delay: 0.6 }}
+        aria-hidden
+        style={{
+          position: "absolute",
+          bottom: "-4rem",
+          right: "-2rem",
+          fontFamily: "'Playfair Display', serif",
+          fontSize: "clamp(10rem, 22vw, 20rem)",
+          fontWeight: 900,
+          color: "rgba(200,169,110,0.025)",
+          lineHeight: 1,
+          userSelect: "none",
+          pointerEvents: "none",
+          letterSpacing: "-0.04em",
+        }}
+      >
+        01
+      </motion.div>
     </section>
   );
 }

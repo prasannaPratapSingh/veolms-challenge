@@ -8,12 +8,12 @@ const sectionFade: Variants = {
 
 const stepsContainer: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
+  visible: { transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
 };
 
 const stepItem: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" as const } },
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
 };
 
 export default function HowItWorks() {
@@ -21,42 +21,75 @@ export default function HowItWorks() {
     <section
       id="how-it-works"
       style={{
-        background: "#111",
-        borderTop: "1px solid rgba(255,255,255,0.05)",
-        borderBottom: "1px solid rgba(255,255,255,0.05)",
-        padding: "7rem 1.5rem",
+        background: "#161510",
+        borderTop: "1px solid rgba(200,169,110,0.08)",
+        borderBottom: "1px solid rgba(200,169,110,0.08)",
+        padding: "8rem 1.5rem",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
-      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+      {/* Decorative watermark */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          top: "-5rem",
+          right: "-3rem",
+          fontFamily: "'Playfair Display', serif",
+          fontSize: "clamp(10rem, 22vw, 20rem)",
+          fontWeight: 900,
+          color: "rgba(200,169,110,0.025)",
+          lineHeight: 1,
+          userSelect: "none",
+          pointerEvents: "none",
+          letterSpacing: "-0.04em",
+        }}
+      >
+        03
+      </div>
+
+      <div style={{ maxWidth: "1100px", margin: "0 auto", position: "relative" }}>
         {/* Header */}
         <motion.div
           variants={sectionFade}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          style={{ textAlign: "center", marginBottom: "4rem" }}
+          style={{ textAlign: "center", marginBottom: "5rem" }}
         >
-          <span
+          <div
             style={{
-              color: "rgba(255,255,255,0.35)",
-              fontSize: "0.72rem",
-              fontWeight: 700,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              display: "block",
-              marginBottom: "0.5rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.6rem",
+              marginBottom: "0.75rem",
             }}
           >
-            The Process
-          </span>
+            <span style={{ display: "block", width: "20px", height: "1px", background: "#c8a96e" }} />
+            <span
+              style={{
+                color: "#c8a96e",
+                fontSize: "0.65rem",
+                fontWeight: 600,
+                letterSpacing: "0.16em",
+                textTransform: "uppercase",
+              }}
+            >
+              The Process
+            </span>
+            <span style={{ display: "block", width: "20px", height: "1px", background: "#c8a96e" }} />
+          </div>
           <h2
             style={{
-              color: "#fff",
-              fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+              fontFamily: "'Playfair Display', serif",
+              color: "#ede8df",
+              fontSize: "clamp(2rem, 3.5vw, 3rem)",
               fontWeight: 800,
-              letterSpacing: "-0.04em",
+              letterSpacing: "-0.03em",
               margin: 0,
-              lineHeight: 1.1,
+              lineHeight: 1.05,
             }}
           >
             Simple as 1 — 2 — 3
@@ -72,56 +105,71 @@ export default function HowItWorks() {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "1.5rem",
+            gap: "0",
           }}
         >
-          {STEPS.map((step) => (
+          {STEPS.map((step, i) => (
             <motion.div
               key={step.num}
               variants={stepItem}
-              whileHover={{ borderColor: "rgba(255,255,255,0.14)", y: -3 }}
+              whileHover={{ background: "rgba(200,169,110,0.03)" }}
               transition={{ duration: 0.2 }}
               style={{
-                padding: "2rem",
-                borderRadius: "12px",
-                border: "1px solid rgba(255,255,255,0.07)",
-                background: "#0a0a0a",
+                padding: "2.5rem 2.5rem",
+                borderRight: i < STEPS.length - 1 ? "1px solid rgba(200,169,110,0.08)" : "none",
+                borderTop: "1px solid rgba(200,169,110,0.08)",
+                position: "relative",
               }}
             >
-              <span
+              {/* Large editorial step number */}
+              <div
                 style={{
-                  fontSize: "3rem",
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "5rem",
                   fontWeight: 900,
-                  color: "rgba(255,255,255,0.05)",
-                  lineHeight: 1,
-                  display: "block",
-                  marginBottom: "1rem",
+                  color: "rgba(200,169,110,0.1)",
+                  lineHeight: 0.9,
                   letterSpacing: "-0.04em",
+                  marginBottom: "1.5rem",
                 }}
               >
                 {step.num}
-              </span>
+              </div>
               <h3
                 style={{
-                  color: "#fff",
+                  color: "#ede8df",
                   fontSize: "1.05rem",
-                  fontWeight: 700,
-                  marginBottom: "0.6rem",
-                  letterSpacing: "-0.02em",
+                  fontWeight: 600,
+                  marginBottom: "0.75rem",
+                  letterSpacing: "-0.01em",
+                  lineHeight: 1.3,
                 }}
               >
                 {step.title}
               </h3>
               <p
                 style={{
-                  color: "rgba(255,255,255,0.42)",
-                  fontSize: "0.875rem",
-                  lineHeight: 1.7,
+                  color: "rgba(237,232,223,0.4)",
+                  fontSize: "0.85rem",
+                  lineHeight: 1.75,
                   margin: 0,
+                  fontWeight: 300,
                 }}
               >
                 {step.desc}
               </p>
+
+              {/* Bottom accent line */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: "2.5rem",
+                  width: "32px",
+                  height: "2px",
+                  background: "rgba(200,169,110,0.3)",
+                }}
+              />
             </motion.div>
           ))}
         </motion.div>

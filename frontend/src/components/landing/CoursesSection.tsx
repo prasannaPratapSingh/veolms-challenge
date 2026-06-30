@@ -5,8 +5,6 @@ import { useCourse } from "../../features/course/hook/course.hook";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-
-
 const sectionVariants: Variants = {
   hidden: { opacity: 0, y: 32 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const } },
@@ -14,37 +12,54 @@ const sectionVariants: Variants = {
 
 const gridVariants: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" as const } },
 };
 
 export default function CoursesSection() {
-
   const { fetchCourses } = useCourse();
-
   const coursesData = useSelector((state: any) => state?.course?.courses);
   const loading = useSelector((state: any) => state?.course?.loading);
 
   useEffect(() => {
     fetchCourses();
-  }, [])
+  }, []);
 
   return (
     <section
       id="courses"
-      style={{ background: "#0a0a0a", padding: "7rem 1.5rem" }}
+      style={{ background: "#0e0d0b", padding: "8rem 1.5rem", position: "relative", overflow: "hidden" }}
     >
-      {/* Responsive grid breakpoints */}
+      {/* Decorative large watermark */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          bottom: "-5rem",
+          left: "-3rem",
+          fontFamily: "'Playfair Display', serif",
+          fontSize: "clamp(10rem, 22vw, 20rem)",
+          fontWeight: 900,
+          color: "rgba(200,169,110,0.025)",
+          lineHeight: 1,
+          userSelect: "none",
+          pointerEvents: "none",
+          letterSpacing: "-0.04em",
+        }}
+      >
+        02
+      </div>
+
       <style>{`
         .courses-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           grid-auto-rows: 1fr;
-          gap: 1.25rem;
+          gap: 1.5rem;
         }
         @media (max-width: 900px) {
           .courses-grid { grid-template-columns: repeat(2, 1fr); }
@@ -53,7 +68,8 @@ export default function CoursesSection() {
           .courses-grid { grid-template-columns: 1fr; }
         }
       `}</style>
-      <div style={{ maxWidth: "1140px", margin: "0 auto" }}>
+
+      <div style={{ maxWidth: "1140px", margin: "0 auto", position: "relative" }}>
         {/* Header */}
         <motion.div
           variants={sectionVariants}
@@ -64,88 +80,126 @@ export default function CoursesSection() {
             display: "flex",
             alignItems: "flex-end",
             justifyContent: "space-between",
-            marginBottom: "3rem",
+            marginBottom: "3.5rem",
             flexWrap: "wrap",
             gap: "1rem",
           }}
         >
           <div>
-            <span
+            <div
               style={{
-                display: "block",
-                color: "rgba(255,255,255,0.35)",
-                fontSize: "0.72rem",
-                fontWeight: 700,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                marginBottom: "0.5rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.6rem",
+                marginBottom: "0.6rem",
               }}
             >
-              What we offer
-            </span>
+              <span
+                style={{
+                  display: "block",
+                  width: "20px",
+                  height: "1px",
+                  background: "#c8a96e",
+                }}
+              />
+              <span
+                style={{
+                  color: "#c8a96e",
+                  fontSize: "0.65rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                }}
+              >
+                What we offer
+              </span>
+            </div>
             <h2
               style={{
-                color: "#fff",
-                fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+                fontFamily: "'Playfair Display', serif",
+                color: "#ede8df",
+                fontSize: "clamp(2rem, 3.5vw, 3rem)",
                 fontWeight: 800,
-                letterSpacing: "-0.04em",
-                lineHeight: 1.1,
+                letterSpacing: "-0.03em",
+                lineHeight: 1.05,
                 margin: 0,
               }}
             >
               Featured Courses
             </h2>
           </div>
-          <a
-            href="/courses"
+          <Link
+            to="/courses"
             style={{
-              color: "rgba(255,255,255,0.45)",
-              fontSize: "0.875rem",
+              color: "rgba(200,169,110,0.6)",
+              fontSize: "0.8rem",
               fontWeight: 500,
               textDecoration: "none",
-              borderBottom: "1px solid rgba(255,255,255,0.18)",
+              borderBottom: "1px solid rgba(200,169,110,0.2)",
               paddingBottom: "2px",
-              transition: "color 0.2s",
               whiteSpace: "nowrap",
+              letterSpacing: "0.03em",
+              transition: "color 0.2s, border-color 0.2s",
             }}
-            onMouseEnter={(e) =>
-              ((e.target as HTMLElement).style.color = "#fff")
-            }
-            onMouseLeave={(e) =>
-              ((e.target as HTMLElement).style.color = "rgba(255,255,255,0.45)")
-            }
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.color = "#c8a96e";
+              (e.currentTarget as HTMLElement).style.borderBottomColor = "#c8a96e";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.color = "rgba(200,169,110,0.6)";
+              (e.currentTarget as HTMLElement).style.borderBottomColor = "rgba(200,169,110,0.2)";
+            }}
           >
             View all courses →
-          </a>
+          </Link>
         </motion.div>
 
         {/* Grid */}
         {loading ? (
-          /* Skeleton cards while loading */
           <div className="courses-grid">
             {Array.from({ length: 3 }).map((_, i) => (
               <div
                 key={i}
                 style={{
-                  background: "#111",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                  borderRadius: "14px",
+                  background: "#161510",
+                  border: "1px solid rgba(200,169,110,0.08)",
+                  borderRadius: "6px",
                   overflow: "hidden",
-                  height: "380px",
-                  animation: "pulse 1.5s ease-in-out infinite",
+                  height: "400px",
                 }}
               >
-                <div style={{ height: "180px", background: "rgba(255,255,255,0.04)" }} />
-                <div style={{ padding: "1.25rem 1.4rem" }}>
-                  <div style={{ height: "16px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", marginBottom: "0.75rem", width: "80%" }} />
-                  <div style={{ height: "12px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", marginBottom: "0.5rem", width: "100%" }} />
-                  <div style={{ height: "12px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", width: "60%" }} />
+                <div
+                  style={{
+                    height: "190px",
+                    background: "rgba(200,169,110,0.04)",
+                    animation: "pulse 1.8s ease-in-out infinite",
+                  }}
+                />
+                <div style={{ padding: "1.4rem 1.5rem" }}>
+                  <div
+                    style={{
+                      height: "18px",
+                      background: "rgba(200,169,110,0.06)",
+                      borderRadius: "3px",
+                      marginBottom: "0.8rem",
+                      width: "75%",
+                    }}
+                  />
+                  <div style={{ height: "12px", background: "rgba(200,169,110,0.04)", borderRadius: "3px", marginBottom: "0.5rem", width: "100%" }} />
+                  <div style={{ height: "12px", background: "rgba(200,169,110,0.04)", borderRadius: "3px", width: "55%" }} />
                 </div>
               </div>
             ))}
           </div>
         ) : coursesData.length === 0 ? (
-          <p style={{ color: "rgba(255,255,255,0.3)", textAlign: "center", fontSize: "0.9rem" }}>
+          <p
+            style={{
+              color: "rgba(237,232,223,0.25)",
+              textAlign: "center",
+              fontSize: "0.9rem",
+              fontWeight: 300,
+            }}
+          >
             No courses available yet.
           </p>
         ) : (

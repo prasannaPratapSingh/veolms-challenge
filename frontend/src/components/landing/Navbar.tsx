@@ -28,7 +28,6 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -39,14 +38,12 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Close mobile menu on resize to desktop
   useEffect(() => {
     const onResize = () => { if (window.innerWidth >= 768) setMobileOpen(false); };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -61,45 +58,98 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
 
   return (
     <>
+      <style>{`
+        .nav-link {
+          color: rgba(237,232,223,0.5);
+          font-size: 0.82rem;
+          font-weight: 500;
+          text-decoration: none;
+          letter-spacing: 0.04em;
+          transition: color 0.2s;
+          position: relative;
+        }
+        .nav-link::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 0;
+          height: 1px;
+          background: #c8a96e;
+          transition: width 0.2s ease;
+        }
+        .nav-link:hover { color: #ede8df; }
+        .nav-link:hover::after { width: 100%; }
+      `}</style>
+
       <motion.nav
         id="navbar"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className={[
-          "fixed top-0 left-0 right-0 z-[100] h-[68px] px-5 sm:px-8",
-          "flex items-center justify-between",
-          "transition-all duration-300",
-          scrolled || mobileOpen
-            ? "bg-[rgba(10,10,10,0.98)] backdrop-blur-[14px] shadow-[0_1px_0_rgba(255,255,255,0.06)]"
-            : "bg-transparent",
-        ].join(" ")}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          height: "68px",
+          padding: "0 2rem",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          transition: "background 0.3s, border-color 0.3s, backdrop-filter 0.3s",
+          background: scrolled || mobileOpen
+            ? "rgba(14,13,11,0.96)"
+            : "transparent",
+          backdropFilter: scrolled || mobileOpen ? "blur(16px)" : "none",
+          borderBottom: scrolled || mobileOpen
+            ? "1px solid rgba(200,169,110,0.1)"
+            : "1px solid transparent",
+        }}
       >
         {/* Logo */}
         <Link
           to="/"
-          className="text-[1.2rem] sm:text-[1.35rem] font-extrabold tracking-[-0.03em] text-white no-underline shrink-0"
           onClick={() => setMobileOpen(false)}
+          style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontSize: "1.35rem",
+            fontWeight: 800,
+            color: "#ede8df",
+            textDecoration: "none",
+            letterSpacing: "-0.02em",
+            flexShrink: 0,
+          }}
         >
           LearnSphere
         </Link>
 
         {/* Desktop nav links */}
         {!minimal && (
-          <ul className="hidden md:flex gap-8 list-none m-0 p-0">
+          <ul
+            style={{
+              display: "flex",
+              gap: "2.5rem",
+              listStyle: "none",
+              margin: 0,
+              padding: 0,
+            }}
+            className="nav-desktop"
+          >
+            <style>{`
+              @media (max-width: 767px) { .nav-desktop { display: none !important; } }
+            `}</style>
             {NAV_LINKS.map((item) => (
               <li key={item}>
                 {item === "Courses" ? (
-                  <Link
-                    to="/courses"
-                    className="text-white/60 text-sm font-medium no-underline transition-colors duration-200 hover:text-white"
-                  >
+                  <Link to="/courses" className="nav-link">
                     {item}
                   </Link>
                 ) : (
                   <a
                     href={`#${item.toLowerCase().replace(" ", "-")}`}
-                    className="text-white/60 text-sm font-medium no-underline transition-colors duration-200 hover:text-white"
+                    className="nav-link"
                   >
                     {item}
                   </a>
@@ -110,22 +160,56 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
         )}
 
         {/* Right side */}
-        <div className="flex items-center gap-3">
-          {/* Desktop auth area */}
-          <div className="hidden md:flex items-center gap-3">
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          {/* Desktop auth */}
+          <div
+            style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
+            className="auth-desktop"
+          >
+            <style>{`
+              @media (max-width: 767px) { .auth-desktop { display: none !important; } }
+            `}</style>
             {user ? (
-              <div className="relative flex items-center gap-3" ref={dropdownRef}>
-                <span className="text-white/60 text-sm font-medium hidden sm:block">{name}</span>
+              <div
+                style={{ position: "relative", display: "flex", alignItems: "center", gap: "0.75rem" }}
+                ref={dropdownRef}
+              >
+                <span
+                  style={{
+                    color: "rgba(237,232,223,0.5)",
+                    fontSize: "0.8rem",
+                    fontWeight: 400,
+                    display: "none",
+                  }}
+                  className="name-sm"
+                >
+                  {name}
+                </span>
+                <style>{`@media (min-width: 640px) { .name-sm { display: block !important; } }`}</style>
                 <button
                   onClick={() => setDropdownOpen((v) => !v)}
-                  className="w-9 h-9 rounded-full overflow-hidden border border-white/10 shrink-0 cursor-pointer transition-opacity duration-200 hover:opacity-80 bg-white flex items-center justify-center"
+                  style={{
+                    width: "34px",
+                    height: "34px",
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    border: "1px solid rgba(200,169,110,0.3)",
+                    flexShrink: 0,
+                    cursor: "pointer",
+                    background: "#1d1b16",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    transition: "border-color 0.2s",
+                  }}
                 >
                   {avatarUrl ? (
-                    <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+                    <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   ) : (
-                    <span className="text-black text-sm font-bold">{initial}</span>
+                    <span style={{ color: "#c8a96e", fontSize: "0.75rem", fontWeight: 700 }}>{initial}</span>
                   )}
                 </button>
+
                 <AnimatePresence>
                   {dropdownOpen && (
                     <motion.div
@@ -133,24 +217,86 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -6, scale: 0.97 }}
                       transition={{ duration: 0.15, ease: "easeOut" }}
-                      className="absolute top-[calc(100%+0.6rem)] right-0 min-w-[160px] bg-[#111] border border-white/10 rounded-xl overflow-hidden shadow-2xl shadow-black/60"
+                      style={{
+                        position: "absolute",
+                        top: "calc(100% + 0.6rem)",
+                        right: 0,
+                        minWidth: "160px",
+                        background: "#161510",
+                        border: "1px solid rgba(200,169,110,0.12)",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        boxShadow: "0 16px 48px rgba(0,0,0,0.6)",
+                      }}
                     >
-                      <div className="px-4 py-3 border-b border-white/[0.06]">
-                        <p className="text-white text-sm font-semibold leading-tight truncate">{name}</p>
+                      <div
+                        style={{
+                          padding: "0.75rem 1rem",
+                          borderBottom: "1px solid rgba(200,169,110,0.08)",
+                        }}
+                      >
+                        <p style={{ color: "#ede8df", fontSize: "0.82rem", fontWeight: 600, margin: 0 }}>
+                          {name}
+                        </p>
                       </div>
-                      <Link to="/dashboard" onClick={() => setDropdownOpen(false)}>
-                        <button className="w-full text-left px-4 py-3 text-sm text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer bg-transparent border-0 font-medium">
-                          Dashboard
-                        </button>
-                      </Link>
-                      <Link to="/profile" onClick={() => setDropdownOpen(false)}>
-                        <button className="w-full text-left px-4 py-3 text-sm text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer bg-transparent border-0 font-medium">
-                          Profile
-                        </button>
-                      </Link>
+                      {[
+                        { label: "Dashboard", to: "/dashboard" },
+                        { label: "Profile", to: "/profile" },
+                      ].map(({ label, to }) => (
+                        <Link
+                          key={label}
+                          to={to}
+                          onClick={() => setDropdownOpen(false)}
+                          style={{ display: "block", textDecoration: "none" }}
+                        >
+                          <button
+                            style={{
+                              width: "100%",
+                              textAlign: "left",
+                              padding: "0.7rem 1rem",
+                              fontSize: "0.8rem",
+                              color: "rgba(237,232,223,0.5)",
+                              background: "transparent",
+                              border: 0,
+                              cursor: "pointer",
+                              fontFamily: "'DM Sans', sans-serif",
+                              transition: "color 0.15s, background 0.15s",
+                            }}
+                            onMouseEnter={(e) => {
+                              (e.currentTarget as HTMLElement).style.color = "#ede8df";
+                              (e.currentTarget as HTMLElement).style.background = "rgba(200,169,110,0.06)";
+                            }}
+                            onMouseLeave={(e) => {
+                              (e.currentTarget as HTMLElement).style.color = "rgba(237,232,223,0.5)";
+                              (e.currentTarget as HTMLElement).style.background = "transparent";
+                            }}
+                          >
+                            {label}
+                          </button>
+                        </Link>
+                      ))}
                       <button
                         onClick={onLogout}
-                        className="w-full text-left px-4 py-3 text-sm text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer bg-transparent border-0 font-medium"
+                        style={{
+                          width: "100%",
+                          textAlign: "left",
+                          padding: "0.7rem 1rem",
+                          fontSize: "0.8rem",
+                          color: "rgba(237,232,223,0.5)",
+                          background: "transparent",
+                          border: 0,
+                          cursor: "pointer",
+                          fontFamily: "'DM Sans', sans-serif",
+                          transition: "color 0.15s, background 0.15s",
+                        }}
+                        onMouseEnter={(e) => {
+                          (e.currentTarget as HTMLElement).style.color = "#ede8df";
+                          (e.currentTarget as HTMLElement).style.background = "rgba(200,169,110,0.06)";
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.currentTarget as HTMLElement).style.color = "rgba(237,232,223,0.5)";
+                          (e.currentTarget as HTMLElement).style.background = "transparent";
+                        }}
                       >
                         Sign out
                       </button>
@@ -162,14 +308,33 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
               <>
                 <Link
                   to="/login"
-                  className="text-white/70 text-sm font-medium no-underline px-4 py-[0.45rem] rounded-md transition-colors hover:text-white"
+                  style={{
+                    color: "rgba(237,232,223,0.55)",
+                    fontSize: "0.82rem",
+                    fontWeight: 500,
+                    textDecoration: "none",
+                    padding: "0.45rem 0.8rem",
+                    transition: "color 0.2s",
+                  }}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#ede8df")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(237,232,223,0.55)")}
                 >
                   Log in
                 </Link>
-                <motion.div whileHover={{ opacity: 0.88, scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                   <Link
                     to="/signup"
-                    className="bg-white text-black text-sm font-bold no-underline px-5 py-2 rounded-md inline-block"
+                    style={{
+                      background: "#c8a96e",
+                      color: "#0e0d0b",
+                      fontSize: "0.82rem",
+                      fontWeight: 700,
+                      textDecoration: "none",
+                      padding: "0.5rem 1.3rem",
+                      borderRadius: "4px",
+                      display: "inline-block",
+                      letterSpacing: "0.02em",
+                    }}
                   >
                     Get Started
                   </Link>
@@ -178,33 +343,54 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
             )}
           </div>
 
-          {/* Mobile: avatar (if logged in) + hamburger */}
-          <div className="flex md:hidden items-center gap-3">
+          {/* Mobile: avatar + hamburger */}
+          <div
+            style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
+            className="mobile-controls"
+          >
+            <style>{`@media (min-width: 768px) { .mobile-controls { display: none !important; } }`}</style>
             {user && (
               <button
                 onClick={() => { setMobileOpen(false); navigate("/dashboard"); }}
-                className="w-8 h-8 rounded-full overflow-hidden border border-white/10 shrink-0 bg-white flex items-center justify-center"
+                style={{
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "50%",
+                  overflow: "hidden",
+                  border: "1px solid rgba(200,169,110,0.3)",
+                  flexShrink: 0,
+                  background: "#1d1b16",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
               >
                 {avatarUrl ? (
-                  <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+                  <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 ) : (
-                  <span className="text-black text-xs font-bold">{initial}</span>
+                  <span style={{ color: "#c8a96e", fontSize: "0.65rem", fontWeight: 700 }}>{initial}</span>
                 )}
               </button>
             )}
             <button
               onClick={() => setMobileOpen((v) => !v)}
-              className="p-2 text-white/70 hover:text-white transition-colors"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              style={{
+                padding: "0.35rem",
+                color: "rgba(237,232,223,0.6)",
+                background: "transparent",
+                border: 0,
+                cursor: "pointer",
+                transition: "color 0.2s",
+              }}
             >
               {mobileOpen ? (
-                /* X icon */
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                /* Hamburger */
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}
@@ -213,7 +399,7 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
         </div>
       </motion.nav>
 
-      {/* Mobile menu drawer */}
+      {/* Mobile drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -221,17 +407,36 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed top-[68px] left-0 right-0 z-[99] bg-[rgba(10,10,10,0.98)] backdrop-blur-[14px] border-b border-white/[0.06] md:hidden"
+            style={{
+              position: "fixed",
+              top: "68px",
+              left: 0,
+              right: 0,
+              zIndex: 99,
+              background: "rgba(14,13,11,0.97)",
+              backdropFilter: "blur(16px)",
+              borderBottom: "1px solid rgba(200,169,110,0.1)",
+            }}
+            className="mobile-drawer"
           >
-            <div className="px-5 py-4 flex flex-col gap-1">
-              {/* Nav links */}
-              {!minimal && NAV_LINKS.map((item) => (
+            <style>{`@media (min-width: 768px) { .mobile-drawer { display: none !important; } }`}</style>
+            <div style={{ padding: "1.25rem 1.5rem 1.5rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+              {!minimal && NAV_LINKS.map((item) =>
                 item === "Courses" ? (
                   <Link
                     key={item}
                     to="/courses"
                     onClick={() => setMobileOpen(false)}
-                    className="text-white/70 text-base font-medium py-3 border-b border-white/[0.05] no-underline hover:text-white transition-colors"
+                    style={{
+                      color: "rgba(237,232,223,0.6)",
+                      fontSize: "0.95rem",
+                      fontWeight: 400,
+                      padding: "0.8rem 0",
+                      borderBottom: "1px solid rgba(200,169,110,0.07)",
+                      textDecoration: "none",
+                      display: "block",
+                      letterSpacing: "0.02em",
+                    }}
                   >
                     {item}
                   </Link>
@@ -240,50 +445,93 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                     key={item}
                     href={`#${item.toLowerCase().replace(" ", "-")}`}
                     onClick={() => setMobileOpen(false)}
-                    className="text-white/70 text-base font-medium py-3 border-b border-white/[0.05] no-underline hover:text-white transition-colors"
+                    style={{
+                      color: "rgba(237,232,223,0.6)",
+                      fontSize: "0.95rem",
+                      fontWeight: 400,
+                      padding: "0.8rem 0",
+                      borderBottom: "1px solid rgba(200,169,110,0.07)",
+                      textDecoration: "none",
+                      display: "block",
+                      letterSpacing: "0.02em",
+                    }}
                   >
                     {item}
                   </a>
                 )
-              ))}
+              )}
 
-              {/* Auth section */}
               {user ? (
-                <div className="pt-3 flex flex-col gap-1">
-                  <Link
-                    to="/dashboard"
-                    onClick={() => setMobileOpen(false)}
-                    className="text-white/70 text-base font-medium py-3 border-b border-white/[0.05] no-underline hover:text-white transition-colors"
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    to="/profile"
-                    onClick={() => setMobileOpen(false)}
-                    className="text-white/70 text-base font-medium py-3 border-b border-white/[0.05] no-underline hover:text-white transition-colors"
-                  >
-                    Profile
-                  </Link>
+                <div style={{ paddingTop: "0.75rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                  {[
+                    { label: "Dashboard", to: "/dashboard" },
+                    { label: "Profile", to: "/profile" },
+                  ].map(({ label, to }) => (
+                    <Link
+                      key={label}
+                      to={to}
+                      onClick={() => setMobileOpen(false)}
+                      style={{
+                        color: "rgba(237,232,223,0.6)",
+                        fontSize: "0.95rem",
+                        padding: "0.8rem 0",
+                        borderBottom: "1px solid rgba(200,169,110,0.07)",
+                        textDecoration: "none",
+                        display: "block",
+                      }}
+                    >
+                      {label}
+                    </Link>
+                  ))}
                   <button
                     onClick={onLogout}
-                    className="text-left text-white/70 text-base font-medium py-3 hover:text-white transition-colors bg-transparent border-0 cursor-pointer"
+                    style={{
+                      textAlign: "left",
+                      color: "rgba(237,232,223,0.6)",
+                      fontSize: "0.95rem",
+                      padding: "0.8rem 0",
+                      background: "transparent",
+                      border: 0,
+                      cursor: "pointer",
+                      fontFamily: "'DM Sans', sans-serif",
+                    }}
                   >
                     Sign out
                   </button>
                 </div>
               ) : (
-                <div className="pt-4 flex flex-col gap-3">
+                <div style={{ paddingTop: "1rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                   <Link
                     to="/login"
                     onClick={() => setMobileOpen(false)}
-                    className="text-center text-white/80 text-sm font-semibold py-3 border border-white/10 rounded-xl no-underline hover:bg-white/5 transition-colors"
+                    style={{
+                      textAlign: "center",
+                      color: "rgba(237,232,223,0.7)",
+                      fontSize: "0.9rem",
+                      fontWeight: 500,
+                      padding: "0.8rem",
+                      border: "1px solid rgba(200,169,110,0.15)",
+                      borderRadius: "4px",
+                      textDecoration: "none",
+                      display: "block",
+                    }}
                   >
                     Log in
                   </Link>
                   <Link
                     to="/signup"
                     onClick={() => setMobileOpen(false)}
-                    className="text-center bg-white text-black text-sm font-bold py-3 rounded-xl no-underline hover:bg-neutral-100 transition-colors"
+                    style={{
+                      textAlign: "center",
+                      background: "#c8a96e",
+                      color: "#0e0d0b",
+                      fontSize: "0.9rem",
+                      fontWeight: 700,
+                      padding: "0.8rem",
+                      borderRadius: "4px",
+                      textDecoration: "none",
+                      display: "block",
+                    }}
                   >
                     Get Started
                   </Link>
