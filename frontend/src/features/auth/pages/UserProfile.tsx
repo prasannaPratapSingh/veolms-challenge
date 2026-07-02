@@ -86,7 +86,7 @@ export default function UserProfile() {
           transition={{ duration: 0.5, ease: EASE }}
           className="mb-10"
         >
-          <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-1">
+          <h1 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-1">
             Your Profile
           </h1>
           <p style={{ color: "rgba(245, 248, 250,0.4)" }} className="text-sm font-light">Manage your name and avatar</p>
@@ -96,13 +96,13 @@ export default function UserProfile() {
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.08, ease: EASE }}
-          style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.12)" }}
+          style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.12)" }}
           className="rounded-sm overflow-hidden"
         >
           {/* Avatar section */}
           <div className="px-6 sm:px-8 pt-8 pb-6 flex flex-col sm:flex-row items-center sm:items-end gap-6" style={{ borderBottom: "1px solid rgba(157, 180, 198,0.08)" }}>
             <div className="relative group">
-              <div style={{ border: "2px solid rgba(157, 180, 198,0.2)", background: "#1E2A39" }} className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden flex items-center justify-center shrink-0">
+              <div style={{ border: "2px solid rgba(157, 180, 198,0.2)", background: "#1F2A39" }} className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden flex items-center justify-center shrink-0">
                 {preview ? (
                   <img src={preview} alt={displayName} className="w-full h-full object-cover" />
                 ) : (

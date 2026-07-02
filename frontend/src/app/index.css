@@ -8,8 +8,8 @@
 
 :root {
   --bg:        #0B0F14;
-  --surface:   #1E2A39;
-  --surface-2: #1E2A39;
+  --surface:   #1F2A39;
+  --surface-2: #1F2A39;
   --accent:        oklch(0.97 0 0);
   --accent-lo: rgba(157, 180, 198, 0.12);
   --border:        oklch(0.922 0 0);

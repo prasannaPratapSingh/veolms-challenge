@@ -81,11 +81,11 @@ function StatCard({ label, value, delay }: { label: string; value: string | numb
     <motion.div
       initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay, ease: EASE }}
-      style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}
+      style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}
       className="rounded-sm p-5 transition-all duration-300 hover:-translate-y-1"
     >
       <p style={{ color: "rgba(157, 180, 198,0.6)", letterSpacing: "0.12em" }} className="text-xs font-bold uppercase mb-3">{label}</p>
-      <p style={{ fontFamily: "'Playfair Display', serif", color: "#9DB4C6" }} className="text-2xl sm:text-3xl font-extrabold tracking-tight">{value}</p>
+      <p style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#9DB4C6" }} className="text-2xl sm:text-3xl font-extrabold tracking-tight">{value}</p>
     </motion.div>
   );
 }
@@ -102,7 +102,7 @@ function CourseCard({ enrollment, onViewProgress, showViewProgress }: {
   return (
     <div
       onClick={() => navigate(`/course/${course._id}/learn`)}
-      style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}
+      style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}
       className="group rounded-sm overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer"
       onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(157, 180, 198,0.25)")}
       onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(157, 180, 198,0.1)")}
@@ -116,7 +116,7 @@ function CourseCard({ enrollment, onViewProgress, showViewProgress }: {
         )}
       </div>
       <div className="p-4 sm:p-5 flex-1 flex flex-col">
-        <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="font-bold text-sm sm:text-base leading-snug mb-2 line-clamp-2">{course.title}</h3>
+        <h3 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="font-bold text-sm sm:text-base leading-snug mb-2 line-clamp-2">{course.title}</h3>
         {course.createdBy && <p style={{ color: "rgba(245, 248, 250,0.35)" }} className="text-xs mb-3 truncate">{course.createdBy}</p>}
         <p style={{ color: "rgba(157, 180, 198,0.35)" }} className="text-xs mt-auto">Enrolled {enrolledDate}</p>
         {showViewProgress && onViewProgress && (
@@ -150,7 +150,7 @@ function OverviewTab({ name, enrollments, progress, onSetTab }: {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: EASE }}>
       <div className="mb-8">
-        <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2">
+        <h1 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2">
           Welcome back, {name.split(" ")[0] || "Learner"}
         </h1>
         <p style={{ color: "rgba(245, 248, 250,0.4)" }} className="text-sm sm:text-base font-light">Your learning dashboard</p>
@@ -190,7 +190,7 @@ function MyCoursesTab({ enrollments, onViewProgress }: { enrollments: Enrollment
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: EASE }}>
       <div className="mb-8">
-        <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2">My Courses</h1>
+        <h1 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2">My Courses</h1>
         <p style={{ color: "rgba(245, 248, 250,0.4)" }} className="text-sm sm:text-base font-light">All your enrolled courses</p>
       </div>
       {enrollments.length === 0 ? (
@@ -223,7 +223,7 @@ function ProgressTab({ progress, filteredCourseId }: { progress: ProgressRecord[
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: EASE }}>
       <div className="mb-8">
-        <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2">Progress</h1>
+        <h1 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2">Progress</h1>
         <p style={{ color: "rgba(245, 248, 250,0.4)" }} className="text-sm sm:text-base font-light">Track your lesson completion across all courses</p>
       </div>
       {entries.length === 0 ? (
@@ -236,7 +236,7 @@ function ProgressTab({ progress, filteredCourseId }: { progress: ProgressRecord[
             const completedCount = records.filter((r) => r.completed).length;
             return (
               <motion.div key={courseId} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.07, ease: EASE }}
-                style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.1)" }} className="rounded-sm overflow-hidden">
+                style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.1)" }} className="rounded-sm overflow-hidden">
                 <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1" style={{ borderBottom: "1px solid rgba(157, 180, 198,0.07)" }}>
                   <h3 style={{ color: "#F5F8FA" }} className="font-bold text-sm sm:text-base line-clamp-1">{title}</h3>
                   <span style={{ color: "rgba(157, 180, 198,0.5)" }} className="text-xs font-bold shrink-0">{completedCount} / {records.length} lessons</span>
@@ -390,7 +390,7 @@ export default function UserDashboard() {
     <div className="flex h-screen antialiased overflow-hidden pt-[68px]" style={{ background: "#0B0F14", color: "#F5F8FA" }}>
 
       {/* ── Desktop sidebar ── */}
-      <aside className="hidden md:flex w-64 shrink-0 flex-col h-full" style={{ background: "#1E2A39", borderRight: "1px solid rgba(157, 180, 198,0.1)" }}>
+      <aside className="hidden md:flex w-64 shrink-0 flex-col h-full" style={{ background: "#1F2A39", borderRight: "1px solid rgba(157, 180, 198,0.1)" }}>
         <SidebarContent {...sidebarProps} />
       </aside>
 

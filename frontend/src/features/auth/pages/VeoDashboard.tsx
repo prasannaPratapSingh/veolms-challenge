@@ -84,13 +84,13 @@ export default function VeoDashboard() {
       <aside 
         className={`fixed inset-y-0 left-0 z-40 w-72 flex flex-col justify-between shrink-0 transition-transform duration-300 transform 
           ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
-        style={{ borderRight: "1px solid rgba(157, 180, 198,0.1)", background: "#1E2A39" }}
+        style={{ borderRight: "1px solid rgba(157, 180, 198,0.1)", background: "#1F2A39" }}
       >
         <div className="p-8 relative">
           {/* Brand */}
           <div className="mb-12 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <span style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA", fontSize: "1.2rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
+              <span style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA", fontSize: "1.2rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
                 LearnSphere
               </span>
               <span style={{ color: "#9DB4C6", background: "rgba(157, 180, 198,0.1)", border: "1px solid rgba(157, 180, 198,0.2)", fontSize: "0.55rem", fontWeight: 700, letterSpacing: "0.1em" }} className="uppercase px-2 py-0.5 rounded-sm ml-1">
@@ -203,7 +203,7 @@ export default function VeoDashboard() {
         {!isSidebarOpen && (
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="fixed top-6 left-6 z-30 p-2 bg-[#1E2A39] text-[rgba(245, 248, 250,0.6)] hover:text-[#F5F8FA] hover:bg-white/5 rounded-md border border-[rgba(157, 180, 198,0.15)] transition-colors shadow-lg"
+            className="fixed top-6 left-6 z-30 p-2 bg-[#1F2A39] text-[rgba(245, 248, 250,0.6)] hover:text-[#F5F8FA] hover:bg-white/5 rounded-md border border-[rgba(157, 180, 198,0.15)] transition-colors shadow-lg"
             title="Open sidebar"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -253,7 +253,7 @@ function SectionHeader({ title, subtitle, badge }: { title: string; subtitle: st
           <span style={{ color: "#9DB4C6", fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" }}>{badge}</span>
         </div>
       )}
-      <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-4xl lg:text-5xl font-extrabold tracking-tight mb-3">
+      <h1 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="text-4xl lg:text-5xl font-extrabold tracking-tight mb-3">
         {title}
       </h1>
       <p style={{ color: "rgba(245, 248, 250,0.4)" }} className="text-base max-w-2xl font-light">{subtitle}</p>
@@ -293,7 +293,7 @@ function OverviewTab({ user }: { user: any }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: i * 0.1, ease: EASE }}
-            style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}
+            style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}
             className="group rounded-sm p-6 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
             onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(157, 180, 198,0.22)")}
             onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(157, 180, 198,0.1)")}
@@ -302,7 +302,7 @@ function OverviewTab({ user }: { user: any }) {
               <p style={{ color: "rgba(157, 180, 198,0.55)", letterSpacing: "0.12em" }} className="text-xs font-bold uppercase mb-4">
                 {card.label}
               </p>
-              <p style={{ fontFamily: "'Playfair Display', serif", color: "#9DB4C6" }} className=" text-2xl sm:text-3xl font-extrabold tracking-tight">
+              <p style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#9DB4C6" }} className=" text-2xl sm:text-3xl font-extrabold tracking-tight">
                 {card.value}
               </p>
             </div>
@@ -375,7 +375,7 @@ function CoursesTab({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: i * 0.05, ease: EASE }}
               key={course._id}
-              style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}
+              style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}
               className="group rounded-sm overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 cursor-pointer"
               onMouseEnter={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(157, 180, 198,0.25)")}
               onMouseLeave={e => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(157, 180, 198,0.1)")}
@@ -401,7 +401,7 @@ function CoursesTab({
               </div>
 
               <div className="p-6 flex-1 flex flex-col">
-                <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="font-extrabold text-xl leading-tight mb-2 line-clamp-1">{course.title}</h3>
+                <h3 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="font-extrabold text-xl leading-tight mb-2 line-clamp-1">{course.title}</h3>
                 <div className="flex items-center gap-2 mb-4">
                   <div style={{ background: "rgba(157, 180, 198,0.1)", border: "1px solid rgba(157, 180, 198,0.15)" }} className="w-5 h-5 rounded-full flex items-center justify-center">
                     <span style={{ color: "#9DB4C6" }} className="text-[10px] font-bold">{course.createdBy?.charAt(0).toUpperCase()}</span>
@@ -412,7 +412,7 @@ function CoursesTab({
                 <div className="flex items-center justify-between pt-5 mt-auto" style={{ borderTop: "1px solid rgba(157, 180, 198,0.08)" }}>
                   <div className="flex flex-col">
                     <span style={{ color: "rgba(157, 180, 198,0.45)", letterSpacing: "0.1em" }} className="text-[10px] font-bold uppercase mb-0.5">Price</span>
-                    <span style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="font-extrabold text-lg">₹{course.price}</span>
+                    <span style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="font-extrabold text-lg">₹{course.price}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <button
@@ -517,7 +517,7 @@ function UploadTab({ onSuccess, handleUploadCourse }: { onSuccess: (courseId: st
         subtitle="Provide the details for your new course to make it available to learners."
       />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 p-8 lg:p-10 rounded-sm relative overflow-hidden" style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.12)" }}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 p-8 lg:p-10 rounded-sm relative overflow-hidden" style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.12)" }}>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Title */}
@@ -687,7 +687,7 @@ function EditCourseModal({ course, onClose, handleUpdateCourse }: { course: any;
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ duration: 0.3, ease: EASE }}
         className="relative w-full max-w-2xl rounded-sm shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
-        style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.15)" }}
+        style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.15)" }}
       >
         <div className="p-6 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(157, 180, 198,0.08)", background: "rgba(157, 180, 198,0.02)" }}>
           <h2 className="text-xl font-bold text-white">Edit Course</h2>

@@ -21,7 +21,7 @@ export default function StatsBar() {
   return (
     <section
       style={{
-        background: "#1E2A39",
+        background: "#1F2A39",
         borderTop: "1px solid rgba(157, 180, 198,0.1)",
         borderBottom: "1px solid rgba(157, 180, 198,0.1)",
         padding: "0 2rem",

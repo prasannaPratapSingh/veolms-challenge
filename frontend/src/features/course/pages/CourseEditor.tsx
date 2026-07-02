@@ -203,7 +203,7 @@ export default function CourseEditor() {
                             <IconArrowLeft />
                         </button>
                         <div>
-                            <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-lg font-extrabold truncate max-w-xs">
+                            <h1 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="text-lg font-extrabold truncate max-w-xs">
                                 {course.title}
                             </h1>
                             <p style={{ color: "rgba(157, 180, 198,0.45)" }} className="text-xs">Course Editor</p>
@@ -261,7 +261,7 @@ function GeneralTab({ course, register, handleSubmit, errors, isSubmitting, onSu
     const labelStyle = { color: "rgba(157, 180, 198,0.6)" };
 
     return (
-        <div style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.12)" }} className="rounded-sm overflow-hidden">
+        <div style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.12)" }} className="rounded-sm overflow-hidden">
             <div className="p-6 flex justify-between items-center" style={{ borderBottom: "1px solid rgba(157, 180, 198,0.08)", background: "rgba(157, 180, 198,0.02)" }}>
                 <div>
                     <h2 style={{ color: "#F5F8FA" }} className="text-base font-semibold">General Information</h2>
@@ -431,7 +431,7 @@ function CurriculumTab({ courseId }: { courseId: string }) {
             {editingSection && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setEditingSection(null)} />
-                    <div style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.15)" }} className="relative w-full max-w-md rounded-sm shadow-2xl p-6">
+                    <div style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.15)" }} className="relative w-full max-w-md rounded-sm shadow-2xl p-6">
                         <div className="flex items-center justify-between mb-5">
                             <h3 style={{ color: "#F5F8FA" }} className="font-bold">Edit Section</h3>
                             <button onClick={() => setEditingSection(null)} style={{ color: "rgba(157, 180, 198,0.4)" }} className="hover:text-[#9DB4C6] transition-colors"><IconX /></button>
@@ -857,7 +857,7 @@ function VideoUploadModal({ lesson, onClose }: { lesson: Lesson; onClose: () => 
                 onClick={handleClose}
             />
 
-            <div style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.15)" }} className="relative w-full max-w-lg rounded-sm shadow-2xl overflow-hidden">
+            <div style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.15)" }} className="relative w-full max-w-lg rounded-sm shadow-2xl overflow-hidden">
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(157, 180, 198,0.08)", background: "rgba(157, 180, 198,0.02)" }}>
                     <div className="flex items-center gap-2">

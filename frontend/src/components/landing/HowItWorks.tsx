@@ -21,7 +21,7 @@ export default function HowItWorks() {
     <section
       id="how-it-works"
       style={{
-        background: "#1E2A39",
+        background: "#1F2A39",
         borderTop: "1px solid rgba(157, 180, 198,0.08)",
         borderBottom: "1px solid rgba(157, 180, 198,0.08)",
         padding: "8rem 1.5rem",

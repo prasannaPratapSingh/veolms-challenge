@@ -36,7 +36,7 @@ function FilterPill({ active, onClick, children }: { active: boolean; onClick: (
 /* ─── Skeleton card ─── */
 function SkeletonCard() {
   return (
-    <div style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.08)" }} className="rounded-sm overflow-hidden animate-pulse">
+    <div style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.08)" }} className="rounded-sm overflow-hidden animate-pulse">
       <div className="h-[180px]" style={{ background: "rgba(157, 180, 198,0.04)" }} />
       <div className="p-5 space-y-3">
         <div className="h-4 rounded-sm w-4/5" style={{ background: "rgba(157, 180, 198,0.06)" }} />
@@ -126,7 +126,7 @@ export default function CoursesPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="px-6 py-16"
-        style={{ background: "#1E2A39", borderBottom: "1px solid rgba(157, 180, 198,0.1)" }}
+        style={{ background: "#1F2A39", borderBottom: "1px solid rgba(157, 180, 198,0.1)" }}
       >
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
@@ -139,7 +139,7 @@ export default function CoursesPage() {
             <span style={{ color: "#9DB4C6", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase" }}>All Courses</span>
             <span style={{ display: "block", width: "20px", height: "1px", background: "#9DB4C6" }} />
           </motion.div>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-4">
+          <h1 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-4">
             Explore Courses
           </h1>
           <p style={{ color: "rgba(245, 248, 250,0.45)" }} className="text-base leading-relaxed mb-10 max-w-xl mx-auto font-light">

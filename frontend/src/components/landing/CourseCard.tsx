@@ -32,7 +32,7 @@ export default function CourseCard({ course }: Props) {
       whileHover={{ y: -5 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
       style={{
-        background: "#1E2A39",
+        background: "#1F2A39",
         border: "1px solid rgba(157, 180, 198,0.1)",
         borderRadius: "6px",
         overflow: "hidden",
@@ -47,7 +47,7 @@ export default function CourseCard({ course }: Props) {
       <div
         style={{
           height: "190px",
-          background: "#1E2A39",
+          background: "#1F2A39",
           overflow: "hidden",
           position: "relative",
           flexShrink: 0,

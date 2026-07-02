@@ -228,7 +228,7 @@ export default function Checkout() {
           </Link>
 
           {/* Thumbnail */}
-          <div className="w-full aspect-video rounded-sm overflow-hidden" style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}>
+          <div className="w-full aspect-video rounded-sm overflow-hidden" style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.1)" }}>
             {course.thumbnail ? (
               <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
             ) : (
@@ -238,7 +238,7 @@ export default function Checkout() {
 
           {/* Title + description */}
           <div>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-2xl lg:text-3xl font-extrabold tracking-tight mb-3">
+            <h1 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="text-2xl lg:text-3xl font-extrabold tracking-tight mb-3">
               {course.title}
             </h1>
             <p style={{ color: "rgba(245, 248, 250,0.42)" }} className="text-sm leading-relaxed line-clamp-3 font-light">
@@ -266,7 +266,7 @@ export default function Checkout() {
                 <div
                   key={section._id}
                   className="flex items-center justify-between px-4 py-3 rounded-sm"
-                  style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.08)" }}
+                  style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.08)" }}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <span style={{ color: "rgba(157, 180, 198,0.3)" }} className="text-xs font-bold w-5 shrink-0 text-right">
@@ -292,9 +292,9 @@ export default function Checkout() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
             className="p-6 space-y-5 sticky top-[88px] rounded-sm"
-            style={{ background: "#1E2A39", border: "1px solid rgba(157, 180, 198,0.12)" }}
+            style={{ background: "#1F2A39", border: "1px solid rgba(157, 180, 198,0.12)" }}
           >
-            <h2 style={{ color: "#F5F8FA", fontFamily: "'Playfair Display', serif" }} className="text-lg font-bold tracking-tight">Order Summary</h2>
+            <h2 style={{ color: "#F5F8FA", fontFamily: "'Helvetica', Arial, sans-serif" }} className="text-lg font-bold tracking-tight">Order Summary</h2>
 
             {/* Course line */}
             <div className="flex items-start justify-between gap-3">
@@ -308,7 +308,7 @@ export default function Checkout() {
             {/* Total */}
             <div className="flex items-center justify-between">
               <span style={{ color: "rgba(245, 248, 250,0.55)" }} className="text-sm font-semibold">Total</span>
-              <span style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-xl font-extrabold tracking-tight">₹{course.price}</span>
+              <span style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="text-xl font-extrabold tracking-tight">₹{course.price}</span>
             </div>
 
             {/* Pay button */}

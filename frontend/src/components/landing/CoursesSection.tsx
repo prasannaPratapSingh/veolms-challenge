@@ -161,7 +161,7 @@ export default function CoursesSection() {
               <div
                 key={i}
                 style={{
-                  background: "#1E2A39",
+                  background: "#1F2A39",
                   border: "1px solid rgba(157, 180, 198,0.08)",
                   borderRadius: "6px",
                   overflow: "hidden",

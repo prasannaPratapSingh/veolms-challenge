@@ -415,7 +415,7 @@ export default function CoursePlayer() {
   return (
     <div className="h-screen flex flex-col pt-[68px] overflow-hidden" style={{ background: "#0B0F14", color: "#F5F8FA" }}>
       {/* Header */}
-      <div className="h-12 shrink-0 flex items-center px-3 sm:px-4 gap-3" style={{ background: "#1E2A39", borderBottom: "1px solid rgba(157, 180, 198,0.1)" }}>
+      <div className="h-12 shrink-0 flex items-center px-3 sm:px-4 gap-3" style={{ background: "#1F2A39", borderBottom: "1px solid rgba(157, 180, 198,0.1)" }}>
         <button onClick={() => navigate(`/course/${courseId}`)}
           className="flex items-center gap-1.5 text-sm font-medium shrink-0 transition-colors"
           style={{ color: "rgba(157, 180, 198,0.5)" }}
@@ -473,7 +473,7 @@ export default function CoursePlayer() {
                 exit={{ width: 0, opacity: 0 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                 className="shrink-0 flex flex-col overflow-hidden fixed right-0 top-0 bottom-0 z-30 md:relative md:z-auto"
-                style={{ background: "#1E2A39", borderLeft: "1px solid rgba(157, 180, 198,0.1)", minWidth: 0 }}
+                style={{ background: "#1F2A39", borderLeft: "1px solid rgba(157, 180, 198,0.1)", minWidth: 0 }}
               >
                 <div className="px-4 py-3 shrink-0 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(157, 180, 198,0.08)" }}>
                   <div>

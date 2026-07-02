@@ -111,7 +111,7 @@ export default function Testimonials() {
               whileHover={{ borderColor: "rgba(157, 180, 198,0.2)", y: -4 }}
               transition={{ duration: 0.2 }}
               style={{
-                background: "#1E2A39",
+                background: "#1F2A39",
                 border: "1px solid rgba(157, 180, 198,0.1)",
                 borderRadius: "6px",
                 padding: "2.25rem",

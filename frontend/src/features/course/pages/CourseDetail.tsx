@@ -79,10 +79,10 @@ function SectionAccordion({
       {/* Header */}
       <button
         onClick={() => setOpen((v) => !v)}
-        style={{ background: "#1E2A39" }}
+        style={{ background: "#1F2A39" }}
         className="w-full flex items-center justify-between px-5 py-4 transition-colors text-left"
         onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(157, 180, 198,0.04)")}
-        onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = "#1E2A39")}
+        onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = "#1F2A39")}
       >
         <div className="flex items-center gap-3">
           <span style={{ color: "rgba(157, 180, 198,0.3)" }} className="text-xs font-bold w-5 text-right shrink-0">
@@ -234,7 +234,7 @@ export default function CourseDetail() {
   return (
     <div className="min-h-screen pt-[68px]" style={{ background: "#0B0F14", color: "#F5F8FA" }}>
       {/* Hero */}
-      <div style={{ background: "#1E2A39", borderBottom: "1px solid rgba(157, 180, 198,0.1)" }}>
+      <div style={{ background: "#1F2A39", borderBottom: "1px solid rgba(157, 180, 198,0.1)" }}>
         <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col lg:flex-row gap-10">
           {/* Left: info */}
           <motion.div
@@ -254,7 +254,7 @@ export default function CourseDetail() {
               All Courses
             </Link>
 
-            <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight mb-4">
+            <h1 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight mb-4">
               {course.title}
             </h1>
 
@@ -284,7 +284,7 @@ export default function CourseDetail() {
             {/* CTA row */}
             <div className="flex items-center gap-4 flex-wrap">
               <div>
-                <span style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA" }} className="text-3xl font-extrabold tracking-tight">₹{course.price}</span>
+                <span style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="text-3xl font-extrabold tracking-tight">₹{course.price}</span>
               </div>
               {isEnrolled ? (
                 <motion.button
@@ -324,7 +324,7 @@ export default function CourseDetail() {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
             className="w-full lg:w-80 xl:w-96 shrink-0"
           >
-            <div className="rounded-sm overflow-hidden aspect-video" style={{ border: "1px solid rgba(157, 180, 198,0.12)", background: "#1E2A39" }}>
+            <div className="rounded-sm overflow-hidden aspect-video" style={{ border: "1px solid rgba(157, 180, 198,0.12)", background: "#1F2A39" }}>
               {course.thumbnail ? (
                 <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
               ) : (

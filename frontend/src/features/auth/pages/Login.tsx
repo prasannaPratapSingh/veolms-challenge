@@ -23,7 +23,7 @@ const inputBase: React.CSSProperties = {
   outline: "none",
   transition: "border-color 0.2s, box-shadow 0.2s",
   boxSizing: "border-box",
-  fontFamily: "'DM Sans', sans-serif",
+  fontFamily: "'Helvetica', Arial, sans-serif",
 };
 const inputError: React.CSSProperties = {
   ...inputBase,
@@ -73,7 +73,7 @@ export default function Login() {
       <motion.div {...fadeUp(0)} style={{ position: "relative", width: "100%", maxWidth: "420px" }}>
         {/* Card */}
         <div style={{
-          background: "#1E2A39",
+          background: "#1F2A39",
           border: "1px solid rgba(157, 180, 198,0.12)",
           borderRadius: "6px",
           padding: "2.5rem 2.25rem",
@@ -81,7 +81,7 @@ export default function Login() {
           {/* Logo */}
           <motion.div {...fadeUp(0.05)} style={{ marginBottom: "2.25rem" }}>
             <Link to="/" style={{
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Helvetica', Arial, sans-serif",
               fontSize: "1.2rem", fontWeight: 800,
               color: "#F5F8FA", textDecoration: "none",
               letterSpacing: "-0.02em", display: "inline-block",
@@ -95,7 +95,7 @@ export default function Login() {
                 Learner Access
               </span>
             </div>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#F5F8FA", fontSize: "1.6rem", fontWeight: 800, letterSpacing: "-0.02em", margin: "0 0 0.4rem" }}>
+            <h1 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA", fontSize: "1.6rem", fontWeight: 800, letterSpacing: "-0.02em", margin: "0 0 0.4rem" }}>
               Welcome back
             </h1>
             <p style={{ color: "rgba(245, 248, 250,0.4)", fontSize: "0.85rem", margin: 0, fontWeight: 300 }}>
@@ -148,7 +148,7 @@ export default function Login() {
                   cursor: (isSubmitting || loading) ? "not-allowed" : "pointer",
                   letterSpacing: "0.02em", transition: "background 0.2s",
                   display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: "'Helvetica', Arial, sans-serif",
                 }}>
                 {(isSubmitting || loading) ? <><Spinner /> Signing in…</> : "Sign in →"}
               </motion.button>
