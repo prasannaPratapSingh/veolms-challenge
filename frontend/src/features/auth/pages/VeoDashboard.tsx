@@ -167,6 +167,20 @@ export default function VeoDashboard() {
             </div>
           </div>
           <motion.button
+            onClick={() => navigate("/")}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            style={{ border: "1px solid rgba(157, 180, 198,0.1)", color: "rgba(245, 248, 250,0.4)" }}
+            className="w-full py-2.5 mb-2 rounded-sm text-sm font-semibold transition-colors flex items-center justify-center gap-2 hover:text-[#F5F8FA]"
+            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(157, 180, 198,0.05)")}
+            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = "transparent")}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            Return to Home
+          </motion.button>
+          <motion.button
             onClick={onLogout}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
