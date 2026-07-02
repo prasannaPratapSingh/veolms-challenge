@@ -571,8 +571,8 @@ function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete
     };
 
     useEffect(() => {
-        if (isExpanded) handleGetLessonsBySection(section._id);
-    }, [isExpanded, section._id]);
+        handleGetLessonsBySection(section._id);
+    }, [section._id]);
 
     const onAddLesson = async (data: LessonForm) => {
         await handleCreateLesson({
