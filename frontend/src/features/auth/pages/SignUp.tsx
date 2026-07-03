@@ -17,9 +17,9 @@ const inputBase: React.CSSProperties = {
   background: "rgba(157, 180, 198,0.04)",
   border: "1px solid rgba(157, 180, 198,0.15)",
   borderRadius: "4px",
-  padding: "0.75rem 1rem",
+  padding: "0.6rem 1rem",
   color: "#F5F8FA",
-  fontSize: "0.88rem",
+  fontSize: "0.86rem",
   outline: "none",
   transition: "border-color 0.2s, box-shadow 0.2s",
   boxSizing: "border-box",
@@ -27,17 +27,16 @@ const inputBase: React.CSSProperties = {
 };
 const inputErrorStyle: React.CSSProperties = { ...inputBase, border: "1px solid rgba(224,112,112,0.5)" };
 
-interface SignUpFormValues extends registerBody { confirmPassword: string; }
+interface SignUpFormValues extends registerBody {}
 
 export default function SignUp() {
   const { handleRegister } = useAuth();
   const navigate = useNavigate();
   const loading = useSelector((state: any) => state.auth.loading);
 
-  const { register, handleSubmit, watch, formState: { errors, isSubmitting } } =
-    useForm<SignUpFormValues>({ defaultValues: { name: "", email: "", password: "", confirmPassword: "" } });
+  const { register, handleSubmit, formState: { errors, isSubmitting } } =
+    useForm<SignUpFormValues>({ defaultValues: { name: "", email: "", password: "" } });
 
-  const passwordValue = watch("password");
   const isBusy = isSubmitting || loading;
 
   const onSubmit = async (data: SignUpFormValues) => {
@@ -116,7 +115,7 @@ export default function SignUp() {
               <FieldError message={errors.email?.message} />
             </motion.div>
 
-            <motion.div {...fadeUp(0.16)} style={{ marginBottom: "1.1rem" }}>
+            <motion.div {...fadeUp(0.16)} style={{ marginBottom: "1.75rem" }}>
               <label htmlFor="password" style={labelStyle}>Password</label>
               <input id="password" type="password" placeholder="Min. 6 characters" autoComplete="new-password"
                 className="auth-input" style={errors.password ? inputErrorStyle : inputBase}
@@ -126,17 +125,6 @@ export default function SignUp() {
                   pattern: { value: /^(?=.*[A-Za-z])(?=.*\d).+$/, message: "Must include at least one letter and one number" },
                 })} />
               <FieldError message={errors.password?.message} />
-            </motion.div>
-
-            <motion.div {...fadeUp(0.19)} style={{ marginBottom: "1.75rem" }}>
-              <label htmlFor="confirmPassword" style={labelStyle}>Confirm password</label>
-              <input id="confirmPassword" type="password" placeholder="Repeat your password" autoComplete="new-password"
-                className="auth-input" style={errors.confirmPassword ? inputErrorStyle : inputBase}
-                {...register("confirmPassword", {
-                  required: "Please confirm your password",
-                  validate: (val) => val === passwordValue || "Passwords do not match",
-                })} />
-              <FieldError message={errors.confirmPassword?.message} />
             </motion.div>
 
             <motion.div {...fadeUp(0.22)}>
