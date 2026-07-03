@@ -64,7 +64,7 @@ export const STEPS: Step[] = [
   },
   {
     num: "03",
-    title: "Get Certified",
-    desc: "Earn verifiable certificates you can share on LinkedIn or attach to job applications.",
+    title: "Track Your Progress",
+    desc: "Keep track of completed lessons, continue where you left off, and stay motivated as you progress through your course.",
   },
 ];
