@@ -15,11 +15,11 @@ passport.use(
         async (accessToken, refreshToken, profile, done) => {
             try {
                 // Check if user already exists
+                
                 let user = await User.findOne({ email: profile._json.email });
 
                 const DEFAULT_AVATAR = "https://res.cloudinary.com/dvhx3ldwz/image/upload/v1753431847/default-user-avatar_n9m7g8.png";
                 const googleAvatar =
-                    profile.photos?.[0]?.value ||
                     profile._json?.picture ||
                     DEFAULT_AVATAR;
 
@@ -35,7 +35,6 @@ passport.use(
                         avatarUrl: googleAvatar,
                     });
                 } else if (!user.avatarUrl || user.avatarUrl === DEFAULT_AVATAR) {
-                    // Update avatar for existing users who are missing one
                     user.avatarUrl = googleAvatar;
                     await user.save();
                 }
