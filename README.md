@@ -283,6 +283,35 @@ The background worker operates entirely independently from the main Express API 
 > [!TIP]  
 > The worker leverages `concurrency: 1` per instance to prevent running out of memory/CPU, as FFmpeg is extremely resource-intensive. If scaling is needed, you can spawn additional worker containers horizontally.
 
+---
+
+## 🚢 Deployment Strategy
+
+### MVP Deployment (Single Process)
+For MVP and development deployments, the BullMQ worker is initialized alongside the API server in the same Node.js process. This simplifies deployment by requiring only a single process to handle both HTTP requests and background job processing.
+
+```bash
+# Starts both API server and worker together (MVP setup)
+npm run dev
+```
+
+### Production-Scale Deployment (Separate Processes)
+In a production-scale deployment, the worker runs as an **independent process or container** to fully isolate CPU-intensive FFmpeg transcoding from API request handling. This separation ensures:
+
+- **Resource Isolation**: Video transcoding (which can be memory and CPU heavy) cannot impact API response times or availability
+- **Independent Scaling**: The worker can be scaled horizontally independent of the API server based on queue backlog
+- **Fault Isolation**: A worker crash or restart does not affect the API server's ability to handle incoming requests
+
+```bash
+# Start API server (no worker)
+npm run start
+
+# Start worker separately (independent container/process)
+npm run worker:prod
+```
+
+This architectural decision allows the system to maintain consistent API performance under load while independently scaling background processing capacity based on transcoding demand.
+
 ### Processing Steps (`transcode.processor.ts`)
 
 #### 1. File Ingestion
