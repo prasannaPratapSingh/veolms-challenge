@@ -4,7 +4,19 @@ import { useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../features/auth/hook/auth.hook";
 
-const NAV_LINKS = ["Courses", "How It Works", "Pricing", "Blog"];
+const NAV_LINKS = [
+  { label: "Courses", to: "/courses" },
+  { label: "How It Works", anchor: "#how-it-works" },
+];
+
+const smoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, anchor: string) => {
+  e.preventDefault();
+  const id = anchor.replace("#", "");
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
 
 export default function Navbar({ minimal = false }: { minimal?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
@@ -148,22 +160,25 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
             <style>{`
               @media (max-width: 767px) { .nav-desktop { display: none !important; } }
             `}</style>
-            {NAV_LINKS.map((item) => (
-              <li key={item}>
-                {item === "Courses" ? (
-                  <Link to="/courses" className="nav-link">
-                    {item}
+            {NAV_LINKS.map((item) =>
+              item.to ? (
+                <li key={item.label}>
+                  <Link to={item.to} className="nav-link">
+                    {item.label}
                   </Link>
-                ) : (
+                </li>
+              ) : (
+                <li key={item.label}>
                   <a
-                    href={`#${item.toLowerCase().replace(" ", "-")}`}
+                    href={item.anchor}
                     className="nav-link"
+                    onClick={(e) => smoothScroll(e, item.anchor!)}
                   >
-                    {item}
+                    {item.label}
                   </a>
-                )}
-              </li>
-            ))}
+                </li>
+              )
+            )}
           </ul>
         )}
 
@@ -212,10 +227,30 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                   }}
                 >
                   {avatarUrl ? (
-                    <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  ) : (
-                    <span style={{ color: "#9DB4C6", fontSize: "0.75rem", fontWeight: 700 }}>{initial}</span>
-                  )}
+                    <img
+                      src={avatarUrl}
+                      alt={name}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).style.display = "none";
+                        (e.currentTarget.nextSibling as HTMLElement | null)?.style.setProperty("display", "flex");
+                      }}
+                    />
+                  ) : null}
+                  <span
+                    style={{
+                      color: "#9DB4C6",
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      display: avatarUrl ? "none" : "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  >
+                    {initial}
+                  </span>
                 </button>
 
                 <AnimatePresence>
@@ -375,10 +410,30 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                 }}
               >
                 {avatarUrl ? (
-                  <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                ) : (
-                  <span style={{ color: "#9DB4C6", fontSize: "0.65rem", fontWeight: 700 }}>{initial}</span>
-                )}
+                  <img
+                    src={avatarUrl}
+                    alt={name}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.display = "none";
+                      (e.currentTarget.nextSibling as HTMLElement | null)?.style.setProperty("display", "flex");
+                    }}
+                  />
+                ) : null}
+                <span
+                  style={{
+                    color: "#9DB4C6",
+                    fontSize: "0.65rem",
+                    fontWeight: 700,
+                    display: avatarUrl ? "none" : "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  {initial}
+                </span>
               </button>
             )}
             <button
@@ -432,10 +487,10 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
             <style>{`@media (min-width: 768px) { .mobile-drawer { display: none !important; } }`}</style>
             <div style={{ padding: "1.25rem 1.5rem 1.5rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
               {!minimal && NAV_LINKS.map((item) =>
-                item === "Courses" ? (
+                item.to ? (
                   <Link
-                    key={item}
-                    to="/courses"
+                    key={item.label}
+                    to={item.to}
                     onClick={() => setMobileOpen(false)}
                     style={{
                       color: "rgba(245, 248, 250,0.6)",
@@ -448,13 +503,13 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                       letterSpacing: "0.02em",
                     }}
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 ) : (
                   <a
-                    key={item}
-                    href={`#${item.toLowerCase().replace(" ", "-")}`}
-                    onClick={() => setMobileOpen(false)}
+                    key={item.label}
+                    href={item.anchor}
+                    onClick={(e) => { smoothScroll(e, item.anchor!); setMobileOpen(false); }}
                     style={{
                       color: "rgba(245, 248, 250,0.6)",
                       fontSize: "0.95rem",
@@ -466,7 +521,7 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                       letterSpacing: "0.02em",
                     }}
                   >
-                    {item}
+                    {item.label}
                   </a>
                 )
               )}

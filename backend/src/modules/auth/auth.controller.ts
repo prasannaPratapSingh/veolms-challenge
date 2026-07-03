@@ -24,7 +24,7 @@ const cookieOptions = {
     httpOnly: true,
     secure: isProd,
     sameSite: isProd ? 'strict' as const : 'lax' as const,
-    path:"/"
+    path: "/"
 };
 
 
@@ -387,12 +387,41 @@ export const getMe = asyncHandler(async (
             throw new ApiError(400, "No such user exists!");
         }
         return res
-          .status(200)
-          .set("Cache-Control", "no-store")
-          .json(new ApiResponse(200, "User data fetched successfully!", { id: user.id, name: user.name, email: user.email, avatarUrl: user.avatarUrl, role: user.role }));
+            .status(200)
+            .set("Cache-Control", "no-store")
+            .json(new ApiResponse(200, "User data fetched successfully!", { id: user.id, name: user.name, email: user.email, avatarUrl: user.avatarUrl, role: user.role }));
 
     } catch (error) {
         next(error);
     }
 
 })
+
+export const googleAuthCallback = asyncHandler(async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        if (!req.user) {
+            throw new ApiError(401, "Authentication failed");
+        }
+
+        const user = req.user as any; // The user object populated by Passport
+
+        const accessToken = generateAccessToken(user._id.toString());
+        const refreshToken = generateRefreshToken(user._id.toString());
+
+        user.refreshToken = await bcrypt.hash(refreshToken, Number(envConfig.SALT_VALUE));
+
+        await user.save();
+
+        res.cookie('accessToken', accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 });
+        res.cookie('refreshToken', refreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
+
+        return res.redirect(`${envConfig.CLIENT_URL}/`);
+
+    } catch (error) {
+        next(error);
+    }
+});
