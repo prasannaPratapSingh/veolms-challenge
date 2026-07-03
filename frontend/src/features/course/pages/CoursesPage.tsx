@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import axiosInstance from "../../../lib/authInstance";
 import CourseCard from "../../../components/landing/CourseCard";
+import Navbar from "../../../components/landing/Navbar";
 
 /* ─── Types ─── */
 interface Course {
@@ -120,6 +121,7 @@ export default function CoursesPage() {
 
   return (
     <div className="min-h-screen pt-[68px]" style={{ background: "#0B0F14", color: "#F5F8FA" }}>
+      <Navbar/>
       {/* ── Hero section ── */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
