@@ -212,10 +212,30 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                   }}
                 >
                   {avatarUrl ? (
-                    <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  ) : (
-                    <span style={{ color: "#9DB4C6", fontSize: "0.75rem", fontWeight: 700 }}>{initial}</span>
-                  )}
+                    <img
+                      src={avatarUrl}
+                      alt={name}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).style.display = "none";
+                        (e.currentTarget.nextSibling as HTMLElement | null)?.style.setProperty("display", "flex");
+                      }}
+                    />
+                  ) : null}
+                  <span
+                    style={{
+                      color: "#9DB4C6",
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      display: avatarUrl ? "none" : "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  >
+                    {initial}
+                  </span>
                 </button>
 
                 <AnimatePresence>
@@ -375,10 +395,30 @@ export default function Navbar({ minimal = false }: { minimal?: boolean }) {
                 }}
               >
                 {avatarUrl ? (
-                  <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                ) : (
-                  <span style={{ color: "#9DB4C6", fontSize: "0.65rem", fontWeight: 700 }}>{initial}</span>
-                )}
+                  <img
+                    src={avatarUrl}
+                    alt={name}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.display = "none";
+                      (e.currentTarget.nextSibling as HTMLElement | null)?.style.setProperty("display", "flex");
+                    }}
+                  />
+                ) : null}
+                <span
+                  style={{
+                    color: "#9DB4C6",
+                    fontSize: "0.65rem",
+                    fontWeight: 700,
+                    display: avatarUrl ? "none" : "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  {initial}
+                </span>
               </button>
             )}
             <button
