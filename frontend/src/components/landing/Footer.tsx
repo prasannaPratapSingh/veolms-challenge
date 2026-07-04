@@ -28,6 +28,7 @@ export default function Footer() {
         position: "relative",
         borderTop: "1px solid rgba(157, 180, 198,0.1)",
         overflow: "hidden",
+        background: "#000000",
       }}
     >
       {/* Lightfall animated background */}

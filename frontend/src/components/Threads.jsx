@@ -133,7 +133,19 @@ const Threads = ({ color = [1, 1, 1], amplitude = 1, distance = 0, enableMouseIn
     const container = containerRef.current;
     if (!container) return;
 
-    const renderer = new Renderer({ alpha: true });
+    // Guard: bail out silently on browsers/devices without WebGL support
+    const testCanvas = document.createElement('canvas');
+    const hasWebGL = !!(
+      testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl')
+    );
+    if (!hasWebGL) return;
+
+    let renderer;
+    try {
+      renderer = new Renderer({ alpha: true });
+    } catch {
+      return;
+    }
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
     gl.enable(gl.BLEND);

@@ -136,12 +136,26 @@ const Grainient = ({
     const container = containerRef.current;
     if (!container) return;
 
-    const renderer = new Renderer({
-      webgl: 2,
-      alpha: true,
-      antialias: false,
-      dpr: Math.min(window.devicePixelRatio || 1, 2)
-    });
+    // Guard: bail out silently on browsers/devices without WebGL support
+    const testCanvas = document.createElement('canvas');
+    const hasWebGL = !!(
+      testCanvas.getContext('webgl2') ||
+      testCanvas.getContext('webgl') ||
+      testCanvas.getContext('experimental-webgl')
+    );
+    if (!hasWebGL) return;
+
+    let renderer;
+    try {
+      renderer = new Renderer({
+        webgl: 2,
+        alpha: true,
+        antialias: false,
+        dpr: Math.min(window.devicePixelRatio || 1, 2)
+      });
+    } catch {
+      return;
+    }
 
     const gl = renderer.gl;
     const canvas = gl.canvas;
