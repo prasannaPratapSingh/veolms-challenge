@@ -6,17 +6,18 @@ import dotenv from 'dotenv';
 import asyncHandler from './utils/asyncHandler.js';
 import ApiResponse from './utils/ApiResponse.js';
 import errorHandler from './middlewares/errorHandler.js';
-import authRouter from "../src/modules/auth/auth.routes.js"
-import courseRouter from "../src/modules/course/course.routes.js";
-import userRouter from "../src/modules/user/user.routes.js";
-import sectionRouter from "../src/modules/section/section.routes.js";
-import lessonRouter from "../src/modules/lesson/lesson.routes.js";
-import enrollmentRouter from "../src/modules/enrollments/enrollment.routes.js";
-import progressRouter from "../src/modules/progress/progress.routes.js";
-import paymentRouter from "../src/payment/payment.route.js";
-import analyticsRouter from "../src/modules/admin/admin.routes.js";
+import authRouter from "./modules/auth/auth.routes.js"
+import courseRouter from "./modules/course/course.routes.js";
+import userRouter from "./modules/user/user.routes.js";
+import sectionRouter from "./modules/section/section.routes.js";
+import lessonRouter from "./modules/lesson/lesson.routes.js";
+import enrollmentRouter from "./modules/enrollments/enrollment.routes.js";
+import progressRouter from "./modules/progress/progress.routes.js";
+import paymentRouter from "./payment/payment.route.js";
+import analyticsRouter from "./modules/admin/admin.routes.js";
 import passport from "passport";
 import "./config/passport.js";
+import envConfig from './config/envConfig.js';
 
 dotenv.config();
 
@@ -29,7 +30,7 @@ app.use(helmet({
 }));
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: envConfig.CLIENT_URL,
     credentials: true
 }));
 app.use(express.json());
