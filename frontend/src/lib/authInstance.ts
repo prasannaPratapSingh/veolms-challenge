@@ -19,10 +19,10 @@ const processQueue = (error: any = null) => {
     failedQueue = [];
 };
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4002";
+const backendUrl = import.meta.env.VITE_BACKEND_URL ?? "http://localhost:4002/api";
 
 const axiosInstance = axios.create({
-    baseURL: `${backendUrl}/api`,
+    baseURL: backendUrl,
     withCredentials: true,
 });
 
