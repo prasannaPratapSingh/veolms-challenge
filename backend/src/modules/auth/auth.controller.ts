@@ -194,7 +194,7 @@ export const refreshToken =
                     );
 
                 if (ttl > 0) {
-                    await redisClient.setEx(
+                    await redisClient.setex(
                         `blacklist:${refreshToken}`,
                         ttl,
                         'true'
@@ -336,7 +336,7 @@ export const logout = asyncHandler(
                 );
 
             if (ttl > 0) {
-                await redisClient.setEx(
+                await redisClient.setex(
                     `blacklist:${refreshToken}`,
                     ttl,
                     'true'

@@ -39,8 +39,9 @@ vi.mock("../middlewares/rateLimiter.midlleware.js", () => {
 vi.mock("../infrastructure/redis/redis.js", () => ({
     redisClient: {
         get: vi.fn().mockResolvedValue(null),
-        setEx: vi.fn().mockResolvedValue("OK"),
-        connect: vi.fn().mockResolvedValue(undefined),
+        setex: vi.fn().mockResolvedValue("OK"),
+        ping: vi.fn().mockResolvedValue("PONG"),
+        on: vi.fn(),
     },
     connectRedis: vi.fn().mockResolvedValue(undefined),
     default: vi.fn().mockResolvedValue(undefined),
