@@ -6,6 +6,7 @@ import { strictAuthLimiter } from "../../middlewares/rateLimiter.midlleware.js";
 import authenticateToken from "../../middlewares/auth.middleware.js";
 import { isAdmin } from "../../middlewares/admin.middleware.js";
 import passport from "passport";
+import envConfig from "../../config/envConfig.js";
 
 const router = Router();
 
@@ -28,7 +29,7 @@ router.get("/google",
 router.get("/google/callback",
     passport.authenticate("google",{
         session:false,
-        failureRedirect:"http://localhost:5173/login"
+        failureRedirect:envConfig.CLIENT_URL
     }),
     googleAuthCallback
 )

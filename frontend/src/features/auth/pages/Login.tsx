@@ -209,7 +209,7 @@ const labelStyle: React.CSSProperties = {
 function GoogleAuthButton({ text }: { text: string }) {
   const handleGoogleLogin = () => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4002";
-    window.location.href = `${backendUrl}/api/auth/google`;
+    window.location.href = `${backendUrl}/auth/google`;
   };
 
   return (
