@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate, useLocation } from "react-router";
 import Hls from "hls.js";
 import { motion, AnimatePresence } from "framer-motion";
 import axiosInstance from "../../../lib/authInstance";
@@ -315,6 +315,8 @@ function VideoPlayer({ videoUrl, onEnded }: { videoUrl: string; onEnded: () => v
 export default function CoursePlayer() {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const initialLessonId = (location.state as { lessonId?: string } | null)?.lessonId;
   const [course, setCourse] = useState<CourseData | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -341,12 +343,18 @@ export default function CoursePlayer() {
       .then((res) => {
         const data: CourseData = res.data?.data ?? res.data;
         setCourse(data);
-        const first = flatLessons(data.sections).find(l => !!l.videoUrl);
-        if (first) setCurrentLesson(first);
+        const all = flatLessons(data.sections);
+        // If navigated here with a specific lesson (e.g. from a preview click), open that one.
+        // Otherwise fall back to the first lesson that has a video.
+        const target = initialLessonId
+          ? (all.find(l => l._id === initialLessonId) ?? all.find(l => !!l.videoUrl))
+          : all.find(l => !!l.videoUrl);
+        if (target) setCurrentLesson(target);
       })
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
-  }, [courseId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseId]); // initialLessonId is stable (from location state, never changes after mount)
 
   useEffect(() => {
     let active = true;

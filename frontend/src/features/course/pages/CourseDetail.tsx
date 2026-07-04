@@ -158,12 +158,27 @@ function SectionAccordion({
                   </li>
                 );
 
-                // Enrolled users click any lesson → go to /learn (no page reload via Link)
+                // Enrolled users click any lesson → go to /learn
                 if (isEnrolled) {
                   return (
                     <Link
                       key={lesson._id}
                       to={`/course/${courseId}/learn`}
+                      state={{ lessonId: lesson._id }}
+                      className="block no-underline"
+                    >
+                      {rowContent}
+                    </Link>
+                  );
+                }
+
+                // Unenrolled users can click preview lessons → go to /learn with that lesson pre-selected
+                if (lesson.isPreview) {
+                  return (
+                    <Link
+                      key={lesson._id}
+                      to={`/course/${courseId}/learn`}
+                      state={{ lessonId: lesson._id }}
                       className="block no-underline"
                     >
                       {rowContent}

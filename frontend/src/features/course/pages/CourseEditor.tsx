@@ -9,6 +9,7 @@ import type { Section } from '../../section/state/section.slice';
 import type { Lesson } from '../../lesson/state/lesson.slice';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+import { getVideoToken } from '../../lesson/service/lesson.service';
 
 // Drag and drop
 import {
@@ -108,7 +109,6 @@ interface LessonForm {
     title: string;
     description: string;
     duration: number;
-    isPreview: boolean;
     order: number;
 }
 
@@ -580,7 +580,7 @@ function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete
             description: data.description,
             duration: Number(data.duration),
             sectionId: section._id,
-            isPreview: data.isPreview,
+            isPreview: false,
             order: Number(data.order),
         });
         reset();
@@ -659,10 +659,6 @@ function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete
                                 </div>
                                 <div>
                                     <input type="number" min={1} placeholder="Order" className={inputClass} style={inputStyle} {...register("order", { required: true, min: 1 })} />
-                                </div>
-                                <div className="col-span-2 flex items-center gap-2">
-                                    <input type="checkbox" id={`preview-${section._id}`} className="w-4 h-4" style={{ accentColor: "#9DB4C6" }} {...register("isPreview")} />
-                                    <label htmlFor={`preview-${section._id}`} style={{ color: "rgba(245, 248, 250,0.5)" }} className="text-sm select-none">Free preview lesson</label>
                                 </div>
                             </div>
                             <div className="flex gap-2 pt-1">
@@ -781,9 +777,22 @@ function LessonRow({ lesson, sectionId, onDelete, onUpload, dragHandleProps }: {
                     <span style={{ color: "rgba(157, 180, 198,0.4)" }} className="text-xs">{lesson.duration} min</span>
                     {statusBadge()}
                     {hasVideo && (
-                        <a href={lesson.videoUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#9DB4C6" }} className="text-[10px] font-bold hover:opacity-70 underline underline-offset-2 transition-colors" title={lesson.videoUrl}>
+                        <button
+                            onClick={async () => {
+                                try {
+                                    const res = await getVideoToken(lesson._id);
+                                    const token = res.data.token;
+                                    const base = import.meta.env.VITE_BACKEND_URL || "http://localhost:4002";
+                                    window.open(`${base}/api/lesson/${lesson._id}/video/master.m3u8?token=${token}`, "_blank");
+                                } catch {
+                                    toast.error("Could not fetch video token");
+                                }
+                            }}
+                            style={{ color: "#9DB4C6" }}
+                            className="text-[10px] font-bold hover:opacity-70 underline underline-offset-2 transition-colors cursor-pointer"
+                        >
                             View HLS
-                        </a>
+                        </button>
                     )}
                 </div>
             </div>

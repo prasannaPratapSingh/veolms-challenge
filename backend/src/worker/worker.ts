@@ -3,9 +3,11 @@ import { bullmqRedisOptions } from "../infrastructure/redis/redis.client.js";
 import { transcodeProcessor } from "./processors/transcode.processor.js";
 import connectDB from "../infrastructure/database/db.js";
 import { Lesson } from "../modules/lesson/lesson.model.js";
+import logger from "../utils/logger.js";
 
+// ── Bootstrap ──────────────────────────────────────────────────────────────
 await connectDB();
-console.log("Worker started, waiting for jobs...");
+logger.info("[Worker] Connected to DB. Waiting for jobs...");
 
 const worker = new Worker(
     "video-transcoding",
@@ -16,24 +18,41 @@ const worker = new Worker(
     }
 );
 
+// ── Job lifecycle events ───────────────────────────────────────────────────
 worker.on("active", async (job) => {
-    console.log(`Processing job ${job.id} — lesson: ${job.data.lessonId}`);
+    logger.info(`[Worker] Processing job ${job.id} — lesson: ${job.data.lessonId}`);
     await Lesson.findByIdAndUpdate(job.data.lessonId, { $set: { processingStatus: "processing" } });
 });
 
 worker.on("progress", (job, progress) => {
-    console.log(`Job ${job.id} progress: ${progress}%`);
+    logger.info(`[Worker] Job ${job.id} progress: ${progress}%`);
 });
 
 worker.on("completed", async (job) => {
-    console.log(`Job ${job.id} completed!`);
+    logger.info(`[Worker] Job ${job.id} completed`);
     // videoUrl is already saved inside transcodeProcessor — just update status
     await Lesson.findByIdAndUpdate(job.data.lessonId, { $set: { processingStatus: "done" } });
 });
 
 worker.on("failed", async (job, err) => {
-    console.error(`Job ${job?.id} failed:`, err.message);
+    logger.error(`[Worker] Job ${job?.id} failed: ${err.message}`);
     if (job?.data?.lessonId) {
         await Lesson.findByIdAndUpdate(job.data.lessonId, { $set: { processingStatus: "failed" } });
     }
 });
+
+worker.on("error", (err) => {
+    logger.error(`[Worker] Worker error: ${err.message}`);
+});
+
+// ── Graceful shutdown ──────────────────────────────────────────────────────
+// Allows any in-progress job to finish before the process exits.
+async function shutdown(signal: string) {
+    logger.info(`[Worker] Received ${signal}. Closing worker gracefully...`);
+    await worker.close();
+    logger.info("[Worker] Worker closed. Exiting.");
+    process.exit(0);
+}
+
+process.on("SIGINT",  () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));

@@ -102,18 +102,25 @@ CLIENT_URL=http://localhost:5173
 
 ### 5. Start the Development Server
 ```bash
-# Starts the main API server with hot-reloading
+# Terminal 1 — API server
 npm run dev
 
-# (Optional in a separate terminal) Starts the background worker
+# Terminal 2 — BullMQ worker (separate process)
 npm run worker:dev
 ```
 The server should now be running on `http://localhost:3000`.
 
+> **Note:** The API server and worker are fully independent processes. The worker can be stopped, restarted, or crash without affecting the API server.
+
 ### 6. Building for Production
 ```bash
 npm run build
+
+# Terminal 1 — API server
 npm run start
+
+# Terminal 2 — BullMQ worker
+npm run worker
 ```
 
 ---
@@ -287,30 +294,37 @@ The background worker operates entirely independently from the main Express API 
 
 ## 🚢 Deployment Strategy
 
-### MVP Deployment (Single Process)
-For MVP and development deployments, the BullMQ worker is initialized alongside the API server in the same Node.js process. This simplifies deployment by requiring only a single process to handle both HTTP requests and background job processing.
+> [!NOTE]  
+> **For the MVP deployment, the BullMQ worker is initialized alongside the API server in the same terminal session. In a production-scale deployment, the worker runs as an independent process/container to isolate CPU-intensive FFmpeg transcoding from request handling.**
+
+### MVP / Development (Two separate processes, same machine)
 
 ```bash
-# Starts both API server and worker together (MVP setup)
+# Terminal 1 — API server
 npm run dev
+
+# Terminal 2 — BullMQ worker
+npm run worker:dev
 ```
 
-### Production-Scale Deployment (Separate Processes)
-In a production-scale deployment, the worker runs as an **independent process or container** to fully isolate CPU-intensive FFmpeg transcoding from API request handling. This separation ensures:
+The two processes share nothing at the OS level — they communicate only through Redis (BullMQ queue). A worker crash **cannot bring down the API server**.
 
-- **Resource Isolation**: Video transcoding (which can be memory and CPU heavy) cannot impact API response times or availability
-- **Independent Scaling**: The worker can be scaled horizontally independent of the API server based on queue backlog
-- **Fault Isolation**: A worker crash or restart does not affect the API server's ability to handle incoming requests
+### Production-Scale Deployment (Separate containers)
+
+In production, deploy the API server and worker as independent containers or services:
 
 ```bash
-# Start API server (no worker)
-npm run start
+# API container
+npm run start          # node dist/server.js
 
-# Start worker separately (independent container/process)
-npm run worker:prod
+# Worker container (can be scaled horizontally)
+npm run worker         # node dist/worker/worker.js
 ```
 
-This architectural decision allows the system to maintain consistent API performance under load while independently scaling background processing capacity based on transcoding demand.
+**Benefits of full separation:**
+- **Fault isolation** — A worker crash or OOM from FFmpeg does not affect API availability
+- **Independent scaling** — Scale worker replicas based on queue backlog without touching the API
+- **Resource control** — Assign dedicated CPU/memory limits to the worker container separately
 
 ### Processing Steps (`transcode.processor.ts`)
 
@@ -688,7 +702,7 @@ npm install
 Create a `.env` file based on the provided `.env.example`. The critical variable is:
 
 ```env
-VITE_API_BASE_URL=http://localhost:3000
+VITE_BACKEND_URL=http://localhost:4002
 ```
 
 ### 5. Start the Development Server

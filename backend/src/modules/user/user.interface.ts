@@ -14,5 +14,7 @@ export interface IUser extends Document {
     refreshToken: string | null;
     role: UserRole;
     coursesEnrolled: string[];
+    createdAt: Date;
+    updatedAt: Date;
 }
 

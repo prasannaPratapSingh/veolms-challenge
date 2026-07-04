@@ -10,6 +10,6 @@ const userSchema: Schema<IUser> = new Schema({
     refreshToken: { type: String, required: false, default: null },
     role: { type: String, enum: UserRole, default: UserRole.STUDENT },
     coursesEnrolled: { type: [String], default: [] }
-})
+}, { timestamps: true })
 
 export const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);

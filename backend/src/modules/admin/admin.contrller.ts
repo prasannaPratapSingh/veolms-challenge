@@ -74,7 +74,7 @@ export const getStudents = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const getStudentDetail = asyncHandler(async (req: Request, res: Response) => {
-    const { studentId } = req.params;
+    const studentId = req.params.studentId as string;
     if (!mongoose.Types.ObjectId.isValid(studentId)) {
         throw new ApiError(400, "Invalid student ID");
     }
@@ -94,10 +94,9 @@ export const getStudentDetail = asyncHandler(async (req: Request, res: Response)
     }));
 });
 
-import { Payment } from "../../payment/payment.model.js";
-
 export const removeStudentEnrollment = asyncHandler(async (req: Request, res: Response) => {
-    const { studentId, courseId } = req.params;
+    const studentId = req.params.studentId as string;
+    const courseId = req.params.courseId as string;
     if (!mongoose.Types.ObjectId.isValid(studentId) || !mongoose.Types.ObjectId.isValid(courseId)) {
         throw new ApiError(400, "Invalid ID");
     }
