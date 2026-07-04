@@ -5,6 +5,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import axiosInstance from "../../../lib/authInstance";
 import { getVideoToken } from "../../lesson/service/lesson.service";
 
+// Derive the backend origin from the axios baseURL so video URLs are always
+// built against the same host — works in dev (localhost:4002) and prod alike.
+// axiosInstance.defaults.baseURL may be "https://example.com" or
+// "https://example.com/api"; strip any trailing /api path segment.
+function getBackendOrigin(): string {
+  const base = axiosInstance.defaults.baseURL ?? "http://localhost:4002";
+  return base.replace(/\/api\/?$/, "");
+}
+
 /* ─── Types ─── */
 interface Lesson {
   _id: string; title: string; description: string;
@@ -369,9 +378,9 @@ export default function CoursePlayer() {
         if (!active) return;
         const token = res.data.token;
         const rawUrl = currentLesson.videoUrl!.replace('/api/v1/lessons/', '/api/lesson/');
-        const baseUrl = rawUrl.startsWith('http') 
-          ? rawUrl 
-          : `${import.meta.env.VITE_BACKEND_URL || "http://localhost:4002"}${rawUrl}`;
+        const baseUrl = rawUrl.startsWith('http')
+          ? rawUrl
+          : `${getBackendOrigin()}${rawUrl}`;
         
         const separator = baseUrl.includes('?') ? '&' : '?';
         setPlayingVideoUrl(`${baseUrl}${separator}token=${token}`);

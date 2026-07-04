@@ -10,6 +10,13 @@ import type { Lesson } from '../../lesson/state/lesson.slice';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { getVideoToken } from '../../lesson/service/lesson.service';
+import axiosInstance from '../../../lib/authInstance';
+
+// Same origin-stripping logic as CoursePlayer
+function getBackendOrigin(): string {
+    const base = axiosInstance.defaults.baseURL ?? "http://localhost:4002";
+    return base.replace(/\/api\/?$/, "");
+}
 
 // Drag and drop
 import {
@@ -776,7 +783,7 @@ function LessonRow({ lesson, sectionId: _sectionId, onDelete, onUpload, dragHand
                                 try {
                                     const res = await getVideoToken(lesson._id);
                                     const token = res.data.token;
-                                    const base = import.meta.env.VITE_BACKEND_URL || "http://localhost:4002";
+                                    const base = getBackendOrigin();
                                     window.open(`${base}/api/lesson/${lesson._id}/video/master.m3u8?token=${token}`, "_blank");
                                 } catch {
                                     toast.error("Could not fetch video token");
