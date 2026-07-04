@@ -65,10 +65,10 @@ axiosInstance.interceptors.response.use(
         isRefreshing = true;
 
         try {
-            const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4002";
+            const backendUrl = import.meta.env.VITE_BACKEND_URL ?? "http://localhost:4002/api";
             // IMPORTANT: normal axios use karo
             await axios.post(
-                `${backendUrl}/api/auth/refresh`,
+                `${backendUrl}/auth/refresh`,
                 {},
                 {
                     withCredentials: true,
