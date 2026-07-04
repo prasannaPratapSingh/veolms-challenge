@@ -1,15 +1,6 @@
 import { Link } from "react-router";
 import Lightfall from "../Lightfall";
 
-const smoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, anchor: string) => {
-  e.preventDefault();
-  const id = anchor.replace("#", "");
-  const el = document.getElementById(id);
-  if (el) {
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-};
-
 const FOOTER_COLS = [
   {
     head: "Platform",

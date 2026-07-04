@@ -499,9 +499,6 @@ function UploadTab({ onSuccess, handleUploadCourse }: { onSuccess: (courseId: st
   const inputClass = "w-full rounded-sm px-5 py-4 text-sm focus:outline-none transition-all placeholder:text-[rgba(245, 248, 250,0.2)] auth-input" ;
   const errorClass = "w-full rounded-sm px-5 py-4 text-sm focus:outline-none transition-all placeholder:text-[rgba(245, 248, 250,0.2)]";
   const labelClass = "block text-xs font-bold uppercase tracking-widest mb-3";
-  const inputStyle = { background: "rgba(157, 180, 198,0.04)", border: "1px solid rgba(157, 180, 198,0.15)", color: "#F5F8FA" };
-  const errorStyle = { background: "rgba(224,112,112,0.04)", border: "1px solid rgba(224,112,112,0.4)", color: "#F5F8FA" };
-  const labelStyle = { color: "rgba(157, 180, 198,0.6)" };
 
   return (
     <motion.div

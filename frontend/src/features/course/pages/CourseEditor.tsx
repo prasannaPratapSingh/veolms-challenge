@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { useCourse } from '../hook/course.hook';
@@ -35,11 +35,6 @@ import { CSS } from "@dnd-kit/utilities";
 /* ── Inline SVG Icons (no external icon lib required) ── */
 const IconLoader = () => (
     <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-    </svg>
-);
-const IconLoaderLg = () => (
-    <svg className="w-8 h-8 animate-spin text-violet-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
         <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
     </svg>
 );
@@ -256,7 +251,6 @@ function GeneralTab({ course, register, handleSubmit, errors, isSubmitting, onSu
 }) {
     const inputClass = "w-full rounded-sm px-4 py-3 text-sm focus:outline-none transition-all auth-input placeholder:text-[rgba(245, 248, 250,0.2)]";
     const inputStyle = { background: "rgba(157, 180, 198,0.04)", border: "1px solid rgba(157, 180, 198,0.15)", color: "#F5F8FA" };
-    const errorStyle = { background: "rgba(224,112,112,0.04)", border: "1px solid rgba(224,112,112,0.4)", color: "#F5F8FA" };
     const labelClass = "block text-xs font-bold uppercase tracking-widest mb-2";
     const labelStyle = { color: "rgba(157, 180, 198,0.6)" };
 
@@ -530,7 +524,7 @@ function SortableSectionCard({ section, courseId, isExpanded, onToggle, onEdit, 
 }
 
 /* ── Section Card ── */
-function SectionCard({ section, courseId, isExpanded, onToggle, onEdit, onDelete, dragHandleProps }: {
+function SectionCard({ section, courseId: _courseId, isExpanded, onToggle, onEdit, onDelete, dragHandleProps }: {
     section: Section;
     courseId: string;
     isExpanded: boolean;
@@ -734,7 +728,7 @@ function SortableLessonRow({ lesson, sectionId, onDelete, onUpload }: {
 }
 
 /* ── Lesson Row ── */
-function LessonRow({ lesson, sectionId, onDelete, onUpload, dragHandleProps }: {
+function LessonRow({ lesson, sectionId: _sectionId, onDelete, onUpload, dragHandleProps }: {
     lesson: Lesson;
     sectionId: string;
     onDelete: () => void;

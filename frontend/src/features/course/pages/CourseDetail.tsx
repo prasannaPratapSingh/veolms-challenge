@@ -53,15 +53,6 @@ function totalDuration(sections: Section[]): string {
   return m === 0 ? `${h}h` : `${h}h ${m}m`;
 }
 
-/* ─── Spinner ─── */
-function Spinner() {
-  return (
-    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-      <span className="w-10 h-10 border-4 border-white/10 border-t-white rounded-full animate-spin" />
-    </div>
-  );
-}
-
 /* ─── SectionAccordion ─── */
 function SectionAccordion({
   section,

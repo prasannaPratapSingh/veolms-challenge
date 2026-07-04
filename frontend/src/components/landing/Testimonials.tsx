@@ -104,7 +104,7 @@ export default function Testimonials() {
             gap: "1.5rem",
           }}
         >
-          {TESTIMONIALS.map((t, i) => (
+          {TESTIMONIALS.map((t) => (
             <motion.blockquote
               key={t.id}
               variants={cardItem}

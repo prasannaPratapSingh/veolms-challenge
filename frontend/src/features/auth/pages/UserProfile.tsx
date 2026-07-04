@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { toast } from "react-hot-toast";
 import { useAuth } from "../hook/auth.hook";
 import type { RootState } from "../../../app/store/app.store";
 
@@ -22,7 +21,7 @@ function Spinner() {
 export default function UserProfile() {
   const navigate = useNavigate();
   const reduxUser = useSelector((state: RootState) => state.auth.user);
-  const { handleGetMe, handleUpdateProfile } = useAuth();
+  const { handleUpdateProfile } = useAuth();
 
   const displayName: string =
     reduxUser?.data?.name ?? reduxUser?.user?.name ?? reduxUser?.name ?? "";
