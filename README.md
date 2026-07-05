@@ -761,37 +761,97 @@ To protect premium video content from unauthorized access and direct downloads, 
 
 ## 🚢 Deployment Strategy
 
-> [!NOTE]  
-> **For the MVP deployment, the BullMQ worker is initialized alongside the API server in the same terminal session. In a production-scale deployment, the worker runs as an independent process/container to isolate CPU-intensive FFmpeg transcoding from request handling.**
+The entire platform — frontend and backend — is deployed on a single **AWS EC2 t3.small** instance with a **20 GB EBS** volume. Both the API server and the transcoding worker run as **separate, independent PM2 processes** on the same machine.
 
-### MVP / Development (Two separate processes, same machine)
+### Infrastructure at a Glance
 
-```bash
-# Terminal 1 — API server
-npm run dev
+| Component | Details |
+| :--- | :--- |
+| Cloud Provider | AWS |
+| Instance Type | EC2 t3.small (2 vCPU, 2 GB RAM) |
+| Storage | 20 GB EBS (gp2) |
+| OS | Ubuntu 22.04 LTS |
+| Process Manager | PM2 |
+| Frontend Serving | Nginx (static files from `/var/www/learnsphere`) |
+| Backend API | Node.js Express — managed by PM2 as `veolms-api` |
+| Transcoding Worker | Node.js BullMQ Worker — managed by PM2 as `veolms-worker` |
+| Message Broker | Redis (running locally on the same instance) |
+| Database | MongoDB Atlas (managed cloud) |
+| Object Storage | Cloudflare R2 (raw uploads + HLS output) |
+| Media CDN | ImageKit (thumbnails & static assets) |
 
-# Terminal 2 — BullMQ worker
-npm run worker:dev
+### Process Isolation — Why It Matters
+
+The API server and the transcoding worker are deliberately run as **two completely separate PM2 processes**, not threads or in-process workers.
+
+When an admin uploads a video, the API immediately hands off the job to Redis (BullMQ queue) and returns a response. The worker picks it up independently and runs FFmpeg in the background. This means:
+
+- If FFmpeg runs out of memory processing a large video and the worker crashes, **the API server keeps running without any interruption** — students can still browse courses, stream videos, and make purchases.
+- If the worker is restarted or redeployed, **no in-flight API requests are affected**.
+- The two processes communicate exclusively through Redis. There is no shared memory, no shared event loop, and no shared crash domain.
+
+```
+EC2 t3.small
+├── PM2
+│   ├── veolms-api      → node dist/server.js      (Express REST API)
+│   └── veolms-worker   → node dist/worker/worker.js  (BullMQ + FFmpeg)
+├── Nginx               → serves /var/www/learnsphere  (React SPA)
+└── Redis               → message broker for BullMQ queue
 ```
 
-The two processes share nothing at the OS level — they communicate only through Redis (BullMQ queue). A worker crash **cannot bring down the API server**.
-
-### Production-Scale Deployment (Separate containers)
-
-In production, deploy the API server and worker as independent containers or services:
+### Starting the Processes
 
 ```bash
-# API container
-npm run start          # node dist/server.js
+# API server
+pm2 start dist/server.js --name veolms-api
 
-# Worker container (can be scaled horizontally)
-npm run worker         # node dist/worker/worker.js
+# Transcoding worker (separate process)
+pm2 start dist/worker/worker.js --name veolms-worker
+
+# Persist across reboots
+pm2 save
+pm2 startup
 ```
 
-**Benefits of full separation:**
-- **Fault isolation** — A worker crash or OOM from FFmpeg does not affect API availability
-- **Independent scaling** — Scale worker replicas based on queue backlog without touching the API
-- **Resource control** — Assign dedicated CPU/memory limits to the worker container separately
+### Frontend — Served by Nginx
+
+The React app is built and copied to `/var/www/learnsphere/`. Nginx serves it as static files on port 80/443, with a catch-all rule to support client-side routing:
+
+```nginx
+server {
+    listen 80;
+    root /var/www/learnsphere;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api {
+        proxy_pass http://localhost:3000;
+    }
+}
+```
+
+---
+
+## 💰 Infrastructure Pricing
+
+All costs are approximate AWS/service list prices as of 2025.
+
+| Service | Plan / Tier | Est. Monthly Cost |
+| :--- | :--- | :--- |
+| AWS EC2 t3.small | On-Demand, `us-east-1` | ~$15.18 |
+| AWS EBS 20 GB gp2 | Attached to EC2 | ~$2.00 |
+| Cloudflare R2 Storage | First 10 GB free, then $0.015/GB | ~$0 – $1.50 |
+| Cloudflare R2 Egress | Free (no egress fees) | $0 |
+| MongoDB Atlas | M0 Free Cluster (512 MB) | $0 |
+| ImageKit | Free tier (20 GB storage, 20 GB bandwidth) | $0 |
+| Redis (self-hosted on EC2) | Included in EC2 instance | $0 |
+| GitHub Actions | Free tier (2,000 min/month) | $0 |
+| **Total (est.)** | | **~$17 – $19 / month** |
+
+> **Note:** These figures cover the MVP deployment running on a single EC2 instance. Costs will scale if you move to separate worker instances, upgrade the EC2 type for heavier FFmpeg workloads, or exceed Cloudflare R2/ImageKit free tiers.
 
 ---
 

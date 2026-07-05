@@ -10,7 +10,7 @@ import Footer from "./landing/Footer";
 
 export default function LandingPage() {
   useEffect(() => {
-    document.title = "LearnSphere — Learn skills that move careers forward";
+    document.title = "LearnSphere Learn skills that move careers forward";
 
     const fonts = document.createElement("link");
     fonts.rel = "stylesheet";

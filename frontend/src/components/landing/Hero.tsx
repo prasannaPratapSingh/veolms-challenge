@@ -26,7 +26,7 @@ export default function Hero() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: "9rem 1.5rem 7rem",
+        padding: "7rem 1.5rem 7rem",
         position: "relative",
         overflow: "hidden",
       }}
