@@ -1,0 +1,50 @@
+name: Deploy LearnSphere
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/veolms-challenge
+
+            echo "Pulling latest changes..."
+            git pull origin main
+
+            echo "Building Backend..."
+            cd backend
+            npm ci
+            npm run build
+            pm2 restart veolms-api --update-env
+
+            echo "Restarting Worker..."
+            pm2 restart veolms-worker --update-env
+
+            echo "Checking PM2 Status..."
+            pm2 status
+
+            echo "Building Frontend..."
+            cd ../frontend
+            npm ci
+            npm run build
+
+            sudo rm -rf /var/www/learnsphere/*
+            sudo cp -r dist/* /var/www/learnsphere/
+
+            sudo systemctl reload nginx
+
+            echo "Deployment Finished! "
