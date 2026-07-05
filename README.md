@@ -4,6 +4,98 @@ Welcome to the backend repository of the **VEO Learning Management System**. Thi
 
 ---
 
+## 🏛️ Platform Architecture
+
+The following diagram shows the full system — from the browser to the database — across both the user-facing frontend and the backend infrastructure.
+
+```mermaid
+graph TB
+    subgraph Client["🌐 Client (Browser)"]
+        FE["React 19 SPA<br/>(Vite + TypeScript)"]
+        HLS_PLAYER["hls.js<br/>Video Player"]
+        RZRPAY["Razorpay<br/>Checkout SDK"]
+    end
+
+    subgraph CDN["☁️ Static Hosting"]
+        NGINX["Nginx<br/>/var/www/learnsphere"]
+    end
+
+    subgraph Backend["🖥️ Backend (EC2 — Node.js + Express)"]
+        API["Express REST API<br/>:3000"]
+        AUTH["Auth Module<br/>(JWT + Google OAuth)"]
+        COURSE["Course / Section / Lesson<br/>Modules"]
+        ENROLL["Enrollment &amp;<br/>Progress Modules"]
+        VIDEO_PROXY["Secure HLS Proxy<br/>(Token-Based)"]
+        PRESIGN["Presigned URL<br/>Generator"]
+        QUEUE_DISPATCH["BullMQ<br/>Queue Dispatcher"]
+    end
+
+    subgraph Worker["⚙️ BullMQ Worker (EC2 — Separate Process)"]
+        WORKER["Transcoding Worker<br/>(Node.js)"]
+        FFMPEG["FFmpeg<br/>(360p / 480p / 720p / 1080p)"]
+    end
+
+    subgraph Storage["🗄️ Storage & Media"]
+        R2_RAW["Cloudflare R2<br/>Raw Bucket (.mp4)"]
+        R2_HLS["Cloudflare R2<br/>HLS Bucket (.m3u8 / .ts)"]
+        IMAGEKIT["ImageKit<br/>(Thumbnails & Assets)"]
+    end
+
+    subgraph Data["💾 Data & Messaging"]
+        MONGO["MongoDB<br/>(Atlas)"]
+        REDIS["Redis<br/>(Cache + BullMQ Broker)"]
+    end
+
+    subgraph CI_CD["🔄 CI/CD"]
+        GH_ACTIONS["GitHub Actions<br/>(Push to main)"]
+        PM2["PM2<br/>(Process Manager)"]
+    end
+
+    %% Client → CDN / Backend
+    FE -->|"Static assets"| NGINX
+    FE -->|"REST API calls (Axios)"| API
+    HLS_PLAYER -->|"HLS segments + token"| VIDEO_PROXY
+    RZRPAY -->|"Payment events"| API
+
+    %% API internal routing
+    API --> AUTH
+    API --> COURSE
+    API --> ENROLL
+    API --> VIDEO_PROXY
+    API --> PRESIGN
+    API --> QUEUE_DISPATCH
+
+    %% Backend → Data
+    AUTH --> MONGO
+    COURSE --> MONGO
+    ENROLL --> MONGO
+    COURSE --> IMAGEKIT
+    VIDEO_PROXY -->|"Fetch .m3u8 / .ts privately"| R2_HLS
+
+    %% Upload flow
+    PRESIGN -->|"Generate presigned URL"| R2_RAW
+    FE -->|"PUT raw video directly"| R2_RAW
+
+    %% Queue & Worker
+    QUEUE_DISPATCH -->|"Enqueue job"| REDIS
+    REDIS -->|"Dequeue job"| WORKER
+    WORKER --> FFMPEG
+    WORKER -->|"Download raw .mp4"| R2_RAW
+    WORKER -->|"Upload HLS segments"| R2_HLS
+    WORKER -->|"Update videoUrl"| MONGO
+
+    %% Caching
+    API -->|"Cache / Rate limiting"| REDIS
+
+    %% CI/CD
+    GH_ACTIONS -->|"SSH deploy"| PM2
+    PM2 -->|"Manages"| API
+    PM2 -->|"Manages"| WORKER
+    GH_ACTIONS -->|"Copy dist/"| NGINX
+```
+
+---
+
 ## 🔑 Key Features
 
 - **Robust Authentication & Authorization**: Secure JWT-based authentication with access and refresh tokens. Role-based access control (RBAC) specifically separating standard users and Admins/Instructors.
