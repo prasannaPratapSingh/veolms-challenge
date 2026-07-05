@@ -6,92 +6,52 @@ Welcome to the backend repository of the **VEO Learning Management System**. Thi
 
 ## 🏛️ Platform Architecture
 
-The following diagram shows the full system — from the browser to the database — across both the user-facing frontend and the backend infrastructure.
-
 ```mermaid
-graph TB
-    subgraph Client["🌐 Client (Browser)"]
-        FE["React 19 SPA<br/>(Vite + TypeScript)"]
-        HLS_PLAYER["hls.js<br/>Video Player"]
-        RZRPAY["Razorpay<br/>Checkout SDK"]
+graph LR
+    %% ── Browser ──────────────────────────────────────────
+    subgraph Browser["🌐 Browser"]
+        direction TB
+        FE["React SPA"]
+        PLAYER["hls.js Player"]
     end
 
-    subgraph CDN["☁️ Static Hosting"]
-        NGINX["Nginx<br/>/var/www/learnsphere"]
+    %% ── AWS EC2 t3.small ─────────────────────────────────
+    subgraph EC2["🖥️ AWS EC2 t3.small"]
+        direction TB
+        NGINX["Nginx\n(serves React SPA)"]
+        API["Express API\n(PM2 · veolms-api)"]
+        WORKER["Transcoding Worker\n(PM2 · veolms-worker)"]
+        FFMPEG["FFmpeg\n360p / 480p / 720p / 1080p"]
+        WORKER --> FFMPEG
     end
 
-    subgraph Backend["🖥️ Backend (EC2 — Node.js + Express)"]
-        API["Express REST API<br/>:3000"]
-        AUTH["Auth Module<br/>(JWT + Google OAuth)"]
-        COURSE["Course / Section / Lesson<br/>Modules"]
-        ENROLL["Enrollment &amp;<br/>Progress Modules"]
-        VIDEO_PROXY["Secure HLS Proxy<br/>(Token-Based)"]
-        PRESIGN["Presigned URL<br/>Generator"]
-        QUEUE_DISPATCH["BullMQ<br/>Queue Dispatcher"]
+    %% ── External Services ────────────────────────────────
+    subgraph Cloud["☁️ Managed Services"]
+        direction TB
+        MONGO["MongoDB Atlas"]
+        REDIS["Redis Cloud"]
+        R2_RAW["Cloudflare R2\nRaw Bucket"]
+        R2_HLS["Cloudflare R2\nHLS Bucket"]
+        IMAGEKIT["ImageKit\nThumbnails"]
     end
 
-    subgraph Worker["⚙️ BullMQ Worker (EC2 — Separate Process)"]
-        WORKER["Transcoding Worker<br/>(Node.js)"]
-        FFMPEG["FFmpeg<br/>(360p / 480p / 720p / 1080p)"]
-    end
+    %% ── Flows ────────────────────────────────────────────
+    FE -->|"loads app"| NGINX
+    FE -->|"API calls"| API
+    PLAYER -->|"HLS + token"| API
 
-    subgraph Storage["🗄️ Storage & Media"]
-        R2_RAW["Cloudflare R2<br/>Raw Bucket (.mp4)"]
-        R2_HLS["Cloudflare R2<br/>HLS Bucket (.m3u8 / .ts)"]
-        IMAGEKIT["ImageKit<br/>(Thumbnails & Assets)"]
-    end
+    API -->|"reads / writes"| MONGO
+    API -->|"thumbnails"| IMAGEKIT
+    API -->|"presigned URL"| R2_RAW
+    API -->|"enqueue job"| REDIS
+    API -->|"stream HLS"| R2_HLS
 
-    subgraph Data["💾 Data & Messaging"]
-        MONGO["MongoDB<br/>(Atlas)"]
-        REDIS["Redis<br/>(Cache + BullMQ Broker)"]
-    end
+    FE -->|"PUT raw video"| R2_RAW
 
-    subgraph CI_CD["🔄 CI/CD"]
-        GH_ACTIONS["GitHub Actions<br/>(Push to main)"]
-        PM2["PM2<br/>(Process Manager)"]
-    end
-
-    %% Client → CDN / Backend
-    FE -->|"Static assets"| NGINX
-    FE -->|"REST API calls (Axios)"| API
-    HLS_PLAYER -->|"HLS segments + token"| VIDEO_PROXY
-    RZRPAY -->|"Payment events"| API
-
-    %% API internal routing
-    API --> AUTH
-    API --> COURSE
-    API --> ENROLL
-    API --> VIDEO_PROXY
-    API --> PRESIGN
-    API --> QUEUE_DISPATCH
-
-    %% Backend → Data
-    AUTH --> MONGO
-    COURSE --> MONGO
-    ENROLL --> MONGO
-    COURSE --> IMAGEKIT
-    VIDEO_PROXY -->|"Fetch .m3u8 / .ts privately"| R2_HLS
-
-    %% Upload flow
-    PRESIGN -->|"Generate presigned URL"| R2_RAW
-    FE -->|"PUT raw video directly"| R2_RAW
-
-    %% Queue & Worker
-    QUEUE_DISPATCH -->|"Enqueue job"| REDIS
-    REDIS -->|"Dequeue job"| WORKER
-    WORKER --> FFMPEG
-    WORKER -->|"Download raw .mp4"| R2_RAW
-    WORKER -->|"Upload HLS segments"| R2_HLS
-    WORKER -->|"Update videoUrl"| MONGO
-
-    %% Caching
-    API -->|"Cache / Rate limiting"| REDIS
-
-    %% CI/CD
-    GH_ACTIONS -->|"SSH deploy"| PM2
-    PM2 -->|"Manages"| API
-    PM2 -->|"Manages"| WORKER
-    GH_ACTIONS -->|"Copy dist/"| NGINX
+    REDIS -->|"dequeue job"| WORKER
+    WORKER -->|"download .mp4"| R2_RAW
+    WORKER -->|"upload HLS segments"| R2_HLS
+    WORKER -->|"update videoUrl"| MONGO
 ```
 
 ---
@@ -356,7 +316,7 @@ frontend/
 Ensure you have the following installed on your machine:
 - Node.js (v18 or higher)
 - MongoDB (Running locally or a MongoDB Atlas URI)
-- Redis Server (Running locally or via a cloud provider)
+- Redis Server (Redis Cloud managed instance or any Redis provider)
 - FFmpeg (Required for the video transcoding worker)
 
 ### 2. Clone the Repository
@@ -379,7 +339,7 @@ NODE_ENV=development
 DB_URL=mongodb://localhost:27017/veolms
 ACCESS_TOKEN_SECRET=your_access_token_secret
 REFRESH_TOKEN_SECRET=your_refresh_token_secret
-REDIS_URL=redis://localhost:6379
+REDIS_URL=redis://:<password>@<host>.redis.cloud:port
 SALT_VALUE=10
 MEETING_WINDOW_LIMIT=100
 IMAGEKIT_PRIVATE_KEY=your_imagekit_private_key
@@ -775,7 +735,7 @@ The entire platform — frontend and backend — is deployed on a single **AWS E
 | Frontend Serving | Nginx (static files from `/var/www/learnsphere`) |
 | Backend API | Node.js Express — managed by PM2 as `veolms-api` |
 | Transcoding Worker | Node.js BullMQ Worker — managed by PM2 as `veolms-worker` |
-| Message Broker | Redis (running locally on the same instance) |
+| Message Broker | Redis Cloud (managed, external) |
 | Database | MongoDB Atlas (managed cloud) |
 | Object Storage | Cloudflare R2 (raw uploads + HLS output) |
 | Media CDN | ImageKit (thumbnails & static assets) |
@@ -793,10 +753,11 @@ When an admin uploads a video, the API immediately hands off the job to Redis (B
 ```
 EC2 t3.small
 ├── PM2
-│   ├── veolms-api      → node dist/server.js      (Express REST API)
+│   ├── veolms-api      → node dist/server.js         (Express REST API)
 │   └── veolms-worker   → node dist/worker/worker.js  (BullMQ + FFmpeg)
-├── Nginx               → serves /var/www/learnsphere  (React SPA)
-└── Redis               → message broker for BullMQ queue
+└── Nginx               → serves /var/www/learnsphere  (React SPA)
+
+Redis Cloud (external managed service) → message broker for BullMQ queue
 ```
 
 ### Starting the Processes
@@ -835,6 +796,23 @@ server {
 
 ---
 
+### ⚠️ MVP Note — Transcoding Scalability
+
+> For the current MVP, video transcoding runs on the same EC2 instance as the API server. This works fine at low volume, but **running FFmpeg on a t3.small is CPU and memory intensive** — under high load it could slow down the entire machine and degrade the experience for all users, not just the admin uploading a video.
+
+**The planned upgrade path when the user base grows:**
+
+Spin up an **isolated Docker container** dedicated solely to transcoding. The container connects to the same Redis Cloud instance (BullMQ), picks up jobs from the queue, runs FFmpeg, and pushes the finished HLS output to Cloudflare R2 — exactly as the current worker does, but fully isolated from the API server's machine.
+
+This can be done in two ways:
+
+- **[Dockerode](https://github.com/apocas/dockerode)** — programmatically spin up a transcoding container on-demand from within Node.js when a new job arrives. Zero idle cost — the container lives only for the duration of the job.
+- **AWS ECS + ECR** — push the worker Docker image to ECR and run it as an ECS task (Fargate). ECS handles container lifecycle, auto-scaling based on queue depth, and retries natively. This is the production-grade path.
+
+Either approach means the API server on EC2 becomes **completely unaware of transcoding** — it just enqueues a job to Redis and forgets. The transcoding load is offloaded entirely to external compute. The EC2 instance stays fast and responsive regardless of how many videos are being processed simultaneously.
+
+---
+
 ## 💰 Infrastructure Pricing
 
 All costs are approximate AWS/service list prices as of 2025.
@@ -847,7 +825,7 @@ All costs are approximate AWS/service list prices as of 2025.
 | Cloudflare R2 Egress | Free (no egress fees) | $0 |
 | MongoDB Atlas | M0 Free Cluster (512 MB) | $0 |
 | ImageKit | Free tier (20 GB storage, 20 GB bandwidth) | $0 |
-| Redis (self-hosted on EC2) | Included in EC2 instance | $0 |
+| Redis Cloud | Free tier (30 MB, managed) | $0 |
 | GitHub Actions | Free tier (2,000 min/month) | $0 |
 | **Total (est.)** | | **~$17 – $19 / month** |
 
