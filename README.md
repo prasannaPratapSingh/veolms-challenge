@@ -726,3 +726,54 @@ The optimized, tree-shaken output will be written to the `dist/` directory, read
 3. **TypeScript is Non-Negotiable**: All new files must be fully typed. No `any` types without explicit justification.
 4. **State via Redux Only**: Application-level state must live in Redux slices. Component-local ephemeral state (e.g., open/closed toggles) is the only acceptable use of raw `useState`.
 5. **Service Abstraction**: Never use `axios` or `fetch` directly inside a component or hook. All HTTP communication must be routed through a `*.service.ts` file.
+
+
+---
+
+## ⚙️ CI/CD Pipeline — GitHub Actions
+
+The project uses a fully automated **GitHub Actions** workflow that deploys the entire stack (backend + frontend) to an AWS EC2 instance on every push to `main`.
+
+### Workflow File
+Located at `.github/workflows/deploy.yaml`.
+
+### Trigger
+```yaml
+on:
+  push:
+    branches:
+      - main
+```
+Any push (or merged PR) to the `main` branch kicks off the pipeline automatically.
+
+### What the Pipeline Does
+
+1. **Checkout** — Clones the latest source code on the runner.
+2. **SSH into EC2** — Connects to the production EC2 instance via `appleboy/ssh-action`.
+3. **Pull latest changes** — Runs `git pull origin main` on the server to sync the codebase.
+4. **Build Backend** — Runs `npm ci && npm run build` inside `backend/`, then restarts the API process via PM2 (`pm2 restart veolms-api`).
+5. **Restart Worker** — Restarts the BullMQ transcoding worker independently (`pm2 restart veolms-worker`).
+6. **Build Frontend** — Runs `npm ci && npm run build` inside `frontend/`, copies the `dist/` output to `/var/www/learnsphere/`, and reloads Nginx to serve the new build.
+
+### Required GitHub Secrets
+
+The following secrets must be configured under **Settings → Secrets and variables → Actions** in your GitHub repository:
+
+| Secret | Description |
+| :--- | :--- |
+| `EC2_HOST` | Public IP or hostname of your EC2 instance |
+| `EC2_USER` | SSH username (e.g., `ubuntu` or `ec2-user`) |
+| `EC2_SSH_KEY` | Private SSH key (PEM) for authenticating with the EC2 instance |
+
+### Production Process Management (PM2)
+
+The backend API and worker are managed as persistent processes via **PM2** on the EC2 instance. The workflow restarts them with `--update-env` to pick up any new environment variable changes without a full server reboot.
+
+```bash
+pm2 restart veolms-api --update-env     # Express API server
+pm2 restart veolms-worker --update-env  # BullMQ transcoding worker
+```
+
+### Static Frontend Serving (Nginx)
+
+The compiled React app (`dist/`) is copied to `/var/www/learnsphere/` and served by **Nginx**. The workflow reloads Nginx (`sudo systemctl reload nginx`) to apply the new build with zero downtime.
