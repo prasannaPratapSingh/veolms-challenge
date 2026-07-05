@@ -1,5 +1,4 @@
 import { rateLimit } from 'express-rate-limit';
-import { success } from 'zod';
 
 
 const strictAuthLimiter = rateLimit({

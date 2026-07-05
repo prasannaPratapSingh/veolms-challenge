@@ -23,10 +23,11 @@ dotenv.config();
 
 const app = express();
 
-// Security headers — must be before other middleware
+app.set('trust proxy', 1);
+
 app.use(helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" }, // allow ImageKit/R2 media to load
-    contentSecurityPolicy: false, // disable CSP here — configure separately if needed
+    crossOriginResourcePolicy: { policy: "cross-origin" }, 
+    contentSecurityPolicy: false, 
 }));
 
 app.use(cors({

@@ -442,6 +442,60 @@ The application leverages a unified error-handling approach.
 
 ---
 
+## 🔐 Security Middleware
+
+### Helmet
+
+[`helmet`](https://helmetjs.github.io/) is applied globally at the top of the middleware stack, before any route is registered. It sets a collection of HTTP response headers that protect against common web vulnerabilities out of the box.
+
+| Header set by Helmet | What it prevents |
+| :--- | :--- |
+| `X-Content-Type-Options: nosniff` | Stops browsers from MIME-sniffing a response away from the declared content type |
+| `X-Frame-Options: SAMEORIGIN` | Blocks the app from being embedded in an `<iframe>` on another origin — prevents clickjacking |
+| `X-XSS-Protection` | Enables the browser's built-in reflected XSS filter (legacy browsers) |
+| `Strict-Transport-Security` | Forces HTTPS for all future requests once the site has been visited once (HSTS) |
+| `Referrer-Policy` | Controls how much referrer information is sent with requests |
+| `X-DNS-Prefetch-Control` | Disables DNS prefetching to reduce information leakage |
+| `Permissions-Policy` | Disables access to browser features (camera, microphone, geolocation) not needed by the API |
+
+Two options are intentionally overridden in this project:
+
+```typescript
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }, // allow ImageKit/R2 media to load cross-origin
+    contentSecurityPolicy: false,                          // disabled — configure separately for the frontend
+}));
+```
+
+---
+
+### express-rate-limit
+
+[`express-rate-limit`](https://github.com/express-rate-limit/express-rate-limit) is used to protect sensitive endpoints from brute-force attacks and abuse. Three tiers are defined:
+
+| Limiter | Window | Max Requests | Applied To |
+| :--- | :--- | :--- | :--- |
+| `strictAuthLimiter` | 15 min | 5 | `POST /api/auth/register`, `POST /api/auth/login` |
+| `moderateAuthLimiter` | 15 min | 5 | Other sensitive auth-adjacent routes |
+| `generalApiLimiter` | 15 min | 100 | General API endpoints |
+
+**Why strict on auth?** Login and register endpoints are the primary target of credential stuffing and brute-force attacks. Capping them at 5 attempts per 15-minute window per IP makes automated attacks impractical without affecting legitimate users.
+
+When a limit is exceeded, the API responds with a `429 Too Many Requests`:
+
+```json
+{
+  "success": false,
+  "message": "Too many authentication attempts. Please try again later."
+}
+```
+
+Rate limit headers are returned in every response (`RateLimit-*`) so clients can observe their remaining quota without hitting a 429 first.
+
+> **Nginx + trust proxy:** Because Nginx sits in front of Express as a reverse proxy, Express is configured with `app.set('trust proxy', 1)`. This tells `express-rate-limit` to read the real client IP from the `X-Forwarded-For` header that Nginx injects, rather than seeing the Nginx machine's loopback IP for every request — which would cause all users to share the same rate limit bucket.
+
+---
+
 # Video Transcoding Pipeline Documentation
 
 > [!IMPORTANT]  
