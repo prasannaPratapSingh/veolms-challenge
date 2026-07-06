@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Grainient from "../Grainient";
+import { useMediaQuery } from "../../lib/useMediaQuery";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -15,6 +16,7 @@ const fadeUp = {
 const AVATAR_LETTERS = ["A", "B", "C", "D", "E"];
 
 export default function Hero() {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   return (
     <section
       id="hero"
@@ -31,33 +33,35 @@ export default function Hero() {
         overflow: "hidden",
       }}
     >
-      {/* Grainient Background */}
-      <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, opacity: 0.35, pointerEvents: 'none', zIndex: 0 }}>
-        <Grainient
-          color1="#0B0F14"
-          color2="#1E2A39"
-          color3="#9DB4C6"
-          timeSpeed={0.25}
-          colorBalance={0}
-          warpStrength={1}
-          warpFrequency={5}
-          warpSpeed={2}
-          warpAmplitude={50}
-          blendAngle={0}
-          blendSoftness={0.05}
-          rotationAmount={500}
-          noiseScale={2}
-          grainAmount={0.1}
-          grainScale={2}
-          grainAnimated={false}
-          contrast={1.5}
-          gamma={1}
-          saturation={1}
-          centerX={0}
-          centerY={0}
-          zoom={0.9}
-        />
-      </div>
+      {/* Grainient Background — desktop only */}
+      {isDesktop && (
+        <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, opacity: 0.35, pointerEvents: 'none', zIndex: 0 }}>
+          <Grainient
+            color1="#0B0F14"
+            color2="#1E2A39"
+            color3="#9DB4C6"
+            timeSpeed={0.25}
+            colorBalance={0}
+            warpStrength={1}
+            warpFrequency={5}
+            warpSpeed={2}
+            warpAmplitude={50}
+            blendAngle={0}
+            blendSoftness={0.05}
+            rotationAmount={500}
+            noiseScale={2}
+            grainAmount={0.1}
+            grainScale={2}
+            grainAnimated={false}
+            contrast={1.5}
+            gamma={1}
+            saturation={1}
+            centerX={0}
+            centerY={0}
+            zoom={0.9}
+          />
+        </div>
+      )}
 
       {/* Ambient warm glow top */}
       <div

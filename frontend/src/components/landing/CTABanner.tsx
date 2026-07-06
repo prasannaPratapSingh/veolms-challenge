@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import Threads from "../Threads";
+import { useMediaQuery } from "../../lib/useMediaQuery";
 
 export default function CTABanner() {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   return (
     <section
       style={{
@@ -13,16 +15,18 @@ export default function CTABanner() {
         overflow: "hidden",
       }}
     >
-      {/* Threads Background */}
-      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', opacity: 0.3, zIndex: 0 }}>
-        <Threads
-          color={[0, 0, 0]}
-          amplitude={1}
-          distance={0}
-          enableMouseInteraction
-          style={{ width: '100%', height: '100%' }}
-        />
-      </div>
+      {/* Threads Background — desktop only */}
+      {isDesktop && (
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', opacity: 0.3, zIndex: 0 }}>
+          <Threads
+            color={[0, 0, 0]}
+            amplitude={1}
+            distance={0}
+            enableMouseInteraction
+            style={{ width: '100%', height: '100%' }}
+          />
+        </div>
+      )}
 
       {/* Fine dot texture on accent background */}
       <div
