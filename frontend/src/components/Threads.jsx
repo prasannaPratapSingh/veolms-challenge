@@ -3,6 +3,8 @@ import { Renderer, Program, Mesh, Triangle, Color } from 'ogl';
 
 import './Threads.css';
 
+const MIN_WIDTH = 768;
+
 const vertexShader = `
 attribute vec2 position;
 attribute vec2 uv;
@@ -132,6 +134,9 @@ const Threads = ({ color = [1, 1, 1], amplitude = 1, distance = 0, enableMouseIn
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+
+    // Guard: skip on small screens — no WebGL context, no RAF loop
+    if (window.innerWidth < MIN_WIDTH) return;
 
     // Guard: bail out silently on browsers/devices without WebGL support
     const testCanvas = document.createElement('canvas');

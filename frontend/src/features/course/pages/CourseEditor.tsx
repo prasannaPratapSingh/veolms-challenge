@@ -579,7 +579,7 @@ function SectionCard({ section, courseId: _courseId, isExpanded, onToggle, onEdi
         await handleCreateLesson({
             title: data.title,
             description: data.description,
-            duration: Number(data.duration),
+            duration: Number(data.duration) * 60, // input is in minutes, store as seconds
             sectionId: section._id,
             isPreview: false,
             order: Number(data.order),

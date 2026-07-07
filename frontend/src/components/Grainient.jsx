@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Triangle } from 'ogl';
 import './Grainient.css';
 
+const MIN_WIDTH = 768;
+
 const hexToRgb = hex => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) return [1, 1, 1];
@@ -135,6 +137,9 @@ const Grainient = ({
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+
+    // Guard: skip on small screens — no WebGL context, no RAF loop
+    if (window.innerWidth < MIN_WIDTH) return;
 
     // Guard: bail out silently on browsers/devices without WebGL support
     const testCanvas = document.createElement('canvas');

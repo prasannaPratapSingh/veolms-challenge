@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Triangle } from 'ogl';
 import './Lightfall.css';
 
+const MIN_WIDTH = 768;
 const MAX_COLORS = 8;
 
 const hexToRGB = hex => {
@@ -200,6 +201,9 @@ const Lightfall = ({
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+
+    // Guard: skip on small screens — no WebGL context, no RAF loop
+    if (window.innerWidth < MIN_WIDTH) return;
 
     // Guard: bail out silently on browsers/devices without WebGL support
     const testCanvas = document.createElement('canvas');

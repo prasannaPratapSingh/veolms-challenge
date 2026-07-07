@@ -381,7 +381,7 @@ function CoursesTab({
                 )}
               </div>
 
-              <div className="p-6 flex-1 flex flex-col">
+              <div className="p-8 flex-1 flex flex-col">
                 <h3 style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="font-extrabold text-xl leading-tight mb-2 line-clamp-1">{course.title}</h3>
                 <div className="flex items-center gap-2 mb-4">
                   <div style={{ background: "rgba(157, 180, 198,0.1)", border: "1px solid rgba(157, 180, 198,0.15)" }} className="w-5 h-5 rounded-full flex items-center justify-center">
@@ -712,7 +712,7 @@ function EditCourseModal({ course, onClose, handleUpdateCourse }: { course: any;
               </div>
 
               <div>
-                <label className={labelClass}>Price ($)</label>
+                <label className={labelClass}>Price (₹)</label>
                 <input type="number" step="0.01" className={errors.price ? errorClass : inputClass} {...register("price", { required: "Price is required", min: 0 })} />
               </div>
             </div>
