@@ -353,14 +353,6 @@ function CoursesTab({
           title="Manage Courses"
           subtitle="View, edit, and monitor the performance of your published content."
         />
-        <div className="flex items-center gap-3 mb-2">
-          <button className="px-4 py-2.5 rounded-xl border border-white/10 bg-white/5 text-sm font-semibold text-white/80 hover:bg-white/10 transition-colors flex items-center gap-2">
-            <svg className="w-4 h-4 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-            </svg>
-            Filter
-          </button>
-        </div>
       </div>
 
       {isLoading ? (
@@ -387,17 +379,6 @@ function CoursesTab({
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-sm font-medium" style={{ color: "rgba(157, 180, 198,0.2)" }}>No Cover Image</div>
                 )}
-                <div className="absolute top-4 right-4 z-20">
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handlePublishToggle(course._id, course.isPublished); }}
-                    style={course.isPublished
-                      ? { background: "#9DB4C6", color: "#0B0F14", border: "1px solid #9DB4C6" }
-                      : { background: "rgba(157, 180, 198,0.08)", color: "rgba(157, 180, 198,0.6)", border: "1px solid rgba(157, 180, 198,0.2)" }}
-                    className="text-[0.6rem] font-bold uppercase tracking-widest px-3 py-1.5 rounded-sm backdrop-blur-md shadow-lg transition-colors"
-                  >
-                    {course.isPublished ? "Live" : "Draft"}
-                  </button>
-                </div>
               </div>
 
               <div className="p-6 flex-1 flex flex-col">
@@ -412,22 +393,46 @@ function CoursesTab({
                 <div className="flex items-center justify-between pt-5 mt-auto" style={{ borderTop: "1px solid rgba(157, 180, 198,0.08)" }}>
                   <div className="flex flex-col">
                     <span style={{ color: "rgba(157, 180, 198,0.45)", letterSpacing: "0.1em" }} className="text-[10px] font-bold uppercase mb-0.5">Price</span>
-                    <span style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="font-extrabold text-lg">₹{course.price}</span>
+                    <span style={{ fontFamily: "'Helvetica', Arial, sans-serif", color: "#F5F8FA" }} className="font-extrabold text-sm">₹{course.price}</span>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <button
                       onClick={(e) => { e.stopPropagation(); setEditingCourse(course); }}
                       style={{ color: "rgba(157, 180, 198,0.45)" }}
-                      className="text-sm font-bold transition-colors hover:text-[#9DB4C6] flex items-center gap-1"
+                      className="text-sm font-bold transition-colors hover:text-[#9DB4C6] flex items-center gap-1 px-2 py-1.5"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                       </svg>
                     </button>
                     <button
+                      onClick={(e) => { e.stopPropagation(); handlePublishToggle(course._id, course.isPublished); }}
+                      style={course.isPublished
+                        ? { background: "#dc2626", color: "#fff", border: "1px solid #dc2626" }
+                        : { background: "#16a34a", color: "#fff", border: "1px solid #16a34a" }}
+                      className="text-xs font-bold px-3 py-1.5 rounded-sm transition-all hover:opacity-85 active:scale-95 flex items-center gap-1.5"
+                    >
+                      {course.isPublished ? (
+                        <>
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                          </svg>
+                          Unpublish
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                          Publish
+                        </>
+                      )}
+                    </button>
+                    <button
                       onClick={(e) => { e.stopPropagation(); navigate(`/admin/course/${course._id}`); }}
                       style={{ background: "rgba(157, 180, 198,0.1)", color: "#9DB4C6", border: "1px solid rgba(157, 180, 198,0.2)" }}
-                      className="text-sm font-bold transition-colors flex items-center gap-1 px-3 py-1.5 rounded-sm hover:bg-[rgba(157, 180, 198,0.18)]"
+                      className="text-sm font-bold transition-colors flex items-center gap-1 px-3 py-1.5 rounded-sm hover:bg-[rgba(157,180,198,0.18)]"
                     >
                       Curriculum
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

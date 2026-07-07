@@ -27,17 +27,33 @@ export default function StatsBar() {
         padding: "0 2rem",
       }}
     >
+      <style>{`
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+        }
+        @media (max-width: 640px) {
+          .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          .stats-grid > div:nth-child(2) {
+            border-right: none !important;
+          }
+          .stats-grid > div:nth-child(3) {
+            border-top: 1px solid rgba(157, 180, 198,0.08);
+          }
+          .stats-grid > div:nth-child(4) {
+            border-top: 1px solid rgba(157, 180, 198,0.08);
+          }
+        }
+      `}</style>
       <motion.div
         variants={container}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.4 }}
-        style={{
-          maxWidth: "1100px",
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-        }}
+        className="stats-grid"
+        style={{ maxWidth: "1100px", margin: "0 auto" }}
       >
         {STATS.map((s, i) => (
           <motion.div
