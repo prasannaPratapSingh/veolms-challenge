@@ -775,7 +775,7 @@ function LessonRow({ lesson, sectionId: _sectionId, onDelete, onUpload, dragHand
                 <p style={{ color: "#F5F8FA" }} className="text-sm font-medium truncate">{lesson.title}</p>
                 <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                     {lesson.isPreview && <span style={{ color: "#9DB4C6", background: "rgba(157, 180, 198,0.08)", border: "1px solid rgba(157, 180, 198,0.2)" }} className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm">Preview</span>}
-                    <span style={{ color: "rgba(157, 180, 198,0.4)" }} className="text-xs">{lesson.duration} min</span>
+                    <span style={{ color: "rgba(157, 180, 198,0.4)" }} className="text-xs">{Math.round(lesson.duration / 60)} min</span>
                     {statusBadge()}
                     {hasVideo && (
                         <button
